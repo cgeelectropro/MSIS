@@ -43,7 +43,7 @@ return [
     | Absent/unreadable file => PushNotificationService safely no-ops.
     */
     'fcm' => [
-        'credentials_path' => env('FCM_CREDENTIALS_PATH'),
+        'credentials_path' => env('FCM_CREDENTIALS_PATH') ?: storage_path('app/firebase-service-account.json'),
     ],
 
 ];

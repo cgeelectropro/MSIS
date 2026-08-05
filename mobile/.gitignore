@@ -12,6 +12,11 @@
 .swiftpm/
 migrate_working_dir/
 
+# Firebase — real project credentials, not committed even though the repo is
+# public (default API key restrictions are permissive; safer to keep this
+# local and let each dev/deploy target drop in their own copy).
+android/app/google-services.json
+
 # IntelliJ related
 *.iml
 *.ipr
