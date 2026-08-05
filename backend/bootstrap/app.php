@@ -3,6 +3,7 @@
 use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\ForceJsonResponse;
 use App\Http\Middleware\LogAuditTrail;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // -> ThrottleRequests (per-route) -> LogAuditTrail (per-route).
         $middleware->api(prepend: [
             ForceJsonResponse::class,
+        ]);
+
+        $middleware->api(append: [
+            SecurityHeaders::class,
         ]);
 
         $middleware->alias([

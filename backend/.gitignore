@@ -3,6 +3,7 @@
 .env
 /msis
 /msis-journal
+/storage/app/backups
 .env.backup
 .env.production
 .phpactor.json
