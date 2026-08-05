@@ -1,0 +1,20 @@
+# VPS-only overlay on top of docker-compose.yml. Use with:
+#   docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+#
+# Local dev/CI never load this file, so nothing here can regress the
+# already-verified local setup. Requires docker/nginx/production.conf to
+# already exist (deploy/vps-setup.sh renders it from production.conf.template
+# by substituting DOMAIN on the host — deliberately not relying on nginx's
+# own container-side envsubst templating, since that would collide with this
+# same mount target already used by the base compose file's default.conf).
+# Certs come from the host's real certbot install (/etc/letsencrypt), issued
+# via --standalone by deploy/vps-setup.sh before this overlay is ever used.
+services:
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./backend:/var/www:ro
+      - ./docker/nginx/production.conf:/etc/nginx/conf.d/default.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro

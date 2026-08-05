@@ -1,0 +1,59 @@
+# VPS deployment only (docker-compose.prod.yml swaps this in for default.conf).
+# Local/CI use stays on default.conf, HTTP-only on :8080 — unchanged, zero
+# regression risk to the already-verified dev setup.
+#
+# Reverb is proxied through the same host on /app (WebSocket upgrade) so only
+# 80/443 need to be open on the VM firewall — no separate public port for it.
+
+server {
+    listen 80;
+    server_name ${DOMAIN};
+
+    # Not used by the initial issuance (deploy/vps-setup.sh uses --standalone,
+    # before this container is even running) — kept so a future switch to
+    # webroot-based renewal (avoids the brief downtime --standalone renewal
+    # needs) is a certbot-flag change only, not an nginx-config change too.
+    location /.well-known/acme-challenge/ {
+        root /var/www/public;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name ${DOMAIN};
+    root /var/www/public;
+    index index.php;
+
+    ssl_certificate /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
+
+    client_max_body_size 12M; # SRS §22 FILE-02: 10MB upload limit + multipart overhead
+
+    location /app {
+        proxy_pass http://reverb:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "Upgrade";
+        proxy_set_header Host $host;
+        proxy_read_timeout 86400;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass app_laravel:9000;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    location ~ /\.(?!well-known).* {
+        deny all;
+    }
+}

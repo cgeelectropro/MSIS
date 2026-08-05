@@ -32,8 +32,11 @@ Feature-first Clean Architecture across Authentication, Interventions, Messaging
 - `docker-compose.yml`: 6 services (nginx, app_laravel, queue_worker, reverb, mysql, redis) with health checks and `restart: unless-stopped` — validated via `docker compose config` (parses cleanly, no errors).
 - `backend/Dockerfile`: multi-stage-ready PHP-FPM image, non-root file ownership on `storage`/`bootstrap/cache`.
 - `docker/nginx/default.conf`: PHP-FPM routing, upload limit matching SRS FILE-02, dotfile deny rule.
-- `.github/workflows/ci.yml`: lint (Pint, `flutter analyze`) + dependency audit (`composer audit`) + test (Pest, `flutter test`) on every PR/push to `main`.
+- `.github/workflows/ci.yml`: lint (Pint, `flutter analyze`) + dependency audit (`composer audit`) + test (Pest, `flutter test`) on every PR/push to `main`. Verified green on GitHub, including catching two real fresh-checkout-only bugs (untracked empty `tests/Unit` dir, missing `APP_KEY`).
 - Root `.gitignore` / `.env.example` for the compose-level secrets (`DB_PASSWORD`, `MYSQL_ROOT_PASSWORD`), distinct from `backend/.env`.
+- `deploy/vps-setup.sh` + `docker-compose.prod.yml` + `docker/nginx/production.conf.template`: scripted path from a bare Ubuntu VM to a running HTTPS deployment (Let's Encrypt via certbot `--standalone`, Reverb proxied over `/app` so only 80/443 are needed). Not yet run against a real VM.
+- `backend/app/Http/Middleware/SecurityHeaders.php`: baseline OWASP A05 headers (CSP, X-Frame-Options, HSTS-when-HTTPS, etc.) on every API response.
+- `backend/app/Console/Commands/BackupDatabase.php`: nightly `mysqldump | gzip`, local-disk rotation of 14 (off-site destination still pending D-26).
 
 ---
 
@@ -72,9 +75,9 @@ Full OWASP Top 10 mapping is in `SRS.md` §17.1; status against what's actually 
 
 This is the section that matters most in a readiness review — a report that only lists what's done isn't a readiness review, it's a changelog.
 
-1. **No git repository exists yet** (confirmed at session start). The CI workflow in `.github/workflows/ci.yml` cannot run until this project is `git init`'d and pushed to a GitHub remote — it is real, correct, and untested-in-anger.
-2. **No real Firebase project.** `PushNotificationService` (both backend and Flutter) is built to fail safely without credentials, but push notifications will not actually deliver until a real Firebase project is created and `google-services.json`/FCM server credentials are added — this is a deliberate boundary, not an oversight (see each service's doc comment).
-3. **No production domain, TLS certificate, or VPS provisioned.** SRS decision D-02 (domain) is still open. `docker-compose.yml`'s nginx serves plain HTTP on `:8080` for local/dev use; Let's Encrypt/certbot integration for real TLS termination is specified in `SRS.md` §25.3 but not wired into this compose file (typically done via a separate certbot container or a reverse proxy like Traefik/Caddy in front — deliberately not guessed at here without a real domain to issue a cert for).
+1. ~~No git repository exists yet~~ **Done** — live at github.com/cgeelectropro/MSIS, CI green on every push.
+2. ~~No real Firebase project~~ **Done** — real project wired in (`google-services.json`, service-account JSON), verified end-to-end against Google's live OAuth2 endpoint. Only a physical/emulator device is needed to see a push land.
+3. **No production domain, TLS certificate, or VPS provisioned yet — but the path there is now scripted.** `deploy/vps-setup.sh` + `docker-compose.prod.yml` + `docker/nginx/production.conf.template` take a fresh Ubuntu VM (written for Oracle Cloud's Always Free tier) to a running HTTPS deployment of the exact existing stack: installs Docker/certbot, issues a real Let's Encrypt cert (`--standalone`), proxies Reverb over the same host on `/app` so only 80/443 need to be open, and runs migrations. Not yet *executed* against a real VM — that's still a manual step (create the VM, point a free DuckDNS/nip.io subdomain at it, run the script) — and renewal past the 90-day cert lifetime isn't automated (documented in the script's own trailing output). SRS decision D-02 (permanent domain) is still open; this is deliberately scoped as a demo/presentation path, not a permanent production answer.
 4. **`APP_DEBUG=true`** in the current `.env` — must flip to `false` before any non-local deployment.
 5. **No Android release signing configured** — no keystore exists in this repo (correctly — a signing key is a secret, not something to generate speculatively). `flutter build appbundle --release` will fail without one.
 6. **No backup automation actually scheduled.** `routes/console.php` has the Sanctum-prune and notification-prune schedules; a `mysqldump`-based backup job (SRS §25.4/DEP-06) is specified but not implemented, since its destination (D-26, off-site storage) is still an open decision.
@@ -90,7 +93,7 @@ Concrete, in order — not aspirational:
 
 - [ ] `git init`, push to a real remote, confirm `.github/workflows/ci.yml` actually runs and passes
 - [ ] Resolve D-02 (domain), D-04 (storage backend), D-10/D-26/D-30c (compliance/retention) with the Product Owner
-- [ ] Provision the VPS; add TLS (certbot or a TLS-terminating reverse proxy) in front of the nginx container
+- [ ] Provision a VPS (e.g. Oracle Cloud Always Free) and a free subdomain (DuckDNS/nip.io), then run `deploy/vps-setup.sh DOMAIN=... EMAIL=...` — handles Docker, certbot/TLS, and bringing up the full stack
 - [ ] Set `APP_DEBUG=false`, generate a fresh `APP_KEY` for production, move all secrets out of any committed `.env`
 - [ ] Create the real Firebase project; add its config to both the Flutter app and `backend/config/services.php`'s `fcm` entry
 - [ ] Generate and securely store an Android release keystore; configure `android/key.properties`

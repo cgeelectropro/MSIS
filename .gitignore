@@ -8,6 +8,9 @@
 .idea/
 .claude/
 
+# Generated on the VM by deploy/vps-setup.sh (bakes in the real domain)
+docker/nginx/production.conf
+
 # OS
 .DS_Store
 Thumbs.db
