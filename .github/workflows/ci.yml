@@ -30,6 +30,11 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
       - name: Lint (Pint)
         run: vendor/bin/pint --test
 
