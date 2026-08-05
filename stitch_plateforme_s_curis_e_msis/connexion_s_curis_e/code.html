@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MSIS - Connexion Sécurisée</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#737783",
+                      "on-primary-fixed": "#001945",
+                      "on-background": "#1a1b21",
+                      "surface-bright": "#faf8ff",
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#2e3036",
+                      "primary-fixed-dim": "#b0c6ff",
+                      "outline-variant": "#c3c6d4",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "primary-fixed": "#d9e2ff",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "inverse-primary": "#b0c6ff",
+                      "surface-container-high": "#e8e7f0",
+                      "inverse-on-surface": "#f0f0f8",
+                      "surface-dim": "#d9d9e1",
+                      "on-tertiary-container": "#7ecf79",
+                      "background": "#faf8ff",
+                      "primary": "#003178",
+                      "surface-container-low": "#f3f3fb",
+                      "on-primary-container": "#a1bbff",
+                      "tertiary-fixed": "#a3f69c",
+                      "surface-variant": "#e2e2ea",
+                      "on-tertiary-fixed-variant": "#005312",
+                      "on-tertiary-fixed": "#002204",
+                      "error-container": "#ffdad6",
+                      "secondary": "#5e5e5e",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#2b5bb5",
+                      "on-primary-fixed-variant": "#00429c",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-surface": "#1a1b21",
+                      "on-secondary-fixed-variant": "#464747",
+                      "surface-container-highest": "#e2e2ea",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#003f0b",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#434652",
+                      "tertiary-container": "#005914",
+                      "primary-container": "#0d47a1",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-container": "#e1dfdf",
+                      "on-secondary-container": "#626262",
+                      "error": "#ba1a1a",
+                      "surface-container": "#ededf5",
+                      "surface": "#faf8ff",
+                      "tertiary-fixed-dim": "#88d982"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "margin-desktop": "32px",
+                      "base": "4px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "2xl": "48px"
+              },
+              "fontFamily": {
+                      "display-lg": ["Hanken Grotesk"],
+                      "title-lg": ["Inter"],
+                      "label-lg": ["JetBrains Mono"],
+                      "label-md": ["JetBrains Mono"],
+                      "title-md": ["Inter"],
+                      "headline-md": ["Hanken Grotesk"],
+                      "body-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "headline-sm": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700" }],
+                      "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "500" }],
+                      "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                      "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                      "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600" }],
+                      "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                      "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+                      "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+                      "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                      "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                      "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Floating label transition */
+        .peer:focus ~ .peer-focus\:top-2,
+        .peer:not(:placeholder-shown) ~ .peer-focus\:top-2 {
+            top: -0.5rem;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            background-color: theme('colors.surface');
+            padding: 0 0.25rem;
+            color: theme('colors.primary');
+        }
+    </style>
+</head>
+<body class="bg-surface-container-low min-h-screen flex items-center justify-center p-margin-mobile md:p-margin-desktop antialiased text-on-surface">
+<main class="w-full max-w-[420px] bg-surface rounded-[24px] shadow-sm border border-outline-variant flex flex-col overflow-hidden relative z-10">
+<!-- Security Banner -->
+<div class="bg-surface-container-high py-sm px-md flex items-center justify-center gap-sm border-b border-outline-variant">
+<span class="material-symbols-outlined text-tertiary-container filled text-[18px]">shield</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Connecté et sécurisé — Chiffrement SSL 256-bit</span>
+</div>
+<div class="p-lg md:p-xl flex flex-col gap-xl">
+<!-- Brand Logo -->
+<div class="flex justify-center mt-sm">
+<img alt="MSIS Brand Logo" class="h-24 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWZrpHZk1yZswSwJH_o48DWu79bzyz__wZNkio9X3x8AA3T_OVCTfsk_K8LwG6QQEG0ZU968xfoyV_sZ7m9Z-I5U27m0m6NPKxYaNhs19ybttpwJJyY6HrmXL8_4f34zf9LC5qfiR1mkrqNAivnyyaO7RjHHTCMdqzcthg05kAeJrNvaNW31FXuOrtFrf0F8COSmNPnolNur6F06t5JgHaw_QNUlBlEt-VVNmhyQyNrMXA8hnHQ2f6kw"/>
+</div>
+<!-- Welcome Text -->
+<div class="text-center">
+<h1 class="font-headline-md text-headline-md text-on-surface">Connexion</h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Accédez au portail d'intervention technique</p>
+</div>
+<form action="#" class="flex flex-col gap-lg" method="POST">
+<!-- Role Selector -->
+<div class="bg-surface-container rounded-xl p-base flex gap-base border border-outline-variant">
+<button class="flex-1 py-sm font-label-lg text-label-lg rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" type="button">Client</button>
+<button class="flex-1 py-sm font-label-lg text-label-lg rounded-lg bg-primary-container text-on-primary-container shadow-sm border border-outline-variant/50 transition-colors" type="button">Technicien</button>
+<button class="flex-1 py-sm font-label-lg text-label-lg rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" type="button">Superviseur</button>
+</div>
+<!-- Inputs -->
+<div class="flex flex-col gap-md mt-sm">
+<!-- Email Field -->
+<div class="relative">
+<input class="peer w-full h-[56px] px-md pt-md pb-sm border border-outline text-on-surface bg-surface rounded-xl focus:border-2 focus:border-primary focus:ring-0 font-body-lg text-body-lg placeholder-transparent transition-all" id="email" placeholder=" " required="" type="email"/>
+<label class="absolute left-md top-4 text-on-surface-variant font-body-md text-body-md transition-all duration-200 pointer-events-none peer-focus:top-2 peer-focus:text-primary bg-surface px-1 -ml-1" for="email">Adresse email</label>
+</div>
+<!-- Password Field -->
+<div class="relative">
+<input class="peer w-full h-[56px] px-md pt-md pb-sm border border-outline text-on-surface bg-surface rounded-xl focus:border-2 focus:border-primary focus:ring-0 font-body-lg text-body-lg placeholder-transparent transition-all pr-12" id="password" placeholder=" " required="" type="password"/>
+<label class="absolute left-md top-4 text-on-surface-variant font-body-md text-body-md transition-all duration-200 pointer-events-none peer-focus:top-2 peer-focus:text-primary bg-surface px-1 -ml-1" for="password">Mot de passe</label>
+<button aria-label="Toggle password visibility" class="absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined">visibility</span>
+</button>
+</div>
+</div>
+<!-- Forgot Password -->
+<div class="flex justify-end -mt-sm">
+<a class="font-label-lg text-label-lg text-primary hover:text-on-primary-fixed-variant transition-colors" href="#">Mot de passe oublié ?</a>
+</div>
+<!-- Submit Button -->
+<button class="w-full h-12 mt-sm bg-primary text-on-primary rounded-xl font-title-md text-title-md flex items-center justify-center gap-sm hover:bg-surface-tint hover:shadow-md transition-all active:scale-[0.98]" type="submit">
+<span class="material-symbols-outlined text-[20px]">login</span>
+                    Se connecter
+                </button>
+</form>
+</div>
+</main>
+<!-- Decorative abstract background elements for structural "modern" feel without being overwhelming -->
+<div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+<div class="absolute -top-64 -right-64 w-[800px] h-[800px] bg-primary-fixed-dim/20 rounded-full blur-[120px]"></div>
+<div class="absolute -bottom-64 -left-64 w-[600px] h-[600px] bg-tertiary-fixed-dim/10 rounded-full blur-[100px]"></div>
+</div>
+</body></html>

@@ -1,0 +1,65 @@
+# SRS DEP-11: lint + test on every pull request. Deploy/staging/production
+# promotion (DEP-12) is intentionally NOT wired here — that requires a real
+# staging host, SSH/deploy credentials, and an OWASP ZAP target URL, none of
+# which exist yet (see PRODUCTION_READINESS.md's "Not yet built" section).
+# This workflow is the honest subset that can run today, self-contained.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend (Laravel)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          extensions: mbstring, pdo_sqlite, redis
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Lint (Pint)
+        run: vendor/bin/pint --test
+
+      - name: Dependency vulnerability scan
+        run: composer audit
+
+      - name: Run tests (Pest)
+        run: vendor/bin/pest
+
+  mobile:
+    name: Mobile (Flutter)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install packages
+        run: flutter pub get
+
+      - name: Generate code (freezed/json_serializable/drift)
+        run: dart run build_runner build --delete-conflicting-outputs
+
+      - name: Analyze
+        run: flutter analyze
+
+      - name: Run tests
+        run: flutter test

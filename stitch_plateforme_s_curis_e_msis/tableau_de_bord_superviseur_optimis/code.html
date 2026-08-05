@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MSIS Tracking - Supervisor Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#0d47a1",
+                        "outline": "#737783",
+                        "on-tertiary-container": "#7ecf79",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#faf8ff",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1a1b21",
+                        "surface-container-highest": "#e2e2ea",
+                        "primary": "#003178",
+                        "surface-bright": "#faf8ff",
+                        "on-primary-fixed-variant": "#00429c",
+                        "secondary": "#5e5e5e",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f3f3fb",
+                        "on-secondary-fixed-variant": "#464747",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#d9d9e1",
+                        "surface-tint": "#2b5bb5",
+                        "surface-container-high": "#e8e7f0",
+                        "on-error": "#ffffff",
+                        "tertiary": "#003f0b",
+                        "inverse-surface": "#2e3036",
+                        "error": "#ba1a1a",
+                        "surface-container": "#ededf5",
+                        "primary-fixed": "#d9e2ff",
+                        "on-primary-container": "#a1bbff",
+                        "on-tertiary-fixed-variant": "#005312",
+                        "tertiary-fixed": "#a3f69c",
+                        "secondary-container": "#e1dfdf",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-primary-fixed": "#001945",
+                        "tertiary-container": "#005914",
+                        "secondary-fixed": "#e4e2e2",
+                        "inverse-on-surface": "#f0f0f8",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed": "#002204",
+                        "on-surface-variant": "#434652",
+                        "inverse-primary": "#b0c6ff",
+                        "surface-variant": "#e2e2ea",
+                        "on-surface": "#1a1b21",
+                        "background": "#faf8ff",
+                        "primary-fixed-dim": "#b0c6ff",
+                        "tertiary-fixed-dim": "#88d982",
+                        "on-secondary-container": "#626262",
+                        "outline-variant": "#c3c6d4"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "lg": "24px",
+                        "gutter": "16px",
+                        "xs": "4px",
+                        "margin-desktop": "32px",
+                        "md": "16px",
+                        "2xl": "48px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Hanken Grotesk"],
+                        "title-lg": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "title-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-lg": ["JetBrains Mono"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+                        "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background antialiased pb-24 md:pb-0 font-body-lg">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim font-headline-lg-mobile text-headline-lg-mobile docked full-width top-0 bg-surface dark:bg-surface-dim flat no shadows flex items-center justify-between px-margin-mobile h-16 w-full sticky z-40">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary font-headline-sm">
+                M
+            </div>
+<h1 class="font-display-lg text-headline-md text-primary dark:text-primary-fixed-dim tracking-tight">MSIS Tracking</h1>
+</div>
+<button class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-100 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined fill" data-icon="verified_user">verified_user</span>
+</button>
+</header>
+<main class="max-w-7xl mx-auto px-margin-mobile md:px-margin-desktop py-lg">
+<!-- Supervisor Header -->
+<div class="mb-xl">
+<h2 class="font-headline-md text-headline-md text-on-surface">Supervisor Dashboard</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Aperçu des interventions techniques</p>
+</div>
+<!-- KPI Grid -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-md mb-xl">
+<!-- Card 1: Total -->
+<div class="bg-surface p-md rounded-xl border border-surface-container-highest flex flex-col gap-sm">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Total</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-primary">142</div>
+</div>
+<!-- Card 2: En attente -->
+<div class="bg-surface p-md rounded-xl border border-surface-container-highest flex flex-col gap-sm">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">En attente</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-secondary">38</div>
+</div>
+<!-- Card 3: En cours -->
+<div class="bg-surface p-md rounded-xl border border-primary/20 bg-primary/5 flex flex-col gap-sm">
+<div class="flex items-center gap-sm text-primary">
+<span class="material-symbols-outlined" data-icon="sync">sync</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">En cours</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-primary">24</div>
+</div>
+<!-- Card 4: Clôturées -->
+<div class="bg-surface p-md rounded-xl border border-surface-container-highest flex flex-col gap-sm">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Clôturées</span>
+</div>
+<div class="font-headline-lg text-headline-lg text-secondary">80</div>
+</div>
+</section>
+<!-- Tabs -->
+<div class="flex border-b border-surface-container-highest mb-lg gap-lg">
+<button class="pb-sm border-b-2 border-primary text-primary font-title-md text-title-md px-xs">Interventions</button>
+<button class="pb-sm border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-md text-title-md px-xs transition-colors">Utilisateurs</button>
+<button class="pb-sm border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-md text-title-md px-xs transition-colors">Rapports</button>
+</div>
+<!-- Ticket List -->
+<div class="flex flex-col gap-md">
+<!-- Ticket Item 1 -->
+<div class="bg-surface rounded-xl border border-surface-container-highest p-md flex flex-col md:flex-row md:items-center justify-between gap-md hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-error"></div>
+<div class="flex flex-col gap-xs pl-xs">
+<div class="flex items-center gap-sm">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-1 rounded-sm">#TKT-8992</span>
+<span class="font-label-md text-label-md text-error bg-error/10 px-2 py-1 rounded-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="priority_high">priority_high</span> Haute
+                        </span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Panne serveur principal - Baie 4</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="business">business</span> Client: TechCorp SA
+                    </p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-primary bg-primary/10 px-3 py-1 rounded-full flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="sync">sync</span> En cours
+                        </span>
+<span class="font-body-md text-body-md text-on-surface-variant mt-1 text-sm">Assigné: J. Dupont</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Ticket Item 2 -->
+<div class="bg-surface rounded-xl border border-surface-container-highest p-md flex flex-col md:flex-row md:items-center justify-between gap-md hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-primary"></div>
+<div class="flex flex-col gap-xs pl-xs">
+<div class="flex items-center gap-sm">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-1 rounded-sm">#TKT-8991</span>
+<span class="font-label-md text-label-md text-primary bg-primary/10 px-2 py-1 rounded-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="horizontal_rule">horizontal_rule</span> Normale
+                        </span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface">Mise à jour firmware routeur C</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="business">business</span> Client: LogiSys SARL
+                    </p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-secondary bg-surface-container px-3 py-1 rounded-full flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="schedule">schedule</span> En attente
+                        </span>
+<span class="font-body-md text-body-md text-on-surface-variant mt-1 text-sm">Non assigné</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Ticket Item 3 -->
+<div class="bg-surface rounded-xl border border-surface-container-highest p-md flex flex-col md:flex-row md:items-center justify-between gap-md hover:bg-surface-container-low transition-colors cursor-pointer relative overflow-hidden opacity-75">
+<div class="absolute left-0 top-0 bottom-0 w-[4px] bg-secondary"></div>
+<div class="flex flex-col gap-xs pl-xs">
+<div class="flex items-center gap-sm">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-2 py-1 rounded-sm">#TKT-8990</span>
+<span class="font-label-md text-label-md text-primary bg-primary/10 px-2 py-1 rounded-sm flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="horizontal_rule">horizontal_rule</span> Normale
+                        </span>
+</div>
+<h3 class="font-title-lg text-title-lg text-on-surface line-through">Remplacement câble réseau bureau 42</h3>
+<p class="font-body-md text-body-md text-on-surface-variant flex items-center gap-xs">
+<span class="material-symbols-outlined text-[16px]" data-icon="business">business</span> Client: Interne
+                    </p>
+</div>
+<div class="flex items-center gap-md">
+<div class="flex flex-col items-end">
+<span class="font-label-md text-label-md text-on-surface-variant bg-surface-container px-3 py-1 rounded-full flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]" data-icon="check_circle">check_circle</span> Clôturée
+                        </span>
+<span class="font-body-md text-body-md text-on-surface-variant mt-1 text-sm">Complété: A. Martin</span>
+</div>
+<span class="material-symbols-outlined text-outline" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container dark:bg-surface-container-high text-primary dark:text-inverse-primary font-label-md text-label-md font-headline-sm text-headline-sm text-primary dark:text-inverse-primary docked full-width bottom-0 rounded-t-xl bg-surface-container dark:bg-surface-container-high shadow-lg fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe">
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="mt-1">Missions</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="mt-1">Map</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="mt-1">Messages</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined fill" data-icon="account_circle">account_circle</span>
+<span class="mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

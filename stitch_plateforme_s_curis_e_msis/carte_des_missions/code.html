@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Technician Map View</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface": "#faf8ff",
+                "on-primary-container": "#a1bbff",
+                "on-primary": "#ffffff",
+                "on-tertiary-container": "#7ecf79",
+                "on-tertiary-fixed": "#002204",
+                "secondary-fixed": "#e4e2e2",
+                "on-error": "#ffffff",
+                "primary": "#003178",
+                "on-secondary": "#ffffff",
+                "surface-tint": "#2b5bb5",
+                "surface-container-high": "#e8e7f0",
+                "on-primary-fixed-variant": "#00429c",
+                "surface-container-highest": "#e2e2ea",
+                "secondary-container": "#e1dfdf",
+                "outline": "#737783",
+                "background": "#faf8ff",
+                "on-primary-fixed": "#001945",
+                "secondary-fixed-dim": "#c7c6c6",
+                "on-tertiary": "#ffffff",
+                "surface-container-low": "#f3f3fb",
+                "on-secondary-fixed-variant": "#464747",
+                "on-background": "#1a1b21",
+                "on-surface-variant": "#434652",
+                "error-container": "#ffdad6",
+                "on-secondary-fixed": "#1b1c1c",
+                "secondary": "#5e5e5e",
+                "primary-fixed-dim": "#b0c6ff",
+                "surface-container": "#ededf5",
+                "tertiary-fixed": "#a3f69c",
+                "on-surface": "#1a1b21",
+                "surface-variant": "#e2e2ea",
+                "error": "#ba1a1a",
+                "on-error-container": "#93000a",
+                "surface-container-lowest": "#ffffff",
+                "tertiary-container": "#005914",
+                "outline-variant": "#c3c6d4",
+                "tertiary": "#003f0b",
+                "on-tertiary-fixed-variant": "#005312",
+                "primary-container": "#0d47a1",
+                "surface-dim": "#d9d9e1",
+                "inverse-on-surface": "#f0f0f8",
+                "on-secondary-container": "#626262",
+                "inverse-primary": "#b0c6ff",
+                "surface-bright": "#faf8ff",
+                "primary-fixed": "#d9e2ff",
+                "tertiary-fixed-dim": "#88d982",
+                "inverse-surface": "#2e3036"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "md": "16px",
+                "base": "4px",
+                "gutter": "16px",
+                "margin-mobile": "16px",
+                "2xl": "48px",
+                "xl": "32px",
+                "margin-desktop": "32px",
+                "xs": "4px",
+                "sm": "8px",
+                "lg": "24px"
+        },
+        "fontFamily": {
+                "title-md": [
+                        "Inter"
+                ],
+                "display-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-lg": [
+                        "JetBrains Mono"
+                ],
+                "title-lg": [
+                        "Inter"
+                ],
+                "body-md": [
+                        "Inter"
+                ],
+                "headline-sm": [
+                        "Hanken Grotesk"
+                ],
+                "headline-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-md": [
+                        "JetBrains Mono"
+                ],
+                "headline-lg-mobile": [
+                        "Hanken Grotesk"
+                ],
+                "body-lg": [
+                        "Inter"
+                ]
+        },
+        "fontSize": {
+                "title-md": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "letterSpacing": "0.15px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "display-lg": [
+                        "57px",
+                        {
+                                "lineHeight": "64px",
+                                "letterSpacing": "-0.25px",
+                                "fontWeight": "700"
+                        }
+                ],
+                "label-lg": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "title-lg": [
+                        "22px",
+                        {
+                                "lineHeight": "28px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-md": [
+                        "14px",
+                        {
+                                "lineHeight": "20px",
+                                "letterSpacing": "0.25px",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-sm": [
+                        "24px",
+                        {
+                                "lineHeight": "32px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-md": [
+                        "28px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "headline-lg": [
+                        "32px",
+                        {
+                                "lineHeight": "40px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "label-md": [
+                        "12px",
+                        {
+                                "lineHeight": "16px",
+                                "fontWeight": "500"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "28px",
+                        {
+                                "lineHeight": "36px",
+                                "fontWeight": "600"
+                        }
+                ],
+                "body-lg": [
+                        "16px",
+                        {
+                                "lineHeight": "24px",
+                                "letterSpacing": "0.5px",
+                                "fontWeight": "400"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Hanken+Grotesk:wght@600;700&amp;family=JetBrains+Mono:wght@500&amp;family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+  body {
+    background-color: theme('colors.background');
+    color: theme('colors.on-background');
+    font-family: theme('fontFamily.body-md');
+  }
+</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="antialiased min-h-screen flex flex-col">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-surface group/design-root overflow-x-hidden" style='font-family: "Be Vietnam Pro", "Noto Sans", sans-serif;'>
+<div class="flex items-center bg-surface p-4 pb-2 justify-between">
+<h2 class="text-on-surface text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pl-12 pr-12">Map</h2>
+</div>
+<div class="@container flex flex-col h-full flex-1">
+<div class="flex flex-1 flex-col @[480px]:px-4 @[480px]:py-3 relative h-[530px]">
+<div class="bg-cover bg-center flex absolute inset-0 flex-1 flex-col justify-between px-4 pb-4 pt-5 @[480px]:rounded-lg @[480px]:px-8 @[480px]:pb-6 @[480px]:pt-8" data-location="Lyon, France, showing technical infrastructure overlay" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDS81zYCGgdleviLclszzb86NrueDKAWKZpNkWIWW3U7zA4hAWgvHQAHl2_YR1Bjf37i8CuB-RYTi4yW_dGRCtNTIeO5w_SKEdBIiolKtJ0DhLpj4CnoKUNawrpT8QuHwIKgSsRuyCA9It9GR-Ii4YT3rzkCZWuVx4xSnOZDpVShpOhbBERS4sjz_0R0TFcPZOCqwiVWPCwXyW3d78qmJrcGAp5YzRSi2D4rQunDOMuS7yAyIpNXbHNvg");'>
+<label class="flex flex-col min-w-40 h-12 z-10">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full shadow-md">
+<div class="text-primary flex border-none bg-surface items-center justify-center pl-4 rounded-l-lg border-r-0" data-icon="search" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-on-surface focus:outline-0 focus:ring-0 border-none bg-surface focus:border-none h-full placeholder:text-outline px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal" placeholder="Search intervention site..." value=""/>
+</div>
+</label>
+<div class="flex flex-col items-end gap-3 z-10">
+<div class="flex flex-col gap-0.5">
+<button class="flex size-10 items-center justify-center rounded-t-lg bg-surface shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-primary">
+<div data-icon="add" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">add</span>
+</div>
+</button>
+<button class="flex size-10 items-center justify-center rounded-b-lg bg-surface shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-primary">
+<div data-icon="remove" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">remove</span>
+</div>
+</button>
+</div>
+<button class="flex size-10 items-center justify-center rounded-lg bg-surface shadow-[0_2px_4px_rgba(0,0,0,0.1)] text-primary">
+<div data-icon="my_location" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">my_location</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+<div class="p-4 relative z-20 mt-auto bg-gradient-to-t from-surface to-transparent pt-12">
+<div class="flex items-stretch justify-between gap-4 rounded-xl bg-surface-container-lowest p-4 shadow-lg border border-surface-variant">
+<div class="flex flex-[2_2_0px] flex-col justify-between gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-sm" style="font-variation-settings: 'FILL' 1;">warning</span>
+<p class="text-on-surface text-base font-bold leading-tight">Server Rack Cooling Failure</p>
+</div>
+<p class="text-on-surface-variant text-sm font-normal leading-normal">Sector 4B • 1.2 km away</p>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-on-primary text-sm font-medium leading-normal w-fit transition-colors hover:bg-on-primary-fixed-variant">
+<span class="material-symbols-outlined mr-2 text-sm">directions</span>
+<span class="truncate">Itinerary</span>
+</button>
+</div>
+<div class="w-24 h-24 bg-center bg-no-repeat bg-cover rounded-lg flex-none border border-outline-variant" data-alt="A close-up view of a complex industrial control panel outdoors, featuring weathered metallic surfaces, various gauges, and thick black cabling. The scene is brightly lit by afternoon daylight, emphasizing a rugged, technical aesthetic suitable for a maintenance intervention. The color palette incorporates stark whites, metallic greys, and subtle hints of blue from surrounding infrastructure." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkdYokcU8c2lMG8ZG-eDHJ2ZiQeB76-BOCN60hHdXTvnrgboUnPXe4VLwYAEmrCEBLUn5oizIfVPR0Pef96ifgpeXRXS6_qIJCekk3Gy1jtVyH3veyDYe6nFAqwWSHfZ0QLoXJaXXZovZ7ZxeM7KrK9KAFq_RPUN8hDhayHsfooi-Vg-FML5hfDM3crLFMKioeNTw2D7NJgX9ch0jcO2hSSNwJhyTRILEAyPzTuF38FTfeF76hN4ntNg");'></div>
+</div>
+</div>
+</div>
+<div class="flex gap-2 border-t border-surface-variant bg-surface px-4 pb-3 pt-2 mt-auto">
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary" href="#">
+<div class="text-primary flex h-8 items-center justify-center bg-secondary-container px-4 rounded-full" data-icon="map" data-size="24px" data-weight="fill">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">map</span>
+</div>
+<p class="text-on-surface font-bold text-xs leading-normal tracking-[0.015em]">Map</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="assignment" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">assignment</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Missions</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="inventory_2" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">inventory_2</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Inventory</p>
+</a>
+<a class="just flex flex-1 flex-col items-center justify-end gap-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center" data-icon="person" data-size="24px" data-weight="regular">
+<span class="material-symbols-outlined">person</span>
+</div>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
+</a>
+</div>
+</div>
+</body></html>

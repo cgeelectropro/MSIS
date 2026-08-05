@@ -1,0 +1,3762 @@
+
+
+MONDE SESSION INFO SERVICE (MSIS)
+
+Pôle Développement Applicatif
+
+CAHIER DES CHARGES TECHNIQUE
+
+SPÉCIFICATION DES EXIGENCES LOGICIELLES (SRS)
+
+Plateforme sécurisée de communication et de suivi des interventions techniques
+
+Conforme aux recommandations OWASP Top 10 — Application mobile Flutter / API Laravel
+
+Version 1.0
+
+Yaoundé, Cameroun — Août 2026
+
+Document dérivé du rapport de stage académique de LEBOU YVAN DANIEL
+
+Institut Supérieur AZIMUT — Licence Professionnelle, Gestion des Systèmes Informatiques
+
+
+
+Contrôle du document
+
+Historique des versions
+
+Version
+
+Date
+
+Auteur
+
+Description
+
+0.1
+
+Août 2026
+
+Équipe d'ingénierie
+
+Extraction initiale des exigences depuis le rapport de stage MSIS
+
+1.0
+
+Août 2026
+
+Équipe d'ingénierie
+
+Version complète : exigences fonctionnelles, architecture, base de données, API, sécurité, déploiement
+
+Objet et portée du document
+
+Ce document constitue la Spécification des Exigences Logicielles (Software Requirements Specification — SRS) de la plateforme de suivi et de communication sécurisée des interventions techniques de Monde Session Info Service (MSIS). Il transforme le rapport de stage académique — qui décrit le contexte métier, les besoins et le prototype conçu par LEBOU YVAN DANIEL — en un référentiel technique exploitable directement par les équipes de développement mobile (Flutter), backend (Laravel), base de données, design, assurance qualité, sécurité et exploitation.
+
+Deux catégories d'information cohabitent dans ce document et sont distinguées explicitement tout au long du texte :
+
+Exigences issues du rapport (fidèles à la source) : problématique métier, acteurs, règles de gestion, choix technologiques de base, modèle de données initial et normes de sécurité imposées. Ces éléments ne sont jamais modifiés ni réinterprétés.
+
+Recommandations d'ingénierie (compléments nécessaires) : tout élément non détaillé dans le rapport mais indispensable à une implémentation de qualité professionnelle — architecture logicielle complète, contrats d'API, système de design, stratégie de tests, topologie de déploiement, etc. Chaque recommandation est signalée par un encart dédié.
+
+Recommandation d'ingénierie — Ce document intègre également le cahier des charges fonctionnel écran par écran fourni directement par le commanditaire du développement (section 6), qui prévaut sur les diagrammes UML du rapport académique lorsque des différences de terminologie existent (par exemple les libellés de statut des tickets, réconciliés en section 8.1).
+
+
+
+
+
+
+
+
+
+1. Résumé exécutif
+
+Monde Session Info Service (MSIS), société camerounaise de maintenance informatique, sonorisation et audiovisuel basée à Yaoundé (Fabrique-Ngousso), gère aujourd'hui ses interventions techniques par téléphone, WhatsApp et fiches papier ou tableurs Excel. Cette organisation informelle expose l'entreprise et ses clients à des risques concrets : absence de traçabilité, retards de prise en charge, et surtout transmission en clair d'informations hautement sensibles (mots de passe administrateur, schémas réseau, accès serveurs).
+
+Ce document spécifie la plateforme destinée à remplacer ces pratiques : une application mobile Flutter pour les clients, techniciens et superviseurs, adossée à une API REST Laravel et une base de données MySQL, avec une messagerie chiffrée liée à chaque ticket et une sécurité conforme à l'OWASP Top 10 (authentification par jetons, contrôle d'accès par rôles RBAC, hachage Bcrypt, HTTPS obligatoire).
+
+La spécification couvre l'intégralité du cycle de vie logiciel : exigences fonctionnelles et non fonctionnelles, personas et parcours utilisateurs, spécification UI écran par écran, système de design, modèle de données et schéma SQL complet, contrat d'API REST, architecture Flutter et Laravel, plan de sécurité détaillé, stratégie de tests, topologie de déploiement Docker/VPS et feuille de route produit.
+
+1.1 Objectifs du produit
+
+Centraliser la création, l'affectation et le suivi des interventions techniques dans un système unique et traçable.
+
+Sécuriser l'ensemble des échanges (données d'accès, messages, pièces jointes) conformément à l'OWASP Top 10.
+
+Offrir à chaque rôle (Client, Technicien, Superviseur) une expérience mobile fluide et adaptée à ses responsabilités.
+
+Fournir à la direction un tableau de bord décisionnel en temps réel sur la charge de travail et la performance.
+
+1.2 Bénéfices attendus
+
+Indicateur
+
+Situation actuelle
+
+Cible avec la plateforme
+
+Temps de prise en charge d'une panne
+
+Variable, non mesuré, dépendant de la disponibilité téléphonique
+
+Réduction estimée de 35 % (chiffre avancé dans le rapport de stage)
+
+Traçabilité des interventions
+
+Aucune historisation fiable (fiches papier, Excel dispersé)
+
+Historique complet et horodaté par ticket, consultable par tous les acteurs autorisés
+
+Confidentialité des données techniques
+
+Transmission en clair via WhatsApp / appels
+
+Messagerie chiffrée liée au ticket, accès strictement limité au client propriétaire, au technicien assigné et à l'administrateur (audit)
+
+Visibilité client
+
+Aucune
+
+Suivi en temps réel du statut (En attente, En cours, Résolue, Clôturée)
+
+Visibilité de la direction
+
+Aucune consolidation
+
+Tableau de bord avec KPI et rapports exportables
+
+2. Contexte métier
+
+2.1 Présentation de l'entreprise
+
+Champ
+
+Valeur
+
+Raison sociale
+
+Monde Session Info Service (MSIS)
+
+Siège
+
+Yaoundé, Fabrique-Ngousso
+
+Créée en
+
+2019, par M. Belomo Dennis Hervais (propriétaire)
+
+Domaines d'activité
+
+Maintenance informatique, montage audiovisuel, sonorisation générale
+
+Clientèle
+
+Particuliers, PME et grandes institutions
+
+Organisation
+
+Directeur général → Secrétaire ; Directeur général → 3 pôles Maintenanciers (dont un Maintenancier-Sonorisateur et un Maintenancier-Infographe)
+
+2.2 Problématique
+
+« Comment concevoir, sécuriser selon les standards de l'OWASP Top 10 et déployer une plateforme intégrée (API REST et application mobile) garantissant un suivi fluide, réactif et confidentiel des interventions techniques au sein de Monde Session Info Service ? » (problématique formulée dans le rapport de stage).
+
+2.3 Fonctionnement actuel et faiblesses identifiées
+
+Les demandes de dépannage sont formulées par appel téléphonique ou via des applications de messagerie grand public (WhatsApp).
+
+Le suivi des tâches et l'affectation aux techniciens reposent sur des fiches papier ou des registres Excel tenus manuellement.
+
+Les informations ultra-sensibles (mots de passe administrateur, schémas réseau, accès serveurs) sont transmises sans aucun chiffrement.
+
+Conséquences observées : retards fréquents de prise en charge, impossibilité d'historiser les pannes, absence de visibilité pour le client final, et vulnérabilités de sécurité critiques — fiches de dépannage circulant par des canaux non sécurisés (risque d'interception en transit) et données d'accès techniques stockées en clair.
+
+2.4 Analyse des risques (situation actuelle)
+
+Risque
+
+Probabilité
+
+Impact
+
+Catégorie OWASP associée
+
+Interception de données sensibles en transit (WhatsApp, SMS)
+
+Élevée
+
+Critique
+
+A02:2021 – Cryptographic Failures
+
+Stockage en clair des identifiants d'accès client
+
+Élevée
+
+Critique
+
+A02:2021 – Cryptographic Failures
+
+Absence de contrôle sur qui peut voir/modifier un ticket
+
+Moyenne
+
+Élevé
+
+A01:2021 – Broken Access Control
+
+Perte de traçabilité (fiches papier égarées)
+
+Élevée
+
+Moyen
+
+Non applicable — risque opérationnel
+
+Absence d'authentification formelle des intervenants
+
+Moyenne
+
+Élevé
+
+A07:2021 – Identification and Authentication Failures
+
+2.5 Objectifs métier
+
+Analyser l'existant et formaliser les besoins fonctionnels et non fonctionnels (priorisation MoSCoW).
+
+Adopter une démarche projet structurée (méthodologie Agile Scrum, sprints, gestion des risques).
+
+Modéliser l'architecture système via UML (cas d'utilisation, activité, séquence, état-transition, composants, déploiement, classes, paquetages).
+
+Développer une API REST backend Laravel et une application mobile cross-platform Flutter.
+
+Appliquer les recommandations OWASP Top 10 (RBAC contre le Broken Access Control, JWT et hachage Bcrypt contre les Cryptographic Failures, ORM Eloquent contre les injections SQL).
+
+Qualifier et déployer le prototype (tests unitaires, fonctionnels, intrusion) sur un VPS Ubuntu avec NGINX et Docker.
+
+3. Vision du projet
+
+3.1 Énoncé de mission
+
+Doter Monde Session Info Service d'une plateforme numérique unique, sécurisée et mobile qui relie clients, techniciens et superviseurs autour de chaque intervention technique, de sa déclaration jusqu'à sa clôture, en remplaçant définitivement les canaux informels par un système traçable, chiffré et conforme aux meilleures pratiques de cybersécurité.
+
+3.2 Buts stratégiques
+
+Éliminer les supports informels (papier, Excel, messageries grand public) comme circuit officiel de gestion des pannes.
+
+Garantir à tout instant la confidentialité, l'intégrité et la traçabilité des échanges techniques.
+
+Donner à la direction une vision consolidée et exploitable de l'activité de maintenance.
+
+Construire une base technique modulaire permettant l'ajout futur de géolocalisation, notifications temps réel et fonctions prédictives.
+
+3.3 Indicateurs clés de performance (KPI)
+
+KPI
+
+Définition
+
+Référence / Cible
+
+Délai moyen de prise en charge
+
+Temps entre la création du ticket et son passage à « En cours »
+
+Réduction de 35 % par rapport à la situation actuelle
+
+Taux de résolution au premier contact
+
+Part des tickets résolus sans réouverture ni blocage
+
+Cible ≥ 80 % après 6 mois d'exploitation
+
+Taux d'adoption client
+
+Part des clients utilisant l'application plutôt que les canaux informels
+
+Cible ≥ 70 % à 3 mois
+
+Disponibilité de l'API
+
+Temps de fonctionnement de l'API REST
+
+≥ 99,5 % mensuel
+
+Incidents de sécurité
+
+Nombre de failles critiques détectées en production
+
+0 vulnérabilité critique non corrigée
+
+4. Parties prenantes
+
+Partie prenante
+
+Rôle dans le projet
+
+Attentes principales
+
+M. Belomo Hervais — Product Owner / Encadreur professionnel
+
+Représente les besoins métier de MSIS ; valide les livrables fonctionnels
+
+Une plateforme opérationnelle qui réduit les délais et sécurise les échanges
+
+Dr Maxwell Manga — Scrum Master / Encadreur académique
+
+Garant du cadre méthodologique et académique
+
+Rigueur de la démarche Agile Scrum et qualité de la documentation
+
+Direction générale de MSIS
+
+Sponsor et décideur final
+
+Visibilité sur la charge de travail, retour sur investissement, image de professionnalisme
+
+Clients de MSIS (particuliers, PME, institutions)
+
+Utilisateurs finaux déclarant les pannes
+
+Simplicité de déclaration, transparence du suivi, confidentialité de leurs données
+
+Techniciens de terrain (maintenanciers, sonorisateur, infographe)
+
+Utilisateurs finaux exécutant les interventions
+
+Interface claire des missions assignées, communication fiable avec le client
+
+Superviseur / Administrateur
+
+Pilotage opérationnel : affectation, suivi, gestion des comptes
+
+Tableau de bord global, contrôle d'accès fiable
+
+Équipe de développement (Flutter, Laravel, DevOps, QA)
+
+Conception, développement, tests, déploiement
+
+Spécifications claires, non ambiguës, prêtes à l'implémentation
+
+5. Analyse du système existant
+
+Cette section synthétise, sans les modifier, les constats du rapport de stage sur le fonctionnement actuel de MSIS, et les traduit en écarts fonctionnels à combler par la nouvelle plateforme.
+
+5.1 Processus actuel (AS-IS)
+
+Le client contacte MSIS par téléphone ou WhatsApp pour signaler une panne.
+
+La demande est notée manuellement (fiche papier ou tableur Excel) par le secrétariat ou directement par un technicien.
+
+L'affectation à un technicien se fait de façon informelle, sans règle d'assignation ni visibilité pour la direction.
+
+Le technicien intervient sur site ou à distance ; les informations d'accès sensibles (mots de passe, schémas réseau) sont échangées en clair par téléphone ou WhatsApp.
+
+La clôture de l'intervention n'est pas formalisée : aucune trace fiable ni évaluation du client n'est conservée.
+
+5.2 Comparatif AS-IS / TO-BE
+
+Dimension
+
+Situation actuelle (AS-IS)
+
+Plateforme cible (TO-BE)
+
+Déclaration de panne
+
+Appel téléphonique ou message WhatsApp
+
+Formulaire structuré dans l'application mobile (titre, description, priorité, pièce jointe)
+
+Affectation
+
+Manuelle, non tracée
+
+Affectation par le superviseur, historisée, avec notification au technicien
+
+Suivi de statut
+
+Aucun, ou verbal
+
+Statuts formels (En attente, En cours, Bloqué, Résolue, Clôturée) visibles par tous les acteurs autorisés
+
+Communication
+
+WhatsApp / téléphone, non chiffrés
+
+Messagerie chiffrée liée au ticket, accès restreint au client, au technicien assigné et à l'administrateur
+
+Historique
+
+Fiches papier dispersées
+
+Base de données centralisée MySQL, consultable et exportable
+
+Pilotage
+
+Aucun tableau de bord
+
+Dashboard superviseur avec KPI et filtres
+
+Recommandation d'ingénierie — Le rapport ne détaille pas de workflow de notification ; la conception d'un système de notifications push et in-app (section 21) répond à ce vide fonctionnel identifié entre la déclaration du ticket et sa prise en charge effective.
+
+6. Exigences fonctionnelles
+
+Les exigences sont organisées par écran, conformément au cahier des charges fonctionnel fourni par le commanditaire. Chaque exigence porte un identifiant unique (préfixe FR), un acteur, une priorité MoSCoW (Must / Should / Could / Won't) et une description vérifiable. Les règles de validation, les états d'erreur et les états de succès sont détaillés sous chaque tableau.
+
+6.1 Authentification (tous les rôles)
+
+ID
+
+Exigence
+
+Priorité
+
+FR-AUTH-01
+
+L'utilisateur sélectionne son rôle (Client, Technicien, Superviseur) avant de saisir ses identifiants.
+
+Must
+
+FR-AUTH-02
+
+L'utilisateur saisit son email et son mot de passe, avec une icône « œil » pour afficher/masquer le mot de passe.
+
+Must
+
+FR-AUTH-03
+
+L'écran affiche une bannière de confiance « Connecté et sécurisé — Chiffrement SSL 256-bit ».
+
+Should
+
+FR-AUTH-04
+
+Un lien « Mot de passe oublié ? » déclenche le parcours de réinitialisation par email.
+
+Must
+
+FR-AUTH-05
+
+À la validation, le client envoie ses identifiants à l'API ; en cas de succès, un jeton d'accès est reçu et stocké de façon chiffrée sur l'appareil.
+
+Must
+
+FR-AUTH-06
+
+Le rôle sélectionné à l'écran est vérifié côté serveur contre le rôle réel de l'utilisateur ; toute incohérence est rejetée (l'interface ne doit jamais faire confiance au choix de rôle affiché).
+
+Must
+
+FR-AUTH-07
+
+Après 5 tentatives échouées consécutives sur un même compte, un délai progressif (rate limiting) est appliqué avant nouvel essai.
+
+Should
+
+Règles de validation — Authentification
+
+Email : format RFC 5322 valide, champ obligatoire.
+
+Mot de passe : champ obligatoire, non vide ; aucune règle de complexité n'est imposée à la saisie de connexion (elle s'applique à la création/réinitialisation, voir FR-AUTH-08).
+
+FR-AUTH-08 (création/réinitialisation) : le mot de passe doit contenir au minimum 8 caractères, une majuscule, un chiffre et un caractère spécial.
+
+États d'écran — Authentification
+
+Chargement : indicateur circulaire sur le bouton de connexion, champs désactivés.
+
+Erreur : message inline « Email ou mot de passe incorrect » sans préciser lequel des deux champs est fautif (prévention de l'énumération de comptes, cf. section 26).
+
+Succès : redirection automatique vers le tableau de bord correspondant au rôle authentifié.
+
+6.2 Création d'intervention (Client)
+
+ID
+
+Exigence
+
+Priorité
+
+FR-CRT-01
+
+Champ « Titre de l'intervention », texte court, obligatoire.
+
+Must
+
+FR-CRT-02
+
+Champ « Description détaillée », zone de texte multiligne, obligatoire.
+
+Must
+
+FR-CRT-03
+
+Sélecteur de priorité : Haute, Normale, Basse.
+
+Must
+
+FR-CRT-04
+
+Ajout d'une pièce jointe / photo depuis la galerie ou l'appareil photo.
+
+Should
+
+FR-CRT-05
+
+À la validation, le ticket est créé avec le statut EN_ATTENTE et le client en est propriétaire (id_client).
+
+Must
+
+FR-CRT-06
+
+Un accusé de création est affiché avec le numéro de ticket généré.
+
+Should
+
+FR-CRT-07
+
+Le superviseur reçoit une notification de nouveau ticket dès la création.
+
+Must
+
+Règles de validation — Création d'intervention
+
+Titre : 5 à 150 caractères.
+
+Description : 10 à 3000 caractères.
+
+Priorité : valeur obligatoire parmi {BASSE, NORMALE, HAUTE} — valeur par défaut NORMALE si non renseignée.
+
+Pièce jointe : formats JPG, PNG, PDF ; taille maximale 10 Mo par fichier ; 5 fichiers maximum par ticket (voir section 22).
+
+États d'écran — Création d'intervention
+
+Erreur de validation : messages inline sous chaque champ fautif, bouton de soumission désactivé tant que le formulaire n'est pas valide.
+
+Échec réseau : bannière « Impossible de créer le ticket, vérifiez votre connexion » avec option de réessai ; le brouillon est conservé localement (voir section 6.7, mode hors-ligne).
+
+Succès : écran de confirmation avec numéro de ticket, puis redirection vers le détail du ticket créé.
+
+6.3 Tableau de bord Superviseur
+
+ID
+
+Exigence
+
+Priorité
+
+FR-DASH-01
+
+Quatre widgets KPI : Total, En attente, En cours, Clôturées.
+
+Must
+
+FR-DASH-02
+
+Trois onglets : Interventions, Utilisateurs, Rapports.
+
+Must
+
+FR-DASH-03
+
+Filtres rapides sur la liste des interventions : Toutes, En attente, En cours, Clôturées.
+
+Must
+
+FR-DASH-04
+
+État vide « Aucune intervention » avec icône boîte aux lettres lorsqu'un filtre ne retourne aucun résultat.
+
+Should
+
+FR-DASH-05
+
+Recherche textuelle sur le titre ou le nom du client.
+
+Could
+
+FR-DASH-06
+
+Tri par date de création, priorité ou statut.
+
+Could
+
+6.4 Gestion des utilisateurs (Superviseur)
+
+ID
+
+Exigence
+
+Priorité
+
+FR-USR-01
+
+Deux listes distinctes : Techniciens et Clients.
+
+Must
+
+FR-USR-02
+
+Affichage de Nom, Email, et Statut (Actif / Inactif) avec badge de couleur.
+
+Must
+
+FR-USR-03
+
+Bouton Activer/Désactiver un compte, avec confirmation avant application.
+
+Must
+
+FR-USR-04
+
+La désactivation d'un compte technicien libère automatiquement ses interventions EN_ATTENTE non commencées pour réaffectation (les interventions EN_COURS restent visibles pour clôture).
+
+Should
+
+FR-USR-05
+
+Création d'un nouveau compte technicien par le superviseur, avec email d'invitation.
+
+Should
+
+6.5 Espace Technicien
+
+ID
+
+Exigence
+
+Priorité
+
+FR-TECH-01
+
+Trois widgets KPI : Assignées, En cours, Clôturées.
+
+Must
+
+FR-TECH-02
+
+Liste « Interventions assignées » avec filtres par statut.
+
+Must
+
+FR-TECH-03
+
+Barre de navigation basse : Missions, Carte, Messages, Profil.
+
+Must
+
+FR-TECH-04
+
+Au clic sur une mission : affichage du détail complet et changement de statut.
+
+Must
+
+FR-TECH-05
+
+L'onglet Carte affiche la localisation des interventions assignées (voir Recommandation d'ingénierie section 31).
+
+Could
+
+6.6 Détail d'intervention et messagerie
+
+ID
+
+Exigence
+
+Priorité
+
+FR-DET-01
+
+Affichage de toutes les informations du ticket : titre, description, priorité, statut, client, technicien assigné, pièces jointes, historique.
+
+Must
+
+FR-DET-02
+
+Changement de statut selon la séquence autorisée : EN_ATTENTE → EN_COURS → RESOLUE → CLOTUREE, avec la possibilité de passer en BLOQUE depuis EN_COURS (voir section 8.1).
+
+Must
+
+FR-DET-03
+
+Messagerie sécurisée : conversation 1-à-1 liée au ticket (id_intervention).
+
+Must
+
+FR-DET-04
+
+Envoi de messages texte et de photos dans la conversation.
+
+Must
+
+FR-DET-05
+
+Historique de la conversation conservé et consultable à tout moment par les parties autorisées.
+
+Must
+
+FR-DET-06
+
+Notification push lors de la réception d'un nouveau message.
+
+Must
+
+FR-DET-07
+
+Horodatage de chaque message et indicateur « vu ».
+
+Should
+
+FR-DET-08
+
+Seuls le client propriétaire, le technicien assigné, et l'administrateur (en lecture d'audit) peuvent accéder à la conversation d'un ticket.
+
+Must
+
+Détail de la règle de transition de statut — FR-DET-02
+
+EN_ATTENTE → EN_COURS : déclenché par l'affectation d'un technicien (superviseur) ou la prise en charge (technicien).
+
+EN_COURS → BLOQUE : déclenché par le technicien avec motif obligatoire (ex. pièce détachée manquante).
+
+BLOQUE → EN_COURS : déclenché par le technicien lorsque le blocage est levé.
+
+EN_COURS → RESOLUE : déclenché par le technicien à la fin de l'intervention, avec rapport technique obligatoire.
+
+RESOLUE → CLOTUREE : déclenché par le client, qui confirme la résolution et peut ajouter une note de satisfaction (voir section 8.1 pour la réconciliation avec le diagramme d'activité du rapport).
+
+Aucune transition arrière n'est autorisée en dehors de BLOQUE ↔ EN_COURS ; toute tentative de saut d'état (ex. EN_ATTENTE → RESOLUE) est rejetée par l'API avec une erreur 422.
+
+6.7 Exigences transverses
+
+ID
+
+Exigence
+
+Priorité
+
+FR-TRV-01
+
+Un client ne voit et ne peut agir que sur ses propres interventions.
+
+Must
+
+FR-TRV-02
+
+Un technicien ne voit et ne peut agir que sur les interventions qui lui sont assignées.
+
+Must
+
+FR-TRV-03
+
+Un superviseur voit l'ensemble des interventions et peut assigner ou réassigner un technicien.
+
+Must
+
+FR-TRV-04
+
+L'application fonctionne en mode dégradé hors-ligne : consultation des dernières données synchronisées, mise en file d'attente des actions (création de ticket, envoi de message) rejouées à la reconnexion.
+
+Should
+
+FR-TRV-05
+
+L'application propose un mode sombre (dark mode) suivant les préférences système.
+
+Could
+
+7. Exigences non fonctionnelles
+
+Exigences issues du rapport (sécurité renforcée conforme OWASP Top 10, fluidité de l'interface mobile, intégrité de la base de données MySQL) complétées par des recommandations d'ingénierie mesurables.
+
+Catégorie
+
+Exigence
+
+Métrique cible
+
+Performance
+
+Temps de réponse de l'API pour les opérations courantes (lecture de liste, création de ticket)
+
+P95 < 400 ms hors upload de fichiers
+
+Performance mobile
+
+Temps de démarrage à froid de l'application
+
+< 2,5 s sur un appareil Android milieu de gamme
+
+Scalabilité
+
+Nombre d'utilisateurs simultanés supportés en V1
+
+500 utilisateurs actifs simultanés sans dégradation notable
+
+Maintenabilité
+
+Couverture de tests automatisés du code backend critique (auth, RBAC, transitions de statut)
+
+≥ 80 %
+
+Accessibilité
+
+Conformité aux contrastes et tailles de cible tactile
+
+WCAG 2.1 AA (contraste ≥ 4.5:1, cibles tactiles ≥ 44x44 dp)
+
+Localisation
+
+Langues supportées à la sortie
+
+Français (par défaut), Anglais
+
+Disponibilité
+
+Disponibilité de l'API en production
+
+≥ 99,5 % mensuel, fenêtres de maintenance planifiées hors heures ouvrées
+
+Fonctionnement hors-ligne
+
+Consultation et mise en file des actions sans réseau
+
+File d'attente locale persistée, synchronisation automatique au retour du réseau
+
+Supervision
+
+Journalisation applicative et suivi des erreurs
+
+Centralisation des logs, alerting sur erreurs 5xx et échecs d'authentification répétés
+
+Journalisation d'audit
+
+Traçabilité des actions sensibles (connexion, changement de statut, accès administrateur)
+
+Conservation 12 mois minimum, horodatage, identifiant utilisateur et adresse IP
+
+Sauvegarde
+
+Sauvegarde de la base de données
+
+Sauvegarde automatisée quotidienne, rétention 30 jours, test de restauration trimestriel
+
+Reprise après sinistre (PRA)
+
+Objectifs de reprise
+
+RPO ≤ 24 h, RTO ≤ 4 h
+
+Intégrité des données
+
+Cohérence référentielle de la base MySQL
+
+Contraintes de clé étrangère actives (InnoDB), transactions atomiques sur les opérations multi-tables
+
+8. Règles de gestion
+
+8.1 Réconciliation des statuts de ticket
+
+Le rapport de stage modélise, dans son diagramme d'état-transition, les statuts A_FAIRE, EN_COURS, BLOQUE et RESOLU, et son diagramme d'activité ajoute une étape finale « Clôture & Note » réalisée par le client après la résolution. Le cahier des charges fonctionnel fourni pour l'application utilise quant à lui les libellés EN_ATTENTE, EN_COURS, RESOLUE et CLOTUREE. Ces deux sources sont réconciliées comme suit, sans perte d'information :
+
+Statut retenu
+
+Correspondance rapport
+
+Déclencheur
+
+EN_ATTENTE
+
+A_FAIRE
+
+Création du ticket par le client
+
+EN_COURS
+
+EN_COURS
+
+Affectation ou prise en charge par un technicien
+
+BLOQUE
+
+BLOQUE
+
+Signalement d'un blocage par le technicien (branche réversible vers EN_COURS)
+
+RESOLUE
+
+RESOLU
+
+Marquage de fin de dépannage par le technicien
+
+CLOTUREE
+
+« Clôture & Note » (étape finale du diagramme d'activité)
+
+Confirmation et notation par le client
+
+Recommandation d'ingénierie — Cette réconciliation est nécessaire car le rapport et le cahier des charges fonctionnel utilisent des libellés différents pour un même processus métier ; aucune règle de gestion n'a été inventée, seule la terminologie a été unifiée en conservant l'état BLOQUE du diagramme original, absent du texte des nouvelles exigences mais indispensable à la réalité opérationnelle (attente de pièce détachée, accès site impossible, etc.).
+
+8.2 Règles de visibilité et de propriété
+
+Un Client ne voit que SES interventions (id_client = utilisateur courant).
+
+Un Technicien ne voit que les interventions qui lui sont ASSIGNÉES (id_technicien = utilisateur courant).
+
+Un Superviseur/Administrateur voit TOUTES les interventions et peut ASSIGNER ou RÉASSIGNER un technicien à tout moment, y compris sur un ticket déjà EN_COURS.
+
+La messagerie d'un ticket n'est accessible qu'au client propriétaire, au technicien assigné, et à l'administrateur en mode audit (lecture seule, action journalisée).
+
+8.3 Règle de progression des statuts
+
+Le statut d'un ticket ne peut évoluer que dans le sens autorisé : EN_ATTENTE → EN_COURS → RESOLUE → CLOTUREE, avec la seule dérogation réversible EN_COURS ↔ BLOQUE. Toute tentative de transition non listée est refusée par l'API (voir FR-DET-02).
+
+8.4 Matrice de contrôle d'accès (synthèse RBAC)
+
+Action
+
+Client
+
+Technicien
+
+Superviseur/Admin
+
+Créer une intervention
+
+Oui (les siennes)
+
+Non
+
+Oui (pour un client)
+
+Voir la liste des interventions
+
+Les siennes uniquement
+
+Les siennes assignées uniquement
+
+Toutes
+
+Assigner un technicien
+
+Non
+
+Non
+
+Oui
+
+Changer le statut EN_ATTENTE→EN_COURS
+
+Non
+
+Oui (ses tickets)
+
+Oui
+
+Changer le statut EN_COURS→RESOLUE
+
+Non
+
+Oui (ses tickets)
+
+Oui
+
+Changer le statut RESOLUE→CLOTUREE
+
+Oui (ses tickets)
+
+Non
+
+Oui
+
+Envoyer un message sur un ticket
+
+Oui (ses tickets)
+
+Oui (ses tickets assignés)
+
+Non (audit lecture seule)
+
+Gérer les comptes utilisateurs
+
+Non
+
+Non
+
+Oui
+
+Voir le tableau de bord global
+
+Non
+
+Non
+
+Oui
+
+9. Personas utilisateurs
+
+9.1 Client — « Le particulier ou l'entreprise en attente de dépannage »
+
+Objectif principal : signaler une panne rapidement et suivre son traitement sans avoir à relancer par téléphone.
+
+Frustration actuelle : ne sait jamais si sa demande WhatsApp a été prise en compte.
+
+Aisance technique : moyenne ; utilise WhatsApp et des applications bancaires mobiles au quotidien.
+
+Attente vis-à-vis de la plateforme : confidentialité de ses accès techniques et transparence du statut de sa demande.
+
+9.2 Technicien — « Le maintenancier de terrain »
+
+Objectif principal : consulter ses missions du jour, communiquer avec le client sans divulguer d'informations sensibles hors du canal sécurisé, et documenter son intervention.
+
+Frustration actuelle : reçoit des instructions orales ou par messages dispersés, sans centralisation.
+
+Aisance technique : bonne sur le plan matériel/réseau, variable sur les usages applicatifs avancés.
+
+Attente vis-à-vis de la plateforme : simplicité d'usage sur le terrain, fonctionnement même en cas de connexion instable.
+
+9.3 Superviseur / Administrateur — « Le responsable du pôle développement applicatif »
+
+Objectif principal : avoir une vision globale de la charge de travail, affecter efficacement les techniciens, garantir la conformité sécuritaire.
+
+Frustration actuelle : aucune consolidation des données, décisions prises « à l'instinct ».
+
+Aisance technique : élevée.
+
+Attente vis-à-vis de la plateforme : tableau de bord fiable, contrôle fin des droits d'accès, capacité d'audit.
+
+10. User stories
+
+Les user stories ci-dessous couvrent l'ensemble des exigences fonctionnelles listées en section 6, organisées par épopée (module fonctionnel). Chaque story suit le format « En tant que <rôle>, je veux <action>, afin de <bénéfice> » et porte un identifiant traçable vers les exigences FR correspondantes.
+
+10.1 Épopée — Authentification et compte
+
+US-01 — En tant que utilisateur, je veux choisir mon rôle avant de me connecter, afin d'accéder directement à l'espace qui me concerne. [FR-AUTH-01]
+
+US-02 — En tant que utilisateur, je veux afficher ou masquer mon mot de passe pendant la saisie, afin d'éviter les erreurs de frappe. [FR-AUTH-02]
+
+US-03 — En tant que utilisateur, je veux réinitialiser mon mot de passe oublié par email, afin de retrouver l'accès à mon compte sans aide extérieure. [FR-AUTH-04]
+
+US-04 — En tant que utilisateur, je veux être informé que ma connexion est chiffrée, afin d'avoir confiance dans la plateforme. [FR-AUTH-03]
+
+US-05 — En tant que Superviseur, je veux créer des comptes techniciens et leur envoyer une invitation, afin de les intégrer rapidement à la plateforme. [FR-USR-05]
+
+US-06 — En tant que Superviseur, je veux activer ou désactiver un compte utilisateur, afin de contrôler les accès en cas de départ ou de suspicion d'abus. [FR-USR-03]
+
+10.2 Épopée — Déclaration et suivi d'intervention (Client)
+
+US-07 — En tant que Client, je veux décrire ma panne avec un titre, une description et une priorité, afin que le technicien comprenne rapidement mon besoin. [FR-CRT-01, FR-CRT-02, FR-CRT-03]
+
+US-08 — En tant que Client, je veux joindre une photo de l'équipement en panne, afin d'aider le diagnostic à distance. [FR-CRT-04]
+
+US-09 — En tant que Client, je veux recevoir un numéro de ticket après ma demande, afin de pouvoir m'y référer facilement. [FR-CRT-06]
+
+US-10 — En tant que Client, je veux suivre en temps réel le statut de mon intervention, afin de savoir quand attendre le technicien. [FR-DET-01, FR-DET-02]
+
+US-11 — En tant que Client, je veux confirmer la clôture de mon intervention et laisser une note, afin d'exprimer mon niveau de satisfaction. [FR-DET-02, section 8.1]
+
+US-12 — En tant que Client, je veux consulter l'historique de tous mes tickets passés, afin de garder une trace de mes échanges avec MSIS. [FR-TRV-01]
+
+10.3 Épopée — Traitement des interventions (Technicien)
+
+US-13 — En tant que Technicien, je veux voir la liste de mes interventions assignées avec des indicateurs KPI, afin d'organiser ma journée. [FR-TECH-01, FR-TECH-02]
+
+US-14 — En tant que Technicien, je veux consulter le détail complet d'une mission avant de m'y rendre, afin de préparer le matériel nécessaire. [FR-TECH-04, FR-DET-01]
+
+US-15 — En tant que Technicien, je veux passer une intervention à « En cours » dès que je commence, afin d'informer le client et le superviseur. [FR-DET-02]
+
+US-16 — En tant que Technicien, je veux signaler un blocage avec un motif, afin que le superviseur sache pourquoi l'intervention est suspendue. [FR-DET-02]
+
+US-17 — En tant que Technicien, je veux ajouter un rapport technique et marquer l'intervention comme résolue, afin de documenter mon travail. [FR-DET-02]
+
+10.4 Épopée — Pilotage (Superviseur)
+
+US-18 — En tant que Superviseur, je veux voir un tableau de bord avec le total, les tickets en attente, en cours et clôturés, afin d'évaluer la charge globale. [FR-DASH-01]
+
+US-19 — En tant que Superviseur, je veux filtrer les interventions par statut, afin de me concentrer sur les urgences. [FR-DASH-03]
+
+US-20 — En tant que Superviseur, je veux assigner ou réassigner un technicien à une intervention, afin d'équilibrer la charge de travail. [FR-TRV-03]
+
+US-21 — En tant que Superviseur, je veux exporter un rapport d'activité, afin de le présenter à la direction générale. [section 23]
+
+10.5 Épopée — Messagerie sécurisée
+
+US-22 — En tant que Client, je veux échanger des messages avec le technicien directement sur mon ticket, afin de préciser le contexte sans passer par WhatsApp. [FR-DET-03, FR-DET-04]
+
+US-23 — En tant que Technicien, je veux recevoir une notification dès qu'un client m'écrit, afin de répondre rapidement. [FR-DET-06]
+
+US-24 — En tant que Client, je veux que mes échanges soient chiffrés et invisibles à des tiers, afin de protéger mes informations sensibles. [FR-DET-08, section 20]
+
+US-25 — En tant que utilisateur (client ou technicien), je veux envoyer une photo dans la conversation, afin d'illustrer un problème technique. [FR-DET-04]
+
+US-26 — En tant que Administrateur, je veux pouvoir auditer une conversation en cas de litige, afin de vérifier la conformité des échanges. [FR-DET-08]
+
+10.6 Épopée — Notifications et hors-ligne
+
+US-27 — En tant que utilisateur, je veux recevoir une notification push lors d'un changement important sur mon ticket, afin de rester informé sans ouvrir l'application en permanence. [section 21]
+
+US-28 — En tant que Technicien, je veux pouvoir consulter mes missions même sans connexion réseau, afin de continuer à travailler sur le terrain. [FR-TRV-04]
+
+US-29 — En tant que utilisateur, je veux que mes actions effectuées hors-ligne soient synchronisées automatiquement au retour du réseau, afin de ne rien perdre. [FR-TRV-04]
+
+US-30 — En tant que utilisateur, je veux basculer l'application en mode sombre, afin de réduire la fatigue visuelle en usage nocturne. [FR-TRV-05]
+
+11. Cas d'utilisation détaillés
+
+Les cas d'utilisation ci-dessous détaillent les scénarios principaux identifiés dans le diagramme de cas d'utilisation du rapport (S'authentifier, Déclarer une intervention, Modifier le statut, Envoyer un message, Affecter un technicien, Gérer les comptes utilisateurs, Visualiser le tableau de bord).
+
+UC-01 — S'authentifier
+
+Champ
+
+Détail
+
+Acteur principal
+
+Tout utilisateur
+
+Préconditions
+
+L'utilisateur dispose d'un compte actif.
+
+Flux principal
+
+1. L'utilisateur sélectionne son rôle. 2. Il saisit son email et son mot de passe. 3. Le système vérifie les identifiants et le rôle côté serveur. 4. Un jeton d'accès est émis et stocké de façon sécurisée. 5. L'utilisateur est redirigé vers son tableau de bord.
+
+Flux alternatif
+
+Si l'utilisateur a oublié son mot de passe, il suit le flux « Mot de passe oublié » (email de réinitialisation avec lien à durée de vie limitée).
+
+Exceptions
+
+Identifiants invalides → message d'erreur générique. Compte désactivé → message « Compte désactivé, contactez votre administrateur ». Trop de tentatives → verrouillage temporaire (FR-AUTH-07).
+
+Postconditions
+
+L'utilisateur est authentifié et dispose d'un jeton valide pour les appels API suivants.
+
+UC-02 — Déclarer une intervention
+
+Champ
+
+Détail
+
+Acteur principal
+
+Client
+
+Préconditions
+
+Le client est authentifié.
+
+Flux principal
+
+1. Le client accède à l'écran de création. 2. Il renseigne titre, description, priorité et pièce jointe optionnelle. 3. Il valide le formulaire. 4. Le système crée le ticket avec le statut EN_ATTENTE. 5. Le superviseur est notifié.
+
+Flux alternatif
+
+Si aucune connexion réseau n'est disponible, le ticket est mis en file d'attente locale et synchronisé à la reconnexion (FR-TRV-04).
+
+Exceptions
+
+Champs invalides → erreurs inline, soumission bloquée. Échec serveur → message d'erreur avec option de réessai.
+
+Postconditions
+
+Un nouveau ticket existe en base avec un identifiant unique, visible par le client et par tous les superviseurs.
+
+UC-03 — Affecter un technicien à une intervention
+
+Champ
+
+Détail
+
+Acteur principal
+
+Superviseur
+
+Préconditions
+
+Le ticket existe avec le statut EN_ATTENTE ou EN_COURS ; au moins un technicien actif existe.
+
+Flux principal
+
+1. Le superviseur ouvre le détail du ticket. 2. Il sélectionne un technicien dans la liste des comptes actifs. 3. Il confirme l'affectation. 4. Le système met à jour id_technicien et passe le statut à EN_COURS si celui-ci était EN_ATTENTE. 5. Le technicien est notifié.
+
+Flux alternatif
+
+Réaffectation : le superviseur peut changer le technicien d'un ticket déjà EN_COURS ; l'ancien et le nouveau technicien sont notifiés.
+
+Exceptions
+
+Technicien désactivé entre-temps → liste rafraîchie, affectation bloquée avec message explicite.
+
+Postconditions
+
+Le ticket est lié au technicien choisi et apparaît dans sa liste de missions assignées.
+
+UC-04 — Traiter une intervention (changement de statut)
+
+Champ
+
+Détail
+
+Acteur principal
+
+Technicien
+
+Préconditions
+
+Le ticket est assigné au technicien connecté.
+
+Flux principal
+
+1. Le technicien ouvre le détail de sa mission. 2. Il passe le statut à EN_COURS. 3. Il exécute le dépannage. 4. Il ajoute un rapport technique et passe le statut à RESOLUE. 5. Une notification est envoyée au client et au superviseur.
+
+Flux alternatif
+
+Si un blocage survient, le technicien passe le statut à BLOQUE avec un motif obligatoire, puis revient à EN_COURS une fois le blocage levé.
+
+Exceptions
+
+Tentative de saut de statut non autorisé → rejet HTTP 422 avec message explicite.
+
+Postconditions
+
+L'intervention porte le statut RESOLUE, un rapport technique est associé au ticket, et le client peut procéder à la clôture.
+
+UC-05 — Clôturer une intervention
+
+Champ
+
+Détail
+
+Acteur principal
+
+Client
+
+Préconditions
+
+Le ticket a le statut RESOLUE et appartient au client connecté.
+
+Flux principal
+
+1. Le client consulte le rapport technique de résolution. 2. Il confirme la clôture. 3. Il peut ajouter une note de satisfaction (1 à 5) et un commentaire libre. 4. Le système passe le statut à CLOTUREE et horodate la clôture.
+
+Flux alternatif
+
+Le client peut rouvrir une contestation en contactant le superviseur si la résolution ne le satisfait pas (hors périmètre automatisé V1, traité manuellement).
+
+Exceptions
+
+Absence de confirmation dans un délai de 7 jours → clôture automatique silencieuse avec notification (recommandation d'ingénierie).
+
+Postconditions
+
+Le ticket est CLOTUREE, définitivement archivé dans l'historique du client.
+
+UC-06 — Envoyer un message sécurisé sur un ticket
+
+Champ
+
+Détail
+
+Acteur principal
+
+Client ou Technicien
+
+Préconditions
+
+L'utilisateur est le client propriétaire ou le technicien assigné du ticket concerné.
+
+Flux principal
+
+1. L'utilisateur ouvre la conversation liée au ticket. 2. Il rédige un message texte ou joint une photo. 3. Il envoie le message. 4. Le message est chiffré et stocké, puis diffusé en temps réel via WebSocket sécurisé (WSS) au destinataire connecté. 5. Le destinataire reçoit une notification push s'il n'est pas connecté à l'application.
+
+Flux alternatif
+
+Envoi hors-ligne : le message est mis en file d'attente locale et envoyé automatiquement à la reconnexion.
+
+Exceptions
+
+Tentative d'accès à une conversation dont l'utilisateur n'est ni le client propriétaire, ni le technicien assigné, ni un administrateur en audit → HTTP 403.
+
+Postconditions
+
+Le message est visible dans l'historique de la conversation, marqué comme livré puis comme lu.
+
+UC-07 — Visualiser le tableau de bord global
+
+Champ
+
+Détail
+
+Acteur principal
+
+Superviseur
+
+Préconditions
+
+Le superviseur est authentifié.
+
+Flux principal
+
+1. Le superviseur accède à l'onglet Interventions du dashboard. 2. Le système calcule et affiche les KPI (total, en attente, en cours, clôturées). 3. Le superviseur applique des filtres ou une recherche. 4. Le superviseur peut ouvrir un ticket pour le détail ou l'onglet Rapports pour exporter les données.
+
+Flux alternatif
+
+Consultation des onglets Utilisateurs et Rapports depuis le même tableau de bord.
+
+Exceptions
+
+Aucun ticket ne correspond au filtre → état vide « Aucune intervention » (FR-DASH-04).
+
+Postconditions
+
+Le superviseur dispose d'une vision à jour de l'activité et peut agir directement depuis le tableau de bord.
+
+12. Carte de navigation
+
+12.1 Écrans communs
+
+Écran
+
+Accessible depuis
+
+Transitions possibles
+
+Splash / Démarrage
+
+Lancement de l'application
+
+→ Authentification (si non connecté) ou Tableau de bord du rôle (si session valide)
+
+Authentification
+
+Splash, Déconnexion
+
+→ Mot de passe oublié ; → Tableau de bord du rôle sélectionné après succès
+
+Mot de passe oublié
+
+Authentification
+
+→ Écran de confirmation d'envoi d'email ; → Authentification
+
+Profil
+
+Barre de navigation (tous rôles)
+
+→ Modification des informations ; → Déconnexion
+
+12.2 Parcours Client
+
+Écran
+
+Accessible depuis
+
+Transitions possibles
+
+Accueil Client (liste de mes tickets)
+
+Authentification
+
+→ Création d'intervention ; → Détail d'intervention
+
+Création d'intervention
+
+Accueil Client
+
+→ Confirmation ; → Détail d'intervention créé
+
+Détail d'intervention + Messagerie
+
+Accueil Client, notification
+
+→ Messagerie plein écran ; → Clôture & note
+
+12.3 Parcours Technicien
+
+Écran
+
+Accessible depuis
+
+Transitions possibles
+
+Espace Technicien (Missions)
+
+Authentification
+
+→ Détail de mission ; onglets Carte, Messages, Profil
+
+Détail de mission + Messagerie
+
+Espace Technicien, notification
+
+→ Changement de statut ; → Ajout de rapport technique
+
+Carte
+
+Barre de navigation Technicien
+
+→ Détail de mission depuis un marqueur
+
+Messages (liste des conversations)
+
+Barre de navigation Technicien
+
+→ Détail de mission correspondant
+
+12.4 Parcours Superviseur
+
+Écran
+
+Accessible depuis
+
+Transitions possibles
+
+Tableau de bord (onglet Interventions)
+
+Authentification
+
+→ Détail d'intervention ; onglets Utilisateurs, Rapports
+
+Onglet Utilisateurs
+
+Tableau de bord
+
+→ Détail d'un compte ; → Création de compte technicien
+
+Onglet Rapports
+
+Tableau de bord
+
+→ Export CSV/PDF
+
+Détail d'intervention (vue superviseur)
+
+Tableau de bord, notification
+
+→ Affectation / réassignation de technicien ; → audit de la messagerie
+
+13. Spécification UI complète
+
+Chaque écran est spécifié selon la structure : composition visuelle, comportements, et états (chargement, vide, erreur, succès). Les valeurs de couleur, typographie et espacement renvoient au système de design (section 14).
+
+13.1 Écran Authentification
+
+En-tête : logo MSIS centré, badge « Connecté et sécurisé — Chiffrement SSL 256-bit » (icône cadenas, fond vert clair).
+
+Sélecteur de rôle : trois segments (Client / Technicien / Superviseur) sous forme de SegmentedButton Material 3, icônes personne / clé à molette / graphique.
+
+Champ Email : TextField avec icône enveloppe, clavier de type email.
+
+Champ Mot de passe : TextField avec icône cadenas et icône œil pour afficher/masquer.
+
+Lien « Mot de passe oublié ? » aligné à droite sous le champ mot de passe.
+
+Bouton principal « Se connecter » pleine largeur, couleur primaire #0D47A1, coins arrondis 12dp.
+
+État de chargement : le bouton affiche un indicateur circulaire et se désactive ; les champs passent en lecture seule.
+
+État d'erreur : SnackBar rouge en bas de l'écran + message inline sous le bouton.
+
+Accessibilité : tous les champs disposent d'un label sémantique lu par le lecteur d'écran ; contraste texte/fond conforme WCAG AA.
+
+13.2 Écran Création d'intervention
+
+AppBar avec titre « Nouvelle intervention » et bouton retour.
+
+Champ « Titre » : TextField simple, compteur de caractères (150 max).
+
+Champ « Description détaillée » : TextField multiligne (5 lignes visibles, extensible), compteur de caractères (3000 max).
+
+Sélecteur de priorité : trois puces (Chips) Haute / Normale / Basse, sélection unique, couleur associée (voir section 14.6).
+
+Zone « Pièce jointe / Photo » : bouton avec icône appareil photo et icône galerie ; aperçu en vignette des fichiers ajoutés avec bouton de suppression individuel.
+
+Bouton flottant (FAB) ou bouton pleine largeur « Créer le ticket », désactivé tant que titre et description ne sont pas valides.
+
+État de succès : dialogue modal « Ticket créé — N° INT-2026-000123 » avec bouton « Voir le ticket ».
+
+État hors-ligne : bandeau orange « Vous êtes hors-ligne — le ticket sera envoyé automatiquement » ; le bouton reste actif et enregistre localement (FR-TRV-04).
+
+13.3 Écran Tableau de bord Superviseur
+
+AppBar avec titre « Tableau de bord » et icône de notifications (badge de compteur).
+
+Rangée de 4 cartes KPI (Total, En attente, En cours, Clôturées), icône + valeur numérique + libellé, fond blanc, ombre légère (élévation 1dp).
+
+TabBar à 3 onglets : Interventions, Utilisateurs, Rapports.
+
+Onglet Interventions : barre de filtres horizontale scrollable (Toutes / En attente / En cours / Clôturées) + liste de cartes ticket (titre, client, priorité en couleur, statut en badge).
+
+État vide : illustration boîte aux lettres centrée + texte « Aucune intervention » + sous-texte contextuel selon le filtre actif.
+
+Pull-to-refresh sur la liste ; pagination infinie (20 éléments par page).
+
+13.4 Écran Gestion des utilisateurs
+
+TabBar à 2 onglets : Techniciens / Clients.
+
+Chaque ligne : avatar (initiales), Nom, Email, badge de statut (vert « Actif » / gris « Inactif »), interrupteur (Switch) d'activation.
+
+Confirmation par dialogue avant toute désactivation, avec rappel de l'impact sur les tickets en cours (FR-USR-04).
+
+Bouton flottant « + » pour créer un compte technicien (onglet Techniciens uniquement).
+
+13.5 Écran Espace Technicien (Missions)
+
+Rangée de 3 cartes KPI (Assignées, En cours, Clôturées).
+
+Liste « Mes missions » avec filtres par statut ; chaque carte affiche titre, adresse/priorité, statut en badge coloré.
+
+Barre de navigation basse à 4 onglets : Missions (icône liste), Carte (icône épingle), Messages (icône bulle, badge de compteur non-lus), Profil (icône personne).
+
+13.6 Écran Détail d'intervention + Messagerie
+
+En-tête : titre du ticket, badge de statut coloré, priorité, date de création.
+
+Section informations : description complète, pièces jointes en galerie miniature, nom du client / technicien assigné.
+
+Bouton d'action contextuel selon le rôle et le statut courant (ex. « Prendre en charge », « Signaler un blocage », « Marquer résolu », « Confirmer la clôture »).
+
+Onglet ou section « Messagerie » : bannière « Chiffrée de bout en bout » (fond bleu clair, icône cadenas), liste de bulles de conversation (bulle droite pour l'utilisateur courant, bulle gauche pour l'interlocuteur), horodatage sous chaque bulle, indicateur « vu ».
+
+Zone de saisie basse : champ texte extensible, bouton pièce jointe, bouton d'envoi ; désactivée si la conversation n'est pas encore initialisée (aucun message).
+
+État vide messagerie : icône bulle vide + texte « Aucune conversation » + sous-texte « Les conversations démarrées depuis les interventions apparaîtront ici », conforme à la maquette fournie.
+
+Bannière de sécurité permanente en tête de conversation : « Toutes les conversations sont chiffrées AES-256 • Zéro connaissance serveur ».
+
+Dialogue/carte d'information : « Messagerie chiffrée de bout en bout — Vos messages sont chiffrés AES-256 et ne peuvent être lus que par les participants de cette conversation. Aucun tiers n'y a accès. »
+
+13.7 Composants transverses
+
+Bottom sheet de confirmation pour toute action destructive ou irréversible (désactivation de compte, clôture de ticket).
+
+Snackbars pour les confirmations rapides (message envoyé, statut mis à jour).
+
+Squelettes de chargement (shimmer) sur les listes pendant la récupération des données, plutôt qu'un simple spinner plein écran.
+
+Tablette / paysage : les écrans à liste + détail (tableau de bord, missions) basculent en disposition maître-détail deux colonnes au-delà de 600dp de largeur.
+
+14. Système de design
+
+Recommandation d'ingénierie — Le rapport n'impose que la couleur primaire (#0D47A1) et le style Material. L'ensemble des tokens ci-dessous est une recommandation d'ingénierie construite sur Material 3, garantissant cohérence visuelle et accessibilité.
+
+14.1 Palette de couleurs
+
+Rôle
+
+Token
+
+Valeur hex
+
+Usage
+
+Primaire
+
+primary
+
+#0D47A1
+
+Boutons principaux, AppBar, éléments actifs
+
+Primaire clair
+
+primaryContainer
+
+#DCE7F9
+
+Bannières d'information, fonds de badges
+
+Secondaire (succès)
+
+success
+
+#2E7D32
+
+Statut Résolue/Clôturée, badge Actif
+
+Alerte (attente)
+
+warning
+
+#F9A825
+
+Statut En attente, priorité Normale
+
+Erreur / Bloqué
+
+error
+
+#C62828
+
+Statut Bloqué, priorité Haute, messages d'erreur
+
+Neutre texte
+
+onSurface
+
+#1A1A1A
+
+Texte principal
+
+Neutre secondaire
+
+onSurfaceVariant
+
+#595959
+
+Texte secondaire, sous-titres
+
+Fond
+
+surface
+
+#FFFFFF / #FAFAFA
+
+Fond des écrans (clair)
+
+Fond sombre
+
+surfaceDark
+
+#121212
+
+Fond des écrans en mode sombre
+
+14.2 Typographie (échelle Material 3)
+
+Style
+
+Taille / graisse
+
+Usage
+
+Display Small
+
+36sp / Bold
+
+Titre d'accueil (rare sur mobile)
+
+Headline Small
+
+24sp / SemiBold
+
+Titres d'écran (AppBar large)
+
+Title Large
+
+20sp / SemiBold
+
+Titres de section, titres de ticket
+
+Title Medium
+
+16sp / Medium
+
+Titres de carte
+
+Body Large
+
+16sp / Regular
+
+Texte principal, descriptions
+
+Body Medium
+
+14sp / Regular
+
+Texte secondaire, métadonnées
+
+Label Medium
+
+12sp / Medium
+
+Badges, libellés de champ
+
+14.3 Espacement et rayons
+
+Échelle d'espacement : 4 / 8 / 12 / 16 / 24 / 32 dp (multiples de 4).
+
+Rayon de bordure : 8dp (champs de saisie), 12dp (boutons, cartes), 20dp (bottom sheets, dialogues).
+
+Élévation : 0dp (fond d'écran), 1dp (cartes au repos), 3dp (AppBar, FAB), 8dp (dialogues, bottom sheets).
+
+14.4 Iconographie
+
+Utilisation exclusive des icônes Material Symbols (rounded) pour une cohérence avec les composants Material 3 ; taille standard 24dp, 20dp dans les listes denses.
+
+14.5 Composants
+
+Boutons : hauteur 48dp, coins arrondis 12dp, état désactivé à 38 % d'opacité.
+
+Champs de texte : variante « outlined », hauteur 56dp, label flottant, message d'erreur en rouge sous le champ.
+
+Cartes : fond blanc, ombre légère, padding interne 16dp.
+
+Badges de statut : forme pilule, fond de couleur pastel correspondant au statut, texte de la couleur pleine associée.
+
+14.6 Codes couleur Statut et Priorité
+
+Élément
+
+Valeur
+
+Couleur
+
+Statut
+
+EN_ATTENTE
+
+#F9A825 (ambre)
+
+Statut
+
+EN_COURS
+
+#0D47A1 (bleu primaire)
+
+Statut
+
+BLOQUE
+
+#E65100 (orange foncé)
+
+Statut
+
+RESOLUE
+
+#2E7D32 (vert)
+
+Statut
+
+CLOTUREE
+
+#616161 (gris)
+
+Priorité
+
+BASSE
+
+#2E7D32 (vert)
+
+Priorité
+
+NORMALE
+
+#F9A825 (ambre)
+
+Priorité
+
+HAUTE
+
+#C62828 (rouge)
+
+15. Conception de la base de données
+
+Le dictionnaire de données et le schéma initial (tables users, interventions, messages) proviennent du rapport de stage et sont conservés à l'identique. Les tables pieces_jointes (issue du cahier des charges fonctionnel), notifications, personal_access_tokens et audit_logs sont des recommandations d'ingénierie nécessaires à la complétude fonctionnelle et sécuritaire.
+
+15.1 Modèle entité-association — vue textuelle
+
+users (1) —— (0..*) interventions [id_client] : un client peut créer plusieurs interventions.
+
+users (1) —— (0..*) interventions [id_technicien, nullable] : un technicien peut être assigné à plusieurs interventions.
+
+interventions (1) —— (0..*) messages : chaque message appartient à exactement un ticket.
+
+users (1) —— (0..*) messages [id_expediteur] : chaque message a un expéditeur unique.
+
+interventions (1) —— (0..*) pieces_jointes : pièces jointes rattachées directement au ticket (création).
+
+messages (1) —— (0..*) pieces_jointes : pièces jointes rattachées à un message (conversation).
+
+users (1) —— (0..*) notifications : chaque notification cible un utilisateur.
+
+Le modèle est normalisé en 3ème forme normale (3NF) : aucune dépendance transitive, chaque attribut non-clé dépend uniquement de la clé primaire de sa table.
+
+15.2 Dictionnaire de données complet
+
+Table users
+
+Champ
+
+Type
+
+Contrainte
+
+Description
+
+id
+
+BIGINT UNSIGNED
+
+PK, AUTO_INCREMENT
+
+Identifiant unique utilisateur
+
+nom
+
+VARCHAR(100)
+
+NOT NULL
+
+Nom complet
+
+email
+
+VARCHAR(100)
+
+UNIQUE, NOT NULL
+
+Adresse email de connexion
+
+password
+
+VARCHAR(255)
+
+NOT NULL
+
+Mot de passe haché Bcrypt
+
+role
+
+ENUM
+
+ADMIN, TECHNICIEN, CLIENT — NOT NULL
+
+Rôle d'accès RBAC
+
+telephone
+
+VARCHAR(20)
+
+NULLABLE
+
+Contact téléphonique (recommandation)
+
+actif
+
+BOOLEAN
+
+NOT NULL, DEFAULT TRUE
+
+Statut du compte (FR-USR-03)
+
+email_verified_at
+
+TIMESTAMP
+
+NULLABLE
+
+Date de vérification de l'email
+
+created_at / updated_at
+
+TIMESTAMP
+
+NULLABLE
+
+Horodatage standard Laravel
+
+Table interventions
+
+Champ
+
+Type
+
+Contrainte
+
+Description
+
+id_intervention
+
+BIGINT UNSIGNED
+
+PK, AUTO_INCREMENT
+
+Identifiant unique du ticket
+
+titre
+
+VARCHAR(255)
+
+NOT NULL
+
+Objet de l'intervention
+
+description
+
+TEXT
+
+NOT NULL
+
+Détail de la panne
+
+statut
+
+ENUM
+
+EN_ATTENTE, EN_COURS, BLOQUE, RESOLUE, CLOTUREE — DEFAULT EN_ATTENTE
+
+État du traitement (section 8.1)
+
+priorite
+
+ENUM
+
+BASSE, NORMALE, HAUTE — DEFAULT NORMALE
+
+Niveau d'urgence
+
+id_client
+
+BIGINT UNSIGNED
+
+FK → users.id, NOT NULL, ON DELETE CASCADE
+
+Créateur de l'intervention
+
+id_technicien
+
+BIGINT UNSIGNED
+
+FK → users.id, NULLABLE, ON DELETE SET NULL
+
+Agent attribué
+
+motif_blocage
+
+VARCHAR(255)
+
+NULLABLE
+
+Motif renseigné lors du passage à BLOQUE
+
+rapport_technique
+
+TEXT
+
+NULLABLE
+
+Rapport renseigné lors du passage à RESOLUE
+
+note_satisfaction
+
+TINYINT
+
+NULLABLE, CHECK (1-5)
+
+Note client à la clôture
+
+date_cloture
+
+TIMESTAMP
+
+NULLABLE
+
+Horodatage de passage à CLOTUREE
+
+created_at / updated_at
+
+TIMESTAMP
+
+NULLABLE
+
+Horodatage standard Laravel
+
+Table messages
+
+Champ
+
+Type
+
+Contrainte
+
+Description
+
+id_message
+
+BIGINT UNSIGNED
+
+PK, AUTO_INCREMENT
+
+Identifiant du message
+
+id_intervention
+
+BIGINT UNSIGNED
+
+FK → interventions.id_intervention, NOT NULL, ON DELETE CASCADE
+
+Ticket concerné
+
+id_expediteur
+
+BIGINT UNSIGNED
+
+FK → users.id, NOT NULL
+
+Auteur du message
+
+contenu
+
+TEXT
+
+NOT NULL — chiffré au repos (AES-256, voir section 20)
+
+Contenu du message
+
+lu
+
+BOOLEAN
+
+NOT NULL, DEFAULT FALSE
+
+Indicateur de lecture
+
+lu_at
+
+TIMESTAMP
+
+NULLABLE
+
+Horodatage de lecture
+
+created_at
+
+DATETIME
+
+NOT NULL
+
+Date d'envoi
+
+Table pieces_jointes (recommandation d'ingénierie)
+
+Champ
+
+Type
+
+Contrainte
+
+Description
+
+id
+
+BIGINT UNSIGNED
+
+PK, AUTO_INCREMENT
+
+Identifiant de la pièce jointe
+
+id_intervention
+
+BIGINT UNSIGNED
+
+FK, NULLABLE, ON DELETE CASCADE
+
+Rattachement direct au ticket (création)
+
+id_message
+
+BIGINT UNSIGNED
+
+FK, NULLABLE, ON DELETE CASCADE
+
+Rattachement à un message de conversation
+
+chemin_fichier
+
+VARCHAR(500)
+
+NOT NULL
+
+Chemin de stockage (voir section 22)
+
+type_mime
+
+VARCHAR(100)
+
+NOT NULL
+
+Type de fichier (image/jpeg, application/pdf…)
+
+taille_octets
+
+INT UNSIGNED
+
+NOT NULL
+
+Taille du fichier, contrôlée à l'upload
+
+uploaded_by
+
+BIGINT UNSIGNED
+
+FK → users.id, NOT NULL
+
+Auteur de l'upload
+
+created_at
+
+TIMESTAMP
+
+NOT NULL
+
+Date d'ajout
+
+Table notifications (recommandation d'ingénierie)
+
+Champ
+
+Type
+
+Contrainte
+
+Description
+
+id
+
+BIGINT UNSIGNED
+
+PK, AUTO_INCREMENT
+
+Identifiant de la notification
+
+id_user
+
+BIGINT UNSIGNED
+
+FK → users.id, NOT NULL, ON DELETE CASCADE
+
+Destinataire
+
+type
+
+VARCHAR(50)
+
+NOT NULL
+
+ticket_cree, statut_modifie, nouveau_message, etc.
+
+contenu
+
+VARCHAR(255)
+
+NOT NULL
+
+Texte de la notification
+
+id_intervention
+
+BIGINT UNSIGNED
+
+FK, NULLABLE
+
+Ticket associé, si applicable
+
+lu
+
+BOOLEAN
+
+NOT NULL, DEFAULT FALSE
+
+Indicateur de lecture in-app
+
+created_at
+
+TIMESTAMP
+
+NOT NULL
+
+Date de génération
+
+Table audit_logs (recommandation d'ingénierie — OWASP A09)
+
+Champ
+
+Type
+
+Contrainte
+
+Description
+
+id
+
+BIGINT UNSIGNED
+
+PK, AUTO_INCREMENT
+
+Identifiant de l'entrée d'audit
+
+id_user
+
+BIGINT UNSIGNED
+
+FK → users.id, NULLABLE
+
+Auteur de l'action (NULL si anonyme/échec d'auth)
+
+action
+
+VARCHAR(100)
+
+NOT NULL
+
+login, login_failed, status_change, message_audit_read, etc.
+
+entite / entite_id
+
+VARCHAR(50) / BIGINT
+
+NULLABLE
+
+Ressource concernée (ex. intervention / 123)
+
+ip_address
+
+VARCHAR(45)
+
+NOT NULL
+
+Adresse IP source
+
+created_at
+
+TIMESTAMP
+
+NOT NULL
+
+Horodatage de l'événement
+
+16. Schéma SQL de production
+
+Le DDL des tables users et interventions ci-dessous reprend exactement le script fourni dans le rapport de stage. Les tables complémentaires suivent les mêmes conventions (InnoDB, utf8mb4, clés étrangères explicites).
+
+CREATE TABLE users (
+
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  nom VARCHAR(100) NOT NULL,
+
+  email VARCHAR(100) NOT NULL UNIQUE,
+
+  password VARCHAR(255) NOT NULL,
+
+  role ENUM('ADMIN','TECHNICIEN','CLIENT') NOT NULL DEFAULT 'CLIENT',
+
+  telephone VARCHAR(20) NULL,
+
+  actif BOOLEAN NOT NULL DEFAULT TRUE,
+
+  email_verified_at TIMESTAMP NULL,
+
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  INDEX idx_users_role (role)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ 
+
+CREATE TABLE interventions (
+
+  id_intervention BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  titre VARCHAR(255) NOT NULL,
+
+  description TEXT NOT NULL,
+
+  statut ENUM('EN_ATTENTE','EN_COURS','BLOQUE','RESOLUE','CLOTUREE') NOT NULL DEFAULT 'EN_ATTENTE',
+
+  priorite ENUM('BASSE','NORMALE','HAUTE') NOT NULL DEFAULT 'NORMALE',
+
+  id_client BIGINT UNSIGNED NOT NULL,
+
+  id_technicien BIGINT UNSIGNED NULL,
+
+  motif_blocage VARCHAR(255) NULL,
+
+  rapport_technique TEXT NULL,
+
+  note_satisfaction TINYINT NULL,
+
+  date_cloture TIMESTAMP NULL,
+
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+  updated_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (id_client) REFERENCES users(id) ON DELETE CASCADE,
+
+  FOREIGN KEY (id_technicien) REFERENCES users(id) ON DELETE SET NULL,
+
+  CONSTRAINT chk_note CHECK (note_satisfaction IS NULL OR note_satisfaction BETWEEN 1 AND 5),
+
+  INDEX idx_interv_client (id_client),
+
+  INDEX idx_interv_technicien (id_technicien),
+
+  INDEX idx_interv_statut (statut)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ 
+
+CREATE TABLE messages (
+
+  id_message BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  id_intervention BIGINT UNSIGNED NOT NULL,
+
+  id_expediteur BIGINT UNSIGNED NOT NULL,
+
+  contenu TEXT NOT NULL,
+
+  lu BOOLEAN NOT NULL DEFAULT FALSE,
+
+  lu_at TIMESTAMP NULL,
+
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (id_intervention) REFERENCES interventions(id_intervention) ON DELETE CASCADE,
+
+  FOREIGN KEY (id_expediteur) REFERENCES users(id) ON DELETE CASCADE,
+
+  INDEX idx_msg_intervention (id_intervention, created_at)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ 
+
+CREATE TABLE pieces_jointes (
+
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  id_intervention BIGINT UNSIGNED NULL,
+
+  id_message BIGINT UNSIGNED NULL,
+
+  chemin_fichier VARCHAR(500) NOT NULL,
+
+  type_mime VARCHAR(100) NOT NULL,
+
+  taille_octets INT UNSIGNED NOT NULL,
+
+  uploaded_by BIGINT UNSIGNED NOT NULL,
+
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (id_intervention) REFERENCES interventions(id_intervention) ON DELETE CASCADE,
+
+  FOREIGN KEY (id_message) REFERENCES messages(id_message) ON DELETE CASCADE,
+
+  FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ 
+
+CREATE TABLE notifications (
+
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  id_user BIGINT UNSIGNED NOT NULL,
+
+  type VARCHAR(50) NOT NULL,
+
+  contenu VARCHAR(255) NOT NULL,
+
+  id_intervention BIGINT UNSIGNED NULL,
+
+  lu BOOLEAN NOT NULL DEFAULT FALSE,
+
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE CASCADE,
+
+  FOREIGN KEY (id_intervention) REFERENCES interventions(id_intervention) ON DELETE SET NULL,
+
+  INDEX idx_notif_user (id_user, lu)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ 
+
+CREATE TABLE audit_logs (
+
+  id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+
+  id_user BIGINT UNSIGNED NULL,
+
+  action VARCHAR(100) NOT NULL,
+
+  entite VARCHAR(50) NULL,
+
+  entite_id BIGINT UNSIGNED NULL,
+
+  ip_address VARCHAR(45) NOT NULL,
+
+  created_at TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+
+  FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE SET NULL,
+
+  INDEX idx_audit_user (id_user), INDEX idx_audit_action (action)
+
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+17. Contrat d'API REST
+
+Base URL de production : https://api.msis-tech.example/api/v1 (nom de domaine indicatif, à confirmer par MSIS). Toutes les réponses sont au format JSON. Tous les endpoints hors authentification exigent l'en-tête Authorization: Bearer <token>.
+
+17.1 Authentification
+
+Méthode
+
+Route
+
+Auth
+
+Description
+
+POST
+
+/auth/login
+
+Non
+
+Connexion — body: {email, password} → {token, user}
+
+POST
+
+/auth/logout
+
+Oui
+
+Révoque le jeton courant
+
+POST
+
+/auth/refresh
+
+Oui
+
+Renouvelle le jeton avant expiration
+
+POST
+
+/auth/forgot-password
+
+Non
+
+Envoie un email de réinitialisation — body: {email}
+
+POST
+
+/auth/reset-password
+
+Non
+
+Réinitialise — body: {token, email, password, password_confirmation}
+
+GET
+
+/auth/me
+
+Oui
+
+Retourne le profil de l'utilisateur connecté
+
+17.2 Interventions
+
+Méthode
+
+Route
+
+Auth / Rôle
+
+Description
+
+GET
+
+/interventions
+
+Tous (portée selon rôle)
+
+Liste paginée, filtrable par statut, priorité, recherche texte
+
+POST
+
+/interventions
+
+Client
+
+Création — body: {titre, description, priorite}
+
+GET
+
+/interventions/{id}
+
+Propriétaire / assigné / superviseur
+
+Détail complet du ticket
+
+PATCH
+
+/interventions/{id}/statut
+
+Selon règle section 8.3
+
+body: {statut, motif_blocage?, rapport_technique?}
+
+PATCH
+
+/interventions/{id}/assigner
+
+Superviseur
+
+body: {id_technicien}
+
+PATCH
+
+/interventions/{id}/cloturer
+
+Client propriétaire
+
+body: {note_satisfaction?, commentaire?}
+
+POST
+
+/interventions/{id}/pieces-jointes
+
+Propriétaire / assigné
+
+Upload multipart (voir section 22)
+
+17.3 Messagerie
+
+Méthode
+
+Route
+
+Auth / Rôle
+
+Description
+
+GET
+
+/interventions/{id}/messages
+
+Client propriétaire / technicien assigné / admin (audit)
+
+Historique paginé de la conversation
+
+POST
+
+/interventions/{id}/messages
+
+Client propriétaire / technicien assigné
+
+Envoi — body: {contenu} ou multipart avec pièce jointe
+
+PATCH
+
+/messages/{id}/lu
+
+Destinataire du message
+
+Marque le message comme lu
+
+17.4 Utilisateurs
+
+Méthode
+
+Route
+
+Auth / Rôle
+
+Description
+
+GET
+
+/users?role=TECHNICIEN
+
+Superviseur
+
+Liste des comptes filtrée par rôle
+
+POST
+
+/users
+
+Superviseur
+
+Création d'un compte technicien — envoie une invitation email
+
+PATCH
+
+/users/{id}/statut
+
+Superviseur
+
+body: {actif: true|false}
+
+17.5 Notifications et rapports
+
+Méthode
+
+Route
+
+Auth / Rôle
+
+Description
+
+GET
+
+/notifications
+
+Utilisateur connecté
+
+Liste des notifications in-app, non lues en premier
+
+PATCH
+
+/notifications/{id}/lu
+
+Utilisateur connecté
+
+Marque une notification comme lue
+
+GET
+
+/reports/dashboard
+
+Superviseur
+
+Retourne les KPI agrégés (section 23)
+
+GET
+
+/reports/export?format=csv|pdf
+
+Superviseur
+
+Génère un export des interventions filtrées
+
+17.6 Exemple de requête et réponse — Création d'intervention
+
+POST /api/v1/interventions
+
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+Content-Type: application/json
+
+ 
+
+{
+
+  "titre": "Ecran bleu au démarrage",
+
+  "description": "Le poste du bureau comptabilité affiche un écran bleu depuis ce matin.",
+
+  "priorite": "HAUTE"
+
+}
+
+Réponse 201 Created :
+
+{
+
+  "id_intervention": 128,
+
+  "titre": "Ecran bleu au démarrage",
+
+  "statut": "EN_ATTENTE",
+
+  "priorite": "HAUTE",
+
+  "id_client": 45,
+
+  "id_technicien": null,
+
+  "created_at": "2026-08-01T09:12:03Z"
+
+}
+
+Réponse 422 Unprocessable Entity (validation échouée) :
+
+{
+
+  "message": "Les données fournies sont invalides.",
+
+  "errors": { "titre": ["Le titre est obligatoire."] }
+
+}
+
+17.7 Conventions d'erreur
+
+Code HTTP
+
+Signification
+
+Cas d'usage
+
+400
+
+Bad Request
+
+Requête mal formée
+
+401
+
+Unauthorized
+
+Jeton absent, invalide ou expiré
+
+403
+
+Forbidden
+
+Utilisateur authentifié mais non autorisé (RBAC)
+
+404
+
+Not Found
+
+Ressource inexistante ou hors de portée du rôle
+
+422
+
+Unprocessable Entity
+
+Échec de validation métier (transition de statut interdite, champs invalides)
+
+429
+
+Too Many Requests
+
+Rate limiting déclenché (ex. tentatives de connexion)
+
+500
+
+Internal Server Error
+
+Erreur serveur — journalisée, jamais de détail technique exposé au client
+
+18. Authentification
+
+Le rapport impose une authentification par jetons JWT. Le cahier des charges fonctionnel précise l'usage de Laravel Sanctum. Ces deux exigences sont réconciliées ci-dessous.
+
+Recommandation d'ingénierie — Laravel Sanctum délivre nativement des jetons opaques (SPA/API tokens), pas des JWT au sens strict (RFC 7519). Deux options équivalent aux besoins exprimés : (a) utiliser Sanctum tel quel — solution la plus simple, alignée avec l'écosystème Laravel officiel et suffisante pour une application mobile consommant sa propre API ; (b) ajouter le package tymon/jwt-auth si un jeton JWT auto-porteur (avec claims exp/iat/role) est requis pour interopérabilité future avec des tiers. La présente spécification retient l'option (a) — Sanctum — pour la V1, tout en conservant la même sémantique fonctionnelle (jeton porteur, expiration, révocation) que le rapport.
+
+18.1 Flux d'authentification
+
+Le client mobile envoie email + mot de passe à /auth/login.
+
+Le serveur vérifie le hachage Bcrypt du mot de passe et le statut actif du compte.
+
+En cas de succès, un jeton d'accès Sanctum est généré, avec une durée de vie de 12 heures (recommandation) et une liste d'« abilities » correspondant au rôle.
+
+Le jeton est retourné au client et stocké via flutter_secure_storage (Keystore Android / Keychain iOS), jamais en SharedPreferences en clair.
+
+Chaque requête ultérieure porte l'en-tête Authorization: Bearer <token>.
+
+Le jeton peut être renouvelé via /auth/refresh avant expiration, ou l'utilisateur est redirigé vers l'écran de connexion à l'expiration.
+
+18.2 Réinitialisation de mot de passe
+
+L'utilisateur saisit son email sur l'écran « Mot de passe oublié ».
+
+Un email contenant un lien à usage unique (jeton valable 60 minutes) est envoyé si le compte existe — la réponse API est identique que le compte existe ou non, afin d'éviter l'énumération d'utilisateurs.
+
+Le lien ouvre un formulaire de nouveau mot de passe respectant la politique de complexité (FR-AUTH-08).
+
+Tous les jetons d'accès existants du compte sont révoqués après une réinitialisation réussie.
+
+18.3 Activation de compte
+
+Les comptes Client s'inscrivent eux-mêmes (hors périmètre détaillé du rapport ; à confirmer avec MSIS si l'inscription est libre ou sur invitation).
+
+Les comptes Technicien et Superviseur sont créés exclusivement par un Superviseur existant, avec envoi d'un email d'invitation contenant un lien d'activation à durée de vie limitée (voir FR-USR-05).
+
+18.4 Gestion des sessions
+
+Un utilisateur peut être connecté sur plusieurs appareils simultanément (jetons multiples associés au même compte).
+
+La déconnexion révoque uniquement le jeton de l'appareil courant ; une option « Déconnecter tous les appareils » révoque l'ensemble des jetons du compte (utile en cas de perte de téléphone).
+
+19. Autorisation (RBAC)
+
+Le contrôle d'accès basé sur les rôles est la contre-mesure imposée par le rapport contre le risque OWASP A01 (Broken Access Control). Il est implémenté à deux niveaux : un middleware qui vérifie le rôle autorisé par route, et des Policies Laravel qui vérifient la propriété de la ressource (un client ne peut agir que sur ses propres tickets, un technicien uniquement sur les siens).
+
+19.1 Rôles et portée
+
+Rôle
+
+Portée d'accès aux interventions
+
+Droits d'administration
+
+CLIENT
+
+Uniquement les tickets dont il est id_client
+
+Aucun
+
+TECHNICIEN
+
+Uniquement les tickets dont il est id_technicien
+
+Aucun
+
+ADMIN (Superviseur)
+
+Tous les tickets
+
+Gestion des comptes, affectation, audit de messagerie
+
+19.2 Principe d'implémentation — Middleware et Policies
+
+Middleware CheckRole : vérifie que le rôle du jeton correspond à un rôle autorisé pour la route appelée (ex. seules les routes /users/* acceptent le rôle ADMIN).
+
+InterventionPolicy::view(user, intervention) : autorise si user.id === intervention.id_client OU user.id === intervention.id_technicien OU user.role === ADMIN.
+
+InterventionPolicy::updateStatus(user, intervention, nouveauStatut) : vérifie à la fois la propriété ET la validité de la transition (section 8.3).
+
+MessagePolicy::view(user, message) : autorise selon la même règle que InterventionPolicy::view appliquée au ticket parent — avec journalisation systématique si l'accédant est ADMIN (audit).
+
+Toute violation de policy renvoie HTTP 403 avec un message générique, sans révéler l'existence ou non de la ressource à un utilisateur non autorisé (renvoyer 404 plutôt que 403 est également acceptable selon la sensibilité — recommandé pour les tickets d'autrui).
+
+20. Messagerie sécurisée
+
+Exigence critique explicitement désignée comme telle dans le cahier des charges fonctionnel : chaque conversation est liée à un ticket, chiffrée, à accès strictement contrôlé.
+
+20.1 Architecture
+
+Canal temps réel : WebSocket sécurisé (WSS) via Laravel WebSockets (auto-hébergé) ou Pusher (SaaS), au choix de MSIS selon la contrainte d'hébergement — les deux options sont compatibles avec Laravel Broadcasting.
+
+Canal de repli : si la connexion WebSocket est indisponible, l'application bascule sur un polling REST toutes les 15 secondes sur /interventions/{id}/messages, garantissant la continuité fonctionnelle.
+
+Chaque conversation est un canal privé Laravel Echo nommé intervention.{id}, dont l'autorisation est vérifiée côté serveur (routes/channels.php) selon la même règle que MessagePolicy::view.
+
+20.2 Chiffrement
+
+Chiffrement en transit : HTTPS/WSS obligatoire (TLS 1.2 minimum), aucun trafic en clair n'est accepté par le serveur Nginx (redirection forcée HTTP → HTTPS).
+
+Chiffrement au repos : le contenu du champ messages.contenu est chiffré côté application avec Laravel Crypt (AES-256-CBC, clé APP_KEY dédiée) avant écriture en base ; la base de données elle-même ne contient donc aucun texte de message en clair.
+
+Les pièces jointes de messagerie sont stockées sur un volume chiffré au repos (chiffrement au niveau du système de fichiers ou du bucket de stockage).
+
+Recommandation d'ingénierie — Le badge « Zéro connaissance serveur » affiché dans la maquette suppose un chiffrement de bout en bout où même l'opérateur ne peut lire les messages (clés détenues uniquement par les appareils clients). Ce niveau (E2EE complet, ex. protocole Signal) dépasse le chiffrement applicatif AES-256 côté serveur décrit ci-dessus et représente un chantier significativement plus complexe (gestion de clés par appareil, rotation, perte d'appareil). Pour la V1, il est recommandé d'implémenter le chiffrement au repos décrit ci-dessus (protection contre l'exfiltration de la base de données) et de reformuler le message affiché en « Conversation chiffrée et strictement confidentielle » plutôt que de promettre un E2EE non encore implémenté ; le véritable chiffrement de bout en bout est proposé comme évolution V2 (section 30).
+
+20.3 Contrôle d'accès
+
+Seuls le client propriétaire du ticket et le technicien assigné peuvent envoyer et recevoir des messages sur la conversation.
+
+L'administrateur peut consulter (lecture seule) une conversation à des fins d'audit ; chaque consultation en mode audit génère une entrée dans audit_logs (action = message_audit_read).
+
+Si le technicien assigné change (réassignation), l'historique de la conversation reste visible au nouveau technicien afin de garantir la continuité du contexte technique.
+
+20.4 Fonctionnalités
+
+Envoi de texte et de photos, horodatage systématique.
+
+Indicateur « vu » : mise à jour du champ lu / lu_at lorsque le destinataire ouvre la conversation.
+
+Indicateur de saisie (« en train d'écrire ») diffusé via un événement WebSocket éphémère, non persisté en base.
+
+File d'attente hors-ligne : les messages rédigés sans connexion sont stockés localement (SQLite/Hive) et envoyés automatiquement à la reconnexion, dans l'ordre chronologique.
+
+21. Notifications
+
+21.1 Canaux
+
+Canal
+
+Technologie
+
+Usage
+
+Push
+
+Firebase Cloud Messaging (FCM)
+
+Alertes en temps réel même application fermée
+
+In-app
+
+Table notifications + badge de compteur
+
+Historique consultable dans l'application
+
+Email
+
+Laravel Mail (SMTP)
+
+Réinitialisation de mot de passe, invitation de compte
+
+Silencieuse (data-only)
+
+FCM data message
+
+Rafraîchissement du badge de compteur de messages non lus sans alerte sonore
+
+21.2 Événements déclencheurs
+
+Événement
+
+Destinataire(s)
+
+Canal
+
+Nouveau ticket créé
+
+Tous les superviseurs actifs
+
+Push + in-app
+
+Ticket assigné
+
+Technicien assigné
+
+Push + in-app
+
+Statut modifié (En cours, Bloqué, Résolue)
+
+Client propriétaire (+ superviseur si Bloqué)
+
+Push + in-app
+
+Ticket clôturé
+
+Technicien assigné, superviseur
+
+In-app
+
+Nouveau message reçu
+
+Destinataire hors ligne ou application en arrière-plan
+
+Push + in-app
+
+Compte désactivé/réactivé
+
+Utilisateur concerné
+
+Email
+
+21.3 Planifiées
+
+Rappel client si un ticket reste au statut RESOLUE sans clôture pendant 5 jours.
+
+Alerte superviseur si un ticket reste EN_ATTENTE sans affectation pendant plus de 2 heures ouvrées (priorité HAUTE) ou 24 heures (autres priorités).
+
+22. Téléversement de fichiers
+
+Aspect
+
+Règle
+
+Types acceptés
+
+Images : JPG, PNG, WEBP. Documents : PDF.
+
+Taille maximale
+
+10 Mo par fichier
+
+Nombre maximal
+
+5 fichiers par ticket à la création ; 1 fichier par message
+
+Validation serveur
+
+Vérification du type MIME réel (pas seulement l'extension), rejet de tout exécutable ou script
+
+Compression
+
+Les images sont recompressées côté client avant envoi (résolution max 1920px, qualité 80 %) pour réduire la consommation réseau
+
+Stockage
+
+Système de fichiers du serveur hors racine web publique, ou bucket S3-compatible ; accès uniquement via une route Laravel signée et temporaire (jamais d'URL directe publique)
+
+Antivirus
+
+Analyse asynchrone recommandée (ex. ClamAV) avant mise à disposition du fichier au destinataire
+
+23. Reporting et tableau de bord
+
+23.1 Indicateurs du tableau de bord Superviseur
+
+Total des interventions (toutes périodes ou période filtrée).
+
+Répartition par statut (En attente, En cours, Bloqué, Résolue, Clôturée).
+
+Répartition par priorité.
+
+Délai moyen de prise en charge et délai moyen de résolution.
+
+Charge de travail par technicien (nombre de tickets actifs).
+
+Taux de satisfaction moyen (moyenne de note_satisfaction).
+
+23.2 Graphiques
+
+Courbe d'évolution du nombre de tickets créés/clôturés par semaine.
+
+Diagramme en barres de la charge par technicien.
+
+Diagramme circulaire de répartition par statut.
+
+23.3 Exports
+
+Export CSV de la liste des interventions filtrées (pour traitement dans un tableur).
+
+Export PDF du tableau de bord (mise en page imprimable pour présentation à la direction générale).
+
+24. Architecture Flutter
+
+Recommandation d'ingénierie — Le rapport impose uniquement Flutter comme framework frontend. L'architecture logicielle détaillée ci-dessous (Clean Architecture, gestion d'état, routage, injection de dépendances, structure de dossiers) est une recommandation d'ingénierie, alignée sur les standards actuels de l'écosystème Flutter et cohérente avec les outils déjà évoqués pour d'autres projets de l'équipe (Riverpod, GoRouter, Dio, Freezed).
+
+24.1 Principes
+
+Architecture en couches (Clean Architecture) organisée par fonctionnalité (feature-first) plutôt que par type technique, pour limiter le couplage et faciliter le travail en parallèle sur plusieurs modules.
+
+Trois couches par fonctionnalité : presentation (widgets, écrans, contrôleurs d'état), domain (entités, cas d'usage, contrats de repository), data (modèles de sérialisation, sources de données distantes/locales, implémentation du repository).
+
+Gestion d'état : Riverpod (providers, notifiers) pour un état prévisible, testable et sans dépendance au contexte de widget.
+
+Navigation : GoRouter, avec garde de routes (redirect) basée sur l'état d'authentification et le rôle courant.
+
+Client HTTP : Dio, avec intercepteurs pour l'injection automatique du jeton, le rafraîchissement de jeton et la gestion centralisée des erreurs.
+
+Modèles immuables : Freezed + json_serializable pour la génération de code des DTO.
+
+Injection de dépendances : GetIt (service locator) combiné aux providers Riverpod.
+
+Stockage sécurisé : flutter_secure_storage pour le jeton d'authentification ; Hive ou SQLite (via drift) pour le cache local et la file d'attente hors-ligne.
+
+24.2 Structure de dossiers
+
+lib/
+
+├── main.dart
+
+├── app/
+
+│   ├── app.dart                 // MaterialApp, thème, GoRouter
+
+│   ├── router/                  // Configuration des routes et gardes
+
+│   └── theme/                   // Design tokens (section 14)
+
+├── core/
+
+│   ├── network/                 // Dio client, intercepteurs, gestion d'erreurs
+
+│   ├── storage/                 // flutter_secure_storage, cache local
+
+│   ├── websocket/                // Client Laravel Echo / Pusher
+
+│   └── di/                      // Enregistrement GetIt
+
+├── features/
+
+│   ├── auth/
+
+│   │   ├── data/                // AuthRepositoryImpl, AuthRemoteDataSource
+
+│   │   ├── domain/               // Entités User, cas d'usage Login/Logout
+
+│   │   └── presentation/         // LoginScreen, AuthController (Riverpod)
+
+│   ├── interventions/
+
+│   │   ├── data/
+
+│   │   ├── domain/
+
+│   │   └── presentation/         // CreateTicketScreen, TicketDetailScreen, ...
+
+│   ├── messaging/
+
+│   ├── dashboard/
+
+│   ├── users_management/
+
+│   └── notifications/
+
+└── shared/
+
+    ├── widgets/                  // Composants réutilisables (badges, cartes KPI)
+
+    └── utils/
+
+24.3 Conventions de nommage
+
+Fichiers : snake_case (ex. ticket_detail_screen.dart).
+
+Classes : UpperCamelCase suffixé par son rôle (TicketDetailScreen, TicketController, TicketRepository, TicketModel, TicketEntity).
+
+Providers Riverpod : suffixe Provider (ticketListProvider, authControllerProvider).
+
+Un seul widget public par fichier ; les widgets privés d'assemblage restent internes au fichier (préfixe _).
+
+24.4 Normes de code
+
+Analyse statique stricte via flutter_lints / very_good_analysis, exécutée en CI (voir section 28).
+
+Aucune logique métier dans les widgets : les widgets ne font qu'observer l'état exposé par les controllers/providers et déclencher des actions.
+
+Gestion d'erreur uniforme via un type Result<T> (ou équivalent Either de dartz) propagé de la couche data à la couche presentation, jamais d'exception non interceptée affichée à l'utilisateur.
+
+25. Architecture Laravel
+
+Recommandation d'ingénierie — Le rapport impose Laravel comme framework backend, une architecture MVC et une persistance MySQL via Eloquent ORM. La structuration en Services, Repositories, Policies et Jobs ci-dessous est une recommandation d'ingénierie visant la maintenabilité à long terme et le respect strict de la séparation des responsabilités (les contrôleurs restent fins).
+
+25.1 Principes
+
+Contrôleurs fins : validation de la requête (Form Requests) puis délégation à un Service métier ; aucune logique métier dans le contrôleur.
+
+Services : InterventionService (création, transition de statut, affectation), MessageService (envoi, chiffrement, diffusion WebSocket), NotificationService (FCM, in-app, email).
+
+Repositories : abstraction de l'accès aux données (InterventionRepository, UserRepository), facilitant les tests unitaires par substitution (mock).
+
+Policies : autorisation par ressource, comme détaillé en section 19.
+
+Form Requests : validation centralisée par endpoint (StoreInterventionRequest, UpdateStatusRequest…), avec messages d'erreur en français.
+
+Jobs et Queues : envoi asynchrone des notifications (email, push) et traitement d'export de rapports volumineux, via des files Redis ou base de données.
+
+Events / Listeners : InterventionCreated, StatusChanged, MessageSent — déclenchent les notifications et la diffusion WebSocket de façon découplée du flux principal de la requête.
+
+25.2 Structure de dossiers (extrait)
+
+app/
+
+├── Http/
+
+│   ├── Controllers/Api/V1/       // AuthController, InterventionController, MessageController...
+
+│   ├── Requests/                 // Form Requests de validation
+
+│   ├── Resources/                // API Resources (transformation JSON)
+
+│   └── Middleware/                // CheckRole, ForceJsonResponse
+
+├── Models/                        // User, Intervention, Message, PieceJointe, Notification, AuditLog
+
+├── Policies/                      // InterventionPolicy, MessagePolicy, UserPolicy
+
+├── Services/                      // InterventionService, MessageService, NotificationService
+
+├── Repositories/                  // InterventionRepository, UserRepository
+
+├── Events/                        // InterventionCreated, StatusChanged, MessageSent
+
+├── Listeners/                     // SendPushNotification, BroadcastMessage
+
+└── Jobs/                          // SendInvitationEmail, ExportInterventionsReport
+
+database/
+
+├── migrations/
+
+├── seeders/                       // DemoDataSeeder (rôles, comptes de démonstration)
+
+└── factories/
+
+routes/
+
+├── api.php                        // Toutes les routes préfixées /api/v1, protégées par sanctum + CheckRole
+
+└── channels.php                   // Autorisation des canaux WebSocket privés intervention.{id}
+
+25.3 Middleware stack (ordre d'exécution)
+
+ForceJsonResponse — force le format JSON même en cas d'erreur.
+
+EnsureFrontendRequestsAreStateful / auth:sanctum — vérifie le jeton.
+
+CheckRole:{role} — vérifie l'appartenance au(x) rôle(s) autorisé(s) pour la route.
+
+ThrottleRequests — limite le débit (login, création de ticket, envoi de message).
+
+LogAuditTrail — journalise les actions sensibles dans audit_logs (section 26.7).
+
+26. Sécurité applicative — OWASP Top 10
+
+Le rapport documente explicitement 3 des 10 catégories (A01, A02, A03) avec leurs contre-mesures ; les 7 catégories restantes sont couvertes ci-dessous en recommandation d'ingénierie, dans la continuité de l'engagement de conformité OWASP Top 10 affirmé comme objectif du projet.
+
+#
+
+Risque OWASP Top 10 (2021)
+
+Contre-mesure
+
+Source
+
+A01
+
+Broken Access Control
+
+Middleware RBAC sur toutes les routes + Policies Laravel vérifiant la propriété de chaque ressource (section 19)
+
+Rapport
+
+A02
+
+Cryptographic Failures
+
+Hachage Bcrypt des mots de passe, HTTPS/TLS 1.2+ obligatoire, chiffrement AES-256 des messages au repos (section 20.2)
+
+Rapport
+
+A03
+
+Injection
+
+Eloquent ORM et requêtes préparées exclusivement ; aucune requête SQL brute concaténée ; validation stricte via Form Requests
+
+Rapport
+
+A04
+
+Insecure Design
+
+Modélisation des menaces réalisée dès la conception (règles de transition de statut, matrice RBAC) ; revue de conception avant développement de chaque module sensible
+
+Recommandation
+
+A05
+
+Security Misconfiguration
+
+APP_DEBUG=false en production, en-têtes de sécurité (CSP, X-Frame-Options, X-Content-Type-Options), désactivation des routes/outils de debug (Telescope, Horizon) en accès public
+
+Recommandation
+
+A06
+
+Vulnerable and Outdated Components
+
+Audit régulier des dépendances (composer audit, npm audit / flutter pub outdated), mise à jour planifiée des versions majeures
+
+Recommandation
+
+A07
+
+Identification and Authentication Failures
+
+Politique de mot de passe forte, limitation du débit sur /auth/login (section 18), révocation de jeton à la réinitialisation, expiration de jeton à 12h
+
+Recommandation, en cohérence avec le JWT du rapport
+
+A08
+
+Software and Data Integrity Failures
+
+Vérification d'intégrité des dépendances (composer.lock / pubspec.lock versionnés), signature des builds APK en mode release
+
+Recommandation
+
+A09
+
+Security Logging and Monitoring Failures
+
+Table audit_logs (section 15.2), alerting sur échecs d'authentification répétés et erreurs 5xx, centralisation des logs applicatifs
+
+Recommandation
+
+A10
+
+Server-Side Request Forgery (SSRF)
+
+Aucun appel sortant piloté par une donnée utilisateur non validée ; liste blanche stricte pour tout futur webhook ou intégration tierce
+
+Recommandation
+
+26.1 Rate limiting
+
+Endpoint
+
+Limite recommandée
+
+/auth/login
+
+5 tentatives / 15 minutes / adresse IP + compte
+
+/auth/forgot-password
+
+3 demandes / heure / adresse email
+
+/interventions (création)
+
+20 créations / heure / utilisateur
+
+/interventions/{id}/messages (envoi)
+
+60 messages / minute / utilisateur (anti-spam)
+
+26.2 Protection CSRF
+
+L'API étant consommée par une application mobile authentifiée par jeton porteur (Bearer token) et non par un navigateur avec cookies de session, le risque CSRF classique ne s'applique pas aux routes API. La protection CSRF standard de Laravel reste activée pour toute interface d'administration web éventuelle utilisant des sessions/cookies.
+
+26.3 Validation des entrées
+
+Toute entrée utilisateur est validée côté serveur via des Form Requests dédiées, indépendamment de la validation côté client (jamais de confiance dans la validation Flutter seule).
+
+Les champs texte libre (description, messages) sont échappés à l'affichage côté Flutter et ne sont jamais interprétés comme HTML/Markdown exécutable, prévenant les injections de contenu.
+
+26.4 Résultats de la campagne de tests de sécurité (rapport)
+
+Le rapport indique que des tests fonctionnels et de sécurité ont été réalisés avec Postman et OWASP ZAP, sans détection de vulnérabilité critique sur le prototype. La présente spécification recommande de reconduire cette campagne à chaque montée de version majeure de l'API (section 27.5).
+
+26.5 Journalisation d'audit
+
+Les événements suivants sont systématiquement journalisés dans audit_logs : connexions réussies et échouées, changements de statut de ticket, affectations/réaffectations, activation/désactivation de compte, accès administrateur en lecture d'audit à une conversation.
+
+27. Stratégie de tests
+
+Le rapport mentionne des tests fonctionnels et de sécurité via Postman et OWASP ZAP. La pyramide de tests complète ci-dessous est une recommandation d'ingénierie garantissant la non-régression au fil des évolutions.
+
+27.1 Pyramide de tests
+
+Niveau
+
+Outils
+
+Portée
+
+Cible de couverture
+
+Tests unitaires (Laravel)
+
+PHPUnit / Pest
+
+Services, règles de transition de statut, Policies
+
+≥ 85 % sur le code métier critique
+
+Tests unitaires (Flutter)
+
+flutter_test, mocktail
+
+Controllers/Notifiers Riverpod, mappers de modèles
+
+≥ 75 %
+
+Tests widget (Flutter)
+
+flutter_test
+
+Rendu et interactions des écrans clés (connexion, création de ticket, messagerie)
+
+Écrans Must-have à 100 %
+
+Tests d'intégration API
+
+Postman/Newman ou Pest HTTP tests
+
+Chaque endpoint : cas nominal, erreurs de validation, RBAC
+
+100 % des endpoints listés en section 17
+
+Tests d'intégration mobile (E2E)
+
+integration_test / Patrol
+
+Parcours complets (déclaration → affectation → résolution → clôture)
+
+Parcours critiques des 3 rôles
+
+Tests de sécurité
+
+OWASP ZAP (scan automatisé), revue manuelle RBAC
+
+Injection, contrôle d'accès, exposition de données sensibles
+
+0 vulnérabilité critique/haute non corrigée
+
+Tests de performance
+
+k6 ou JMeter
+
+Endpoints à fort trafic (liste des interventions, messagerie)
+
+P95 < 400 ms à 500 utilisateurs simulés
+
+Recette utilisateur (UAT)
+
+Scénarios manuels avec MSIS
+
+Validation métier par le Product Owner (M. Belomo Hervais)
+
+Tous les critères d'acceptation (section 29) validés
+
+27.2 Cas de test représentatifs — Authentification et RBAC
+
+Connexion avec identifiants valides → 200 + jeton reçu.
+
+Connexion avec mot de passe invalide → 401, message générique sans indication du champ fautif.
+
+Connexion sur un compte désactivé → 403, message explicite.
+
+Un client tente de consulter le ticket d'un autre client (id_client différent) → 403/404.
+
+Un technicien tente de modifier le statut d'un ticket qui ne lui est pas assigné → 403.
+
+Un client tente de forcer le statut EN_ATTENTE → RESOLUE directement → 422 (transition non autorisée).
+
+27.3 Cas de test représentatifs — Messagerie
+
+Le client propriétaire et le technicien assigné peuvent tous deux lire et écrire dans la conversation.
+
+Un tiers non lié au ticket ne peut ni lire ni écrire (403).
+
+L'administrateur peut lire en audit ; l'accès génère une entrée dans audit_logs.
+
+Un message envoyé hors-ligne est mis en file et livré à la reconnexion, sans duplication.
+
+27.4 Environnements de test
+
+Local : Docker Compose avec base de données de test isolée et données de démonstration (seeders).
+
+Intégration continue : exécution automatique de la suite de tests à chaque pull request (voir section 28.3).
+
+Recette (staging) : environnement miroir de la production, utilisé pour l'UAT avant chaque mise en production.
+
+27.5 Cadence des campagnes de sécurité
+
+Une analyse OWASP ZAP automatisée est exécutée à chaque déploiement en recette ; une revue manuelle de la matrice RBAC (section 8.4) est effectuée à chaque ajout de rôle ou d'endpoint sensible.
+
+28. Déploiement
+
+Le rapport spécifie un déploiement sur serveur Linux (VPS Ubuntu), via Docker et NGINX, avec un dépôt Git de production et des migrations exécutées via php artisan migrate --force. Ces éléments sont conservés à l'identique et complétés par une chaîne CI/CD et une stratégie de supervision.
+
+28.1 Topologie cible
+
+Nœud client : application Flutter compilée en APK/AAB (Android) et IPA (iOS le cas échéant), communiquant en HTTPS:443.
+
+Nœud serveur (VPS Ubuntu) : NGINX en reverse proxy TLS → conteneur Docker API Laravel → conteneur Docker MySQL (ou instance managée) → conteneur Docker WebSocket (Laravel WebSockets), sur le port dédié au broadcasting.
+
+Certificats TLS : Let's Encrypt avec renouvellement automatique (certbot).
+
+28.2 Étapes de déploiement (issues du rapport, conservées à l'identique)
+
+1. Clonage du dépôt Git de production :
+
+   git clone https://github.com/msis-tech/api-interventions.git
+
+ 
+
+2. Configuration des variables d'environnement (.env) :
+
+   réglages base de données et clé secrète d'authentification
+
+ 
+
+3. Exécution du déploiement Docker :
+
+   docker-compose up -d --build
+
+ 
+
+4. Exécution des migrations de base de données :
+
+   docker exec -it app_laravel php artisan migrate --force
+
+28.3 Recommandation d'ingénierie — Intégration et déploiement continus (CI/CD)
+
+Pipeline GitHub Actions déclenché à chaque pull request : lint (PHP-CS-Fixer, flutter analyze), tests unitaires et d'intégration (section 27), scan de dépendances.
+
+Sur fusion vers la branche main : build automatique de l'image Docker, déploiement en environnement de recette, exécution de l'analyse OWASP ZAP, puis déploiement en production sur validation manuelle (approbation requise).
+
+Build Flutter release automatisé (Codemagic ou GitHub Actions) générant l'APK signé et le publiant sur un canal de distribution interne (Firebase App Distribution) avant publication sur le Play Store.
+
+28.4 Supervision et journalisation
+
+Centralisation des logs applicatifs (stdout des conteneurs collecté, ex. via Loki ou solution équivalente).
+
+Suivi des erreurs applicatives mobiles et backend via Sentry, avec alerting en cas de pic d'erreurs 5xx ou de crash mobile.
+
+Sonde de disponibilité (health check) sur /api/v1/health, contrôlée toutes les 5 minutes avec alerte en cas d'indisponibilité.
+
+28.5 Sauvegarde et reprise après sinistre
+
+Sauvegarde automatisée quotidienne de la base MySQL (mysqldump ou snapshot du volume Docker), rétention 30 jours, copie hors site.
+
+Test de restauration trimestriel documenté.
+
+Objectifs : RPO ≤ 24 h, RTO ≤ 4 h (cf. section 7).
+
+28.6 Évaluation économique (devis prévisionnel du rapport)
+
+Élément
+
+Coût (FCFA)
+
+Développement
+
+700 000
+
+Hébergement / an
+
+120 000
+
+Maintenance / an
+
+150 000
+
+Total
+
+970 000
+
+29. Critères d'acceptation
+
+Formulés au format Given / When / Then pour les fonctionnalités Must-have, servant de base à la recette utilisateur (UAT, section 27.4).
+
+29.1 Création d'intervention
+
+Étant donné un client authentifié avec un formulaire valide, quand il soumet le formulaire, alors un ticket est créé avec le statut EN_ATTENTE et un numéro unique lui est retourné.
+
+Étant donné un formulaire avec un titre vide, quand le client tente de soumettre, alors le bouton de soumission reste désactivé et une erreur inline s'affiche.
+
+29.2 Affectation et changement de statut
+
+Étant donné un ticket EN_ATTENTE, quand le superviseur assigne un technicien, alors le ticket passe à EN_COURS et le technicien reçoit une notification.
+
+Étant donné un ticket EN_COURS assigné au technicien connecté, quand celui-ci tente de le clôturer directement, alors l'action est refusée (seul le client peut clôturer, section 8.3).
+
+29.3 Messagerie
+
+Étant donné une conversation liée à un ticket, quand le client propriétaire envoie un message, alors le technicien assigné le reçoit en temps réel (ou à la reconnexion) et peut y répondre.
+
+Étant donné un utilisateur non lié au ticket, quand il tente d'accéder à la conversation via l'API, alors la requête est rejetée avec un code 403.
+
+29.4 Sécurité
+
+Étant donné un mot de passe incorrect saisi 5 fois de suite, quand une 6e tentative est effectuée, alors la connexion est temporairement bloquée.
+
+Étant donné un jeton expiré, quand une requête API est envoyée, alors elle est rejetée avec un code 401 et l'application redirige vers l'écran de connexion.
+
+29.5 Tableau de bord
+
+Étant donné au moins un ticket en base, quand le superviseur ouvre le tableau de bord, alors les 4 widgets KPI affichent des valeurs cohérentes avec la base de données au moment du chargement.
+
+Étant donné un filtre « Clôturées » sans aucun ticket clôturé, quand le superviseur applique ce filtre, alors l'état vide « Aucune intervention » s'affiche.
+
+30. Feuille de route produit
+
+30.1 MVP (V1) — périmètre de cette spécification
+
+Authentification par rôle, RBAC, gestion des comptes.
+
+Création, affectation, suivi et clôture des interventions (statuts EN_ATTENTE → EN_COURS → BLOQUE/RESOLUE → CLOTUREE).
+
+Messagerie chiffrée liée au ticket, avec pièces jointes.
+
+Tableau de bord superviseur avec KPI et filtres.
+
+Notifications push et in-app.
+
+Déploiement Docker/VPS avec sauvegarde automatisée.
+
+30.2 V2
+
+Chiffrement de bout en bout complet de la messagerie (gestion de clés par appareil), en remplacement du chiffrement au repos côté serveur (cf. note section 20.2).
+
+Géolocalisation des techniciens et des interventions, avec affectation automatique au technicien le plus proche (mentionné dans les perspectives d'évolution du rapport).
+
+Optimisation de tournées pour les techniciens ayant plusieurs missions dans la journée.
+
+Signature électronique du client à la clôture de l'intervention (déjà esquissée dans la planification Sprint 2 du rapport : « création ticket, suivi, signatures, rapports »).
+
+30.3 V3
+
+Assistance par IA/NLP pour la catégorisation automatique et la pré-priorisation des tickets à la création.
+
+Assignation prédictive basée sur l'historique de performance et la charge des techniciens.
+
+Portail web complémentaire pour la direction (rapports avancés, export comptable).
+
+31. Évolutions futures envisagées
+
+Le rapport identifie explicitement deux axes d'évolution : l'intégration de notifications Push en temps réel via Firebase Cloud Messaging (déjà repris comme exigence de base en V1 dans cette spécification, section 21) et un module de géolocalisation et d'optimisation des tournées exploitant les coordonnées GPS des équipements clients et des techniciens de terrain pour assigner automatiquement les urgences au technicien le plus proche.
+
+Recommandation d'ingénierie — Analytique prédictive : détection de pannes récurrentes par client/équipement pour proposer une maintenance préventive.
+
+Recommandation d'ingénierie — Intégration paiement : facturation en ligne des interventions hors garantie directement depuis l'application.
+
+Recommandation d'ingénierie — Portail client web (complément de l'application mobile) pour les grandes institutions clientes disposant de plusieurs sites.
+
+32. Annexes
+
+32.1 Glossaire
+
+Terme
+
+Définition
+
+Ticket / Intervention
+
+Enregistrement représentant une demande de dépannage, de sa création à sa clôture
+
+RBAC
+
+Role-Based Access Control — contrôle d'accès basé sur les rôles
+
+JWT
+
+JSON Web Token — format de jeton d'authentification auto-porteur
+
+Policy
+
+Classe Laravel encapsulant les règles d'autorisation propres à une ressource
+
+Clean Architecture
+
+Style d'architecture logicielle séparant présentation, domaine métier et accès aux données
+
+MoSCoW
+
+Méthode de priorisation : Must have, Should have, Could have, Won't have
+
+WSS
+
+WebSocket Secure — canal de communication temps réel chiffré
+
+32.2 Sigles et abréviations
+
+Sigle
+
+Signification
+
+API
+
+Application Programming Interface
+
+BDD
+
+Base de Données
+
+CRUD
+
+Create, Read, Update, Delete
+
+DDL
+
+Data Definition Language
+
+FCM
+
+Firebase Cloud Messaging
+
+KPI
+
+Key Performance Indicator (indicateur clé de performance)
+
+MCD / MLD
+
+Modèle Conceptuel de Données / Modèle Logique de Données
+
+OWASP
+
+Open Web Application Security Project
+
+RBAC
+
+Role Based Access Control
+
+SRS
+
+Software Requirements Specification
+
+UML
+
+Unified Modeling Language
+
+VPS
+
+Virtual Private Server
+
+32.3 Références
+
+Rapport de stage académique : LEBOU YVAN DANIEL, « Conception et mise en œuvre d'une plateforme sécurisée de communication et de suivi des interventions techniques conforme aux recommandations de l'OWASP : Cas de Monde Session Info Service », Institut Supérieur AZIMUT, année académique 2025-2026.
+
+OWASP Top 10:2021 — https://owasp.org/Top10/
+
+Documentation officielle Laravel — https://laravel.com
+
+Documentation officielle Flutter — https://flutter.dev
+
+Joseph Schmuller, Apprendre UML en 24 heures, Pearson, 2004 (cité dans le rapport).
+
+Alan Beaulieu, Learning SQL, O'Reilly Media, 2009 (cité dans le rapport).
+
+32.4 Traçabilité exigences → écrans → tables → endpoints (synthèse)
+
+Module
+
+Écran(s)
+
+Table(s) principales
+
+Endpoint(s) clés
+
+Authentification
+
+Authentification, Mot de passe oublié
+
+users
+
+/auth/login, /auth/forgot-password
+
+Interventions
+
+Création, Détail, Tableau de bord
+
+interventions, pieces_jointes
+
+/interventions, /interventions/{id}/statut
+
+Messagerie
+
+Détail + Messagerie
+
+messages, pieces_jointes
+
+/interventions/{id}/messages
+
+Utilisateurs
+
+Gestion des utilisateurs
+
+users
+
+/users, /users/{id}/statut
+
+Notifications
+
+Bandeau de notifications (tous écrans)
+
+notifications
+
+/notifications
+
+Rapports
+
+Onglet Rapports
+
+interventions (agrégats)
+
+/reports/dashboard, /reports/export
+

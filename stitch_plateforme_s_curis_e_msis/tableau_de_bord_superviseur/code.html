@@ -1,0 +1,332 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MSIS Tracking - Supervisor Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#f3f3fb",
+                        "primary-fixed": "#d9e2ff",
+                        "outline-variant": "#c3c6d4",
+                        "on-error": "#ffffff",
+                        "primary": "#003178",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#e8e7f0",
+                        "surface-tint": "#2b5bb5",
+                        "on-tertiary": "#ffffff",
+                        "on-tertiary-fixed": "#002204",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-surface": "#1a1b21",
+                        "secondary-container": "#e1dfdf",
+                        "on-secondary-fixed-variant": "#464747",
+                        "secondary": "#5e5e5e",
+                        "primary-container": "#0d47a1",
+                        "inverse-on-surface": "#f0f0f8",
+                        "surface": "#faf8ff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed-variant": "#005312",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed": "#e4e2e2",
+                        "inverse-surface": "#2e3036",
+                        "on-primary-fixed": "#001945",
+                        "tertiary-fixed-dim": "#88d982",
+                        "on-primary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "tertiary-fixed": "#a3f69c",
+                        "primary-fixed-dim": "#b0c6ff",
+                        "surface-bright": "#faf8ff",
+                        "tertiary-container": "#005914",
+                        "tertiary": "#003f0b",
+                        "on-primary-container": "#a1bbff",
+                        "on-background": "#1a1b21",
+                        "on-primary-fixed-variant": "#00429c",
+                        "surface-dim": "#d9d9e1",
+                        "surface-container-highest": "#e2e2ea",
+                        "on-surface-variant": "#434652",
+                        "on-secondary-container": "#626262",
+                        "outline": "#737783",
+                        "on-tertiary-container": "#7ecf79",
+                        "surface-variant": "#e2e2ea",
+                        "background": "#faf8ff",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#ededf5",
+                        "inverse-primary": "#b0c6ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "base": "4px",
+                        "xs": "4px",
+                        "md": "16px",
+                        "2xl": "48px",
+                        "xl": "32px",
+                        "margin-desktop": "32px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "headline-md": ["Hanken Grotesk"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "title-md": ["Inter"],
+                        "label-md": ["JetBrains Mono"],
+                        "label-lg": ["JetBrains Mono"],
+                        "headline-sm": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "title-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400" }],
+                        "headline-md": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "title-md": ["16px", { "lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-lg": ["14px", { "lineHeight": "20px", "fontWeight": "500" }],
+                        "headline-sm": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "display-lg": ["57px", { "lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400" }],
+                        "title-lg": ["22px", { "lineHeight": "28px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[style*="'FILL' 1"] {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="flex items-center justify-between px-margin-mobile h-16 w-full docked full-width top-0 bg-surface dark:bg-surface-dim flat no shadows z-40 sticky">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden flex-shrink-0">
+<img alt="MSIS Technical Intervention Logo" class="w-full h-full object-cover" data-alt="A macro shot of a sleek, dark metallic surface with an intricately engraved abstract emblem glowing faintly in deep primary blue. The lighting is sharp, directional, highlighting the brushed texture of the metal. Corporate and secure atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJ8YMvdztvSEq5gi3spaZ2tXMt_2wRzdlOIcLJ4Gpvz8lGDyQ_6qhMejhjU30qQOUdZbWUF-JNb4l2ROkgZMuwxvkxUzOru9FPpAbWJYjIkJU5nH59zAMba-hd4bCUNLG8lCehGXtT7GKYQBHe5iSogJKqWEryFic5tT3Q6BoZvAQ3A_Ycu3LInxgTqoYhH-5NVdGFtiTUWlySsuP2ncUm2NiR3zFWU6WAKGXP5ftPX74yFiazR8RuPw">
+</div>
+<h1 class="font-display-lg text-headline-md text-primary dark:text-primary-fixed-dim tracking-tight hidden md:block">MSIS Tracking</h1>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight md:hidden">MSIS Tracking</h1>
+</div>
+<div class="flex items-center gap-sm">
+<button class="relative p-2 rounded-full text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full ring-2 ring-surface"></span>
+</button>
+<button class="p-2 rounded-full text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-[88px] md:pb-lg pt-lg px-margin-mobile md:px-margin-desktop max-w-7xl mx-auto w-full">
+<div class="mb-xl flex items-center justify-between">
+<h2 class="font-title-lg text-title-lg text-on-surface">Supervisor Dashboard</h2>
+<div class="font-label-md text-label-md text-on-surface-variant bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant">
+                Last updated: 10:42 AM
+            </div>
+</div>
+<!-- KPI Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-xl gap-lg">
+<!-- Total -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-lg transition-shadow bg-gradient-to-br from-surface to-primary-fixed/20 shadow-sm">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="confirmation_number">confirmation_number</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider">Total</span>
+</div>
+<div class="font-display-lg text-[40px] leading-none text-primary font-bold tracking-tight">142</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[80px]" data-icon="confirmation_number">confirmation_number</span>
+</div>
+</div>
+<!-- En attente -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 border-l-[#F59E0B] shadow-sm">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="pending_actions">pending_actions</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider">En attente</span>
+</div>
+<div class="font-display-lg text-[40px] leading-none text-[#F59E0B] font-bold tracking-tight">38</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[80px]" data-icon="pending_actions">pending_actions</span>
+</div>
+</div>
+<!-- En cours -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 border-l-primary shadow-sm">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="play_circle">play_circle</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider">En cours</span>
+</div>
+<div class="font-display-lg text-[40px] leading-none text-primary font-bold tracking-tight">56</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[80px]" data-icon="play_circle">play_circle</span>
+</div>
+</div>
+<!-- Clôturées -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col justify-between h-32 relative overflow-hidden group hover:shadow-lg transition-shadow border-l-4 border-l-outline shadow-sm">
+<div class="flex items-center gap-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]" data-icon="task_alt">task_alt</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider">Clôturées</span>
+</div>
+<div class="font-display-lg text-[40px] leading-none text-outline font-bold tracking-tight">48</div>
+<div class="absolute -right-4 -bottom-4 opacity-10 transform group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-[80px]" data-icon="task_alt">task_alt</span>
+</div>
+</div>
+</div>
+<!-- Tab Bar -->
+<div class="border-b border-outline-variant mb-md flex gap-lg mb-lg">
+<button class="pb-2 border-b-2 border-primary text-primary font-title-md text-title-md px-1 transition-colors">Interventions</button>
+<button class="pb-2 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-md text-title-md px-1 transition-colors">Utilisateurs</button>
+<button class="pb-2 border-b-2 border-transparent text-on-surface-variant hover:text-on-surface font-title-md text-title-md px-1 transition-colors">Rapports</button>
+</div>
+<!-- Controls -->
+<div class="flex flex-col md:flex-row gap-4 mb-md justify-between items-start md:items-center mb-lg">
+<div class="relative w-full md:w-96">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-surface border border-outline-variant rounded-lg pl-10 pr-4 py-2 font-body-md text-body-md text-on-surface focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-outline h-12" placeholder="Search ID, Client, Technician..." type="text">
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg border border-outline-variant text-on-surface-variant hover:bg-surface-container-low transition-colors h-12 font-label-lg text-label-lg">
+<span class="material-symbols-outlined text-[20px]" data-icon="filter_list">filter_list</span>
+                    Filter
+                </button>
+<button class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary-container text-on-primary-container hover:bg-primary-container/90 transition-colors h-12 font-label-lg text-label-lg justify-center">
+<span class="material-symbols-outlined text-[20px]" data-icon="add">add</span>
+                    New Ticket
+                </button>
+</div>
+</div>
+<!-- Interventions List (Bento-ish layout for items) -->
+<div class="space-y-4">
+<!-- Ticket 1 (Urgent/En cours) -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col md:flex-row gap-4 hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/50">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-mono bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/30">#TKT-8992</span>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 10m ago
+                        </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface">Server Rack Power Failure</h3>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="business">business</span> TechCorp Solutions
+                        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span> A. Dupont
+                    </div>
+</div>
+<div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-2 border-t md:border-t-0 md:border-l border-outline-variant pt-3 md:pt-0 md:pl-4 min-w-[140px] gap-4">
+<div class="flex items-center gap-1 bg-primary/10 text-primary px-3 py-1 rounded-full border border-primary/20">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-md text-label-md font-semibold">En cours</span>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1">
+                        View Details <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Ticket 2 (Normal/En attente) -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col md:flex-row gap-4 hover:shadow-md transition-shadow relative overflow-hidden group">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-[#F59E0B]"></div>
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/50">
+<span class="material-symbols-outlined text-[#F59E0B]" data-icon="build">build</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-mono bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/30">#TKT-8991</span>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 1h ago
+                        </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface">Switch Configuration Update</h3>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="business">business</span> Global Net
+                        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="material-symbols-outlined text-[16px]" data-icon="person_off">person_off</span> Unassigned
+                    </div>
+</div>
+<div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-2 border-t md:border-t-0 md:border-l border-outline-variant pt-3 md:pt-0 md:pl-4 min-w-[140px] gap-4">
+<div class="flex items-center gap-1 bg-[#F59E0B]/10 text-[#F59E0B] px-3 py-1 rounded-full border border-[#F59E0B]/20">
+<span class="w-2 h-2 rounded-full bg-[#F59E0B]"></span>
+<span class="font-label-md text-label-md font-semibold">En attente</span>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1">
+                        View Details <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Ticket 3 (Low/Cloturees) -->
+<div class="bg-surface rounded-xl border border-outline-variant p-4 flex flex-col md:flex-row gap-4 hover:shadow-md transition-shadow relative overflow-hidden group opacity-75 hover:opacity-100">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline"></div>
+<div class="flex-shrink-0 w-12 h-12 rounded-lg bg-surface-container flex items-center justify-center border border-outline-variant/50">
+<span class="material-symbols-outlined text-outline" data-icon="done_all">done_all</span>
+</div>
+<div class="flex-1 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-mono bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/30">#TKT-8985</span>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span> 4h ago
+                        </span>
+</div>
+<h3 class="font-title-md text-title-md text-on-surface">Routine Maintenance Check</h3>
+<div class="flex items-center gap-2 text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-[16px]" data-icon="business">business</span> MediGroup
+                        <span class="w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="material-symbols-outlined text-[16px]" data-icon="person">person</span> L. Martin
+                    </div>
+</div>
+<div class="flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-2 border-t md:border-t-0 md:border-l border-outline-variant pt-3 md:pt-0 md:pl-4 min-w-[140px] gap-4">
+<div class="flex items-center gap-1 bg-surface-container text-on-surface-variant px-3 py-1 rounded-full border border-outline-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="check">check</span>
+<span class="font-label-md text-label-md font-semibold">Clôturées</span>
+</div>
+<button class="text-primary font-label-md text-label-md hover:underline flex items-center gap-1">
+                        View Details <span class="material-symbols-outlined text-[16px]" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe bg-surface-container dark:bg-surface-container-high shadow-lg rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-4 py-1 scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="assignment" data-weight="fill">assignment</span>
+<span class="font-label-md text-label-md mt-1">Missions</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-md text-label-md mt-1">Map</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-label-md text-label-md mt-1">Messages</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</button>
+</nav>
+
+
+</body></html>

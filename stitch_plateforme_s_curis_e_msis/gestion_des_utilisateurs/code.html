@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MSIS - Gestion Utilisateurs</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Inter & Hanken Grotesk & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-low": "#f3f3fb",
+                    "primary-fixed": "#d9e2ff",
+                    "outline-variant": "#c3c6d4",
+                    "on-error": "#ffffff",
+                    "primary": "#003178",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#e8e7f0",
+                    "surface-tint": "#2b5bb5",
+                    "on-tertiary": "#ffffff",
+                    "on-tertiary-fixed": "#002204",
+                    "on-secondary-fixed": "#1b1c1c",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-surface": "#1a1b21",
+                    "secondary-container": "#e1dfdf",
+                    "on-secondary-fixed-variant": "#464747",
+                    "secondary": "#5e5e5e",
+                    "primary-container": "#0d47a1",
+                    "inverse-on-surface": "#f0f0f8",
+                    "surface": "#faf8ff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed-variant": "#005312",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-fixed": "#e4e2e2",
+                    "inverse-surface": "#2e3036",
+                    "on-primary-fixed": "#001945",
+                    "tertiary-fixed-dim": "#88d982",
+                    "on-primary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#a3f69c",
+                    "primary-fixed-dim": "#b0c6ff",
+                    "surface-bright": "#faf8ff",
+                    "tertiary-container": "#005914",
+                    "tertiary": "#003f0b",
+                    "on-primary-container": "#a1bbff",
+                    "on-background": "#1a1b21",
+                    "on-primary-fixed-variant": "#00429c",
+                    "surface-dim": "#d9d9e1",
+                    "surface-container-highest": "#e2e2ea",
+                    "on-surface-variant": "#434652",
+                    "on-secondary-container": "#626262",
+                    "outline": "#737783",
+                    "on-tertiary-container": "#7ecf79",
+                    "surface-variant": "#e2e2ea",
+                    "background": "#faf8ff",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#ededf5",
+                    "inverse-primary": "#b0c6ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "sm": "8px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "base": "4px",
+                    "xs": "4px",
+                    "md": "16px",
+                    "2xl": "48px",
+                    "xl": "32px",
+                    "margin-desktop": "32px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "headline-md": ["Hanken Grotesk"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "title-md": ["Inter"],
+                    "label-md": ["JetBrains Mono"],
+                    "label-lg": ["JetBrains Mono"],
+                    "headline-sm": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "title-lg": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.25px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "title-md": ["16px", {"lineHeight": "24px", "letterSpacing": "0.15px", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "label-lg": ["14px", {"lineHeight": "20px", "fontWeight": "500"}],
+                    "headline-sm": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "display-lg": ["57px", {"lineHeight": "64px", "letterSpacing": "-0.25px", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "letterSpacing": "0.5px", "fontWeight": "400"}],
+                    "title-lg": ["22px", {"lineHeight": "28px", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        /* Hide scrollbar for clean M3 look */
+        ::-webkit-scrollbar { display: none; }
+        
+        /* Toggle Switch Customization based on M3 */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #0d47a1; /* primary-container */
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #0d47a1; /* primary-container */
+        }
+        .toggle-checkbox:checked + .toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+            background-color: white;
+        }
+        .toggle-label {
+            width: 48px; /* Touch target minimum */
+            height: 24px;
+            background-color: #e2e2ea; /* surface-variant */
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: inline-block;
+        }
+        .toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background-color: #737783; /* outline */
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen relative flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim docked full-width top-0 text-primary dark:text-primary-fixed-dim font-headline-lg-mobile text-headline-lg-mobile font-display-lg text-headline-md text-primary dark:text-primary-fixed-dim tracking-tight flat no shadows flex items-center justify-between px-margin-mobile h-16 w-full z-40">
+<!-- Leading Avatar / Brand -->
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-title-md text-sm">
+                MS
+            </div>
+<span class="font-headline-md md:font-headline-lg tracking-tight">MSIS Tracking</span>
+</div>
+<!-- Desktop Navigation Cluster (Responsive Pivot) -->
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors font-label-lg px-3 py-2 rounded-lg" href="#">Missions</a>
+<a class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors font-label-lg px-3 py-2 rounded-lg" href="#">Map</a>
+<a class="text-on-surface-variant dark:text-outline hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors font-label-lg px-3 py-2 rounded-lg" href="#">Messages</a>
+<a class="text-primary dark:text-primary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors font-label-lg px-3 py-2 rounded-lg bg-primary-container/10" href="#">Profile</a>
+</nav>
+<!-- Trailing Icon -->
+<div class="flex items-center">
+<span class="material-symbols-outlined hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-2 rounded-full cursor-pointer active:scale-95 duration-100" data-icon="verified_user">verified_user</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col px-margin-mobile md:px-margin-desktop py-md md:py-lg pb-24 md:pb-lg max-w-5xl mx-auto w-full">
+<!-- Page Header -->
+<div class="mb-lg">
+<h1 class="font-title-lg text-title-lg text-on-surface mb-sm">Gestion Utilisateurs</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Manage active personnel and client access.</p>
+</div>
+<!-- Segmented Control (Tabs) -->
+<div class="flex bg-surface-container-low rounded-xl p-1 mb-lg w-full max-w-md shadow-sm border border-outline-variant/30">
+<button class="flex-1 py-2 px-4 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow transition-all">
+                Techniciens
+            </button>
+<button class="flex-1 py-2 px-4 rounded-lg text-on-surface-variant font-label-md text-label-md hover:bg-surface-container transition-all">
+                Clients
+            </button>
+</div>
+<!-- User List (Bento/Card Style) -->
+<div class="flex flex-col gap-sm">
+<!-- List Item 1 (Active) -->
+<div class="flex items-center p-md bg-surface-container-lowest rounded-xl border border-outline-variant/50 hover:bg-surface-container-low transition-colors shadow-sm">
+<!-- Avatar -->
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-title-md shrink-0">
+                    JD
+                </div>
+<!-- Info -->
+<div class="ml-4 flex-1">
+<div class="font-title-md text-title-md text-on-surface">Jean Dupont</div>
+<div class="font-label-md text-label-md text-on-surface-variant mt-xs">j.dupont@msis.tech</div>
+</div>
+<!-- Status Badge -->
+<div class="hidden md:flex items-center px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container mr-md">
+<span class="font-label-md text-label-md">Active</span>
+</div>
+<!-- Toggle -->
+<div class="relative flex items-center justify-center min-w-[48px] min-h-[48px]">
+<input checked="" class="sr-only toggle-checkbox" id="toggle1" type="checkbox"/>
+<label class="toggle-label" for="toggle1"></label>
+</div>
+</div>
+<!-- List Item 2 (Inactive) -->
+<div class="flex items-center p-md bg-surface-container-lowest rounded-xl border border-outline-variant/50 hover:bg-surface-container-low transition-colors shadow-sm opacity-80">
+<!-- Avatar -->
+<div class="w-12 h-12 rounded-full bg-surface-variant text-on-surface-variant flex items-center justify-center font-title-md shrink-0">
+                    ML
+                </div>
+<!-- Info -->
+<div class="ml-4 flex-1">
+<div class="font-title-md text-title-md text-on-surface">Marie Laurent</div>
+<div class="font-label-md text-label-md text-on-surface-variant mt-xs">m.laurent@msis.tech</div>
+</div>
+<!-- Status Badge -->
+<div class="hidden md:flex items-center px-3 py-1 rounded-full bg-surface-variant text-on-surface-variant mr-md">
+<span class="font-label-md text-label-md">Inactive</span>
+</div>
+<!-- Toggle -->
+<div class="relative flex items-center justify-center min-w-[48px] min-h-[48px]">
+<input class="sr-only toggle-checkbox" id="toggle2" type="checkbox"/>
+<label class="toggle-label" for="toggle2"></label>
+</div>
+</div>
+<!-- List Item 3 (Active) -->
+<div class="flex items-center p-md bg-surface-container-lowest rounded-xl border border-outline-variant/50 hover:bg-surface-container-low transition-colors shadow-sm">
+<!-- Avatar -->
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-title-md shrink-0">
+                    KB
+                </div>
+<!-- Info -->
+<div class="ml-4 flex-1">
+<div class="font-title-md text-title-md text-on-surface">Karim Benali</div>
+<div class="font-label-md text-label-md text-on-surface-variant mt-xs">k.benali@msis.tech</div>
+</div>
+<!-- Status Badge -->
+<div class="hidden md:flex items-center px-3 py-1 rounded-full bg-tertiary-container text-on-tertiary-container mr-md">
+<span class="font-label-md text-label-md">Active</span>
+</div>
+<!-- Toggle -->
+<div class="relative flex items-center justify-center min-w-[48px] min-h-[48px]">
+<input checked="" class="sr-only toggle-checkbox" id="toggle3" type="checkbox"/>
+<label class="toggle-label" for="toggle3"></label>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) -->
+<!-- Contextual suppression check: This is a management screen, adding a user is a primary action here. -->
+<button class="fixed bottom-24 right-4 md:bottom-8 md:right-8 w-14 h-14 bg-primary-container text-on-primary-container rounded-2xl shadow-lg hover:bg-primary transition-colors flex items-center justify-center z-40 active:scale-95">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</button>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container dark:bg-surface-container-high text-primary dark:text-inverse-primary font-label-md text-label-md font-headline-sm text-headline-sm text-primary dark:text-inverse-primary docked full-width bottom-0 rounded-t-xl bg-surface-container dark:bg-surface-container-high shadow-lg fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 py-3 pb-safe border-t-0">
+<!-- Tab 1: Missions (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="mt-1">Missions</span>
+</a>
+<!-- Tab 2: Map (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="mt-1">Map</span>
+</a>
+<!-- Tab 3: Messages (Inactive) -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="mt-1">Messages</span>
+</a>
+<!-- Tab 4: Profile (Active - Semantic match for Settings/User Management) -->
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-xl px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest transition-all scale-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

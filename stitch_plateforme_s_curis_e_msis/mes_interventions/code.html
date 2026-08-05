@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MSIS Tracking - Client Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline": "#737783",
+                      "on-primary-fixed": "#001945",
+                      "on-background": "#1a1b21",
+                      "surface-bright": "#faf8ff",
+                      "on-tertiary": "#ffffff",
+                      "inverse-surface": "#2e3036",
+                      "primary-fixed-dim": "#b0c6ff",
+                      "outline-variant": "#c3c6d4",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "primary-fixed": "#d9e2ff",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "inverse-primary": "#b0c6ff",
+                      "surface-container-high": "#e8e7f0",
+                      "inverse-on-surface": "#f0f0f8",
+                      "surface-dim": "#d9d9e1",
+                      "on-tertiary-container": "#7ecf79",
+                      "background": "#faf8ff",
+                      "primary": "#003178",
+                      "surface-container-low": "#f3f3fb",
+                      "on-primary-container": "#a1bbff",
+                      "tertiary-fixed": "#a3f69c",
+                      "surface-variant": "#e2e2ea",
+                      "on-tertiary-fixed-variant": "#005312",
+                      "on-tertiary-fixed": "#002204",
+                      "error-container": "#ffdad6",
+                      "secondary": "#5e5e5e",
+                      "on-primary": "#ffffff",
+                      "surface-tint": "#2b5bb5",
+                      "on-primary-fixed-variant": "#00429c",
+                      "on-error-container": "#93000a",
+                      "secondary-fixed": "#e4e2e2",
+                      "on-surface": "#1a1b21",
+                      "on-secondary-fixed-variant": "#464747",
+                      "surface-container-highest": "#e2e2ea",
+                      "on-secondary": "#ffffff",
+                      "tertiary": "#003f0b",
+                      "on-error": "#ffffff",
+                      "on-surface-variant": "#434652",
+                      "tertiary-container": "#005914",
+                      "primary-container": "#0d47a1",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-container": "#e1dfdf",
+                      "on-secondary-container": "#626262",
+                      "error": "#ba1a1a",
+                      "surface-container": "#ededf5",
+                      "surface": "#faf8ff",
+                      "tertiary-fixed-dim": "#88d982"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xs": "4px",
+                      "margin-desktop": "32px",
+                      "base": "4px",
+                      "xl": "32px",
+                      "margin-mobile": "16px",
+                      "sm": "8px",
+                      "lg": "24px",
+                      "gutter": "16px",
+                      "md": "16px",
+                      "2xl": "48px"
+              },
+              "fontFamily": {
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "label-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "label-md": [
+                              "JetBrains Mono"
+                      ],
+                      "title-md": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "display-lg": [
+                              "57px",
+                              {
+                                      "lineHeight": "64px",
+                                      "letterSpacing": "-0.25px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "title-lg": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "title-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.15px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.5px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.25px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+      </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- TopAppBar -->
+<header class="bg-surface flex items-center justify-between px-margin-mobile h-16 w-full docked full-width top-0 sticky z-40">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-headline-sm overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A stylized, modern, high-contrast, blue and white technical M logo with a gear and shield for a technical intervention tracking system, designed in a corporate, clean, flat vector style." src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"/>
+</div>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">MSIS Tracking</h1>
+</div>
+<button aria-label="Profile" class="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-100">
+<span class="material-symbols-outlined" style="font-size: 24px;">verified_user</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow px-margin-mobile md:px-margin-desktop py-lg pb-2xl md:pb-lg max-w-7xl mx-auto w-full flex flex-col gap-xl">
+<!-- Summary Section -->
+<section class="flex flex-col gap-md">
+<h2 class="font-title-lg text-title-lg text-on-surface">Interventions Récents</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+<!-- Intervention Card 1 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md flex flex-col gap-md shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-error"></div>
+<div class="flex justify-between items-start pl-xs">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant mb-xs block">INT-2023-0042</span>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2">Panne serveur principal</h3>
+</div>
+<div class="bg-error-container text-on-error-container px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">priority_high</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">HAUTE</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 pl-xs">Serveur de base de données inaccessible depuis 08h00. Diagnostic réseau requis en urgence.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant pl-xs">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+<span class="font-label-md text-label-md">24 Oct 2023</span>
+</div>
+<div class="bg-amber-100 text-amber-800 px-2 py-1 rounded border border-amber-200 flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">pending</span>
+<span class="font-label-md text-label-md uppercase">EN_ATTENTE</span>
+</div>
+</div>
+</article>
+<!-- Intervention Card 2 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md flex flex-col gap-md shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-surface-tint"></div>
+<div class="flex justify-between items-start pl-xs">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant mb-xs block">INT-2023-0041</span>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2">Installation Système Audio Conférence</h3>
+</div>
+<div class="bg-surface-container text-on-surface-variant px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">low_priority</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">NORMALE</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 pl-xs">Mise en place des nouveaux micros et configuration de la table de mixage Salle A.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant pl-xs">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+<span class="font-label-md text-label-md">23 Oct 2023</span>
+</div>
+<div class="bg-primary-fixed text-on-primary-fixed-variant px-2 py-1 rounded border border-primary-fixed-dim flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">autorenew</span>
+<span class="font-label-md text-label-md uppercase">EN_COURS</span>
+</div>
+</div>
+</article>
+<!-- Intervention Card 3 -->
+<article class="bg-surface-container-lowest rounded-xl border border-outline-variant p-md flex flex-col gap-md shadow-sm relative overflow-hidden group hover:shadow-md transition-shadow opacity-75">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-tertiary"></div>
+<div class="flex justify-between items-start pl-xs">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant mb-xs block">INT-2023-0040</span>
+<h3 class="font-title-md text-title-md text-on-surface line-clamp-2 line-through">Maintenance Préventive Climatisation</h3>
+</div>
+<div class="bg-surface-container text-on-surface-variant px-2 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">low_priority</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">BASSE</span>
+</div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2 pl-xs">Vérification annuelle des filtres et du niveau de gaz réfrigérant pour le bâtiment principal.</p>
+<div class="flex justify-between items-center mt-auto pt-sm border-t border-outline-variant pl-xs">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" style="font-size: 16px;">calendar_today</span>
+<span class="font-label-md text-label-md">20 Oct 2023</span>
+</div>
+<div class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-2 py-1 rounded border border-tertiary-fixed-dim flex items-center gap-1">
+<span class="material-symbols-outlined" style="font-size: 14px;">check_circle</span>
+<span class="font-label-md text-label-md uppercase">TERMINÉ</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- FAB -->
+<div class="fixed bottom-24 right-4 md:right-8 z-40">
+<button aria-label="Nouvelle intervention" class="bg-primary-container hover:bg-primary-fixed active:bg-primary text-on-primary-container rounded-2xl w-14 h-14 flex items-center justify-center shadow-lg transition-all hover:scale-105 active:scale-95">
+<span class="material-symbols-outlined" data-weight="fill" style="font-size: 24px;">add</span>
+</button>
+</div>
+<!-- BottomNavBar -->
+<nav class="bg-surface-container flex justify-around items-center px-2 py-3 pb-safe fixed bottom-0 left-0 w-full z-50 rounded-t-xl shadow-lg md:hidden">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1 scale-100 active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" data-weight="fill">assignment</span>
+<span class="font-label-md text-label-md mt-1">Missions</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all scale-100 active:scale-90" href="#">
+<span class="material-symbols-outlined">map</span>
+<span class="font-label-md text-label-md mt-1">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all scale-100 active:scale-90 relative" href="#">
+<span class="material-symbols-outlined">forum</span>
+<span class="absolute top-1 right-3 w-2 h-2 bg-error rounded-full"></span>
+<span class="font-label-md text-label-md mt-1">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:bg-surface-variant transition-all scale-100 active:scale-90" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-md text-label-md mt-1">Profile</span>
+</a>
+</nav>
+<!-- Desktop SideNav Placeholder (Hidden on mobile) -->
+<aside class="hidden md:flex flex-col w-64 bg-surface-container border-r border-outline-variant fixed left-0 top-16 h-[calc(100vh-4rem)] pt-lg px-md z-30">
+<div class="flex flex-col gap-sm">
+<a class="flex items-center gap-md px-4 py-3 bg-primary-container text-on-primary-container rounded-xl font-title-md text-title-md" href="#">
+<span class="material-symbols-outlined" data-weight="fill">assignment</span>
+                Missions
+            </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-xl font-title-md text-title-md transition-colors" href="#">
+<span class="material-symbols-outlined">map</span>
+                Map
+            </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-xl font-title-md text-title-md transition-colors" href="#">
+<span class="material-symbols-outlined">forum</span>
+                Messages
+            </a>
+<a class="flex items-center gap-md px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-xl font-title-md text-title-md transition-colors" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+                Profile
+            </a>
+</div>
+</aside>
+<!-- Add margin to main content for desktop to account for sidebar -->
+<style>
+        @media (min-width: 768px) {
+            main { margin-left: 16rem; max-width: calc(100% - 16rem); }
+        }
+    </style>
+</body></html>

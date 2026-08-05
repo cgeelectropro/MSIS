@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+
+<html class="light" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Espace Rapports - MSIS TechFlow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-container": "#0d47a1",
+                      "outline": "#737783",
+                      "on-tertiary-container": "#7ecf79",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#faf8ff",
+                      "on-primary": "#ffffff",
+                      "on-background": "#1a1b21",
+                      "surface-container-highest": "#e2e2ea",
+                      "primary": "#003178",
+                      "surface-bright": "#faf8ff",
+                      "on-primary-fixed-variant": "#00429c",
+                      "secondary": "#5e5e5e",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f3f3fb",
+                      "on-secondary-fixed-variant": "#464747",
+                      "on-secondary": "#ffffff",
+                      "surface-dim": "#d9d9e1",
+                      "surface-tint": "#2b5bb5",
+                      "surface-container-high": "#e8e7f0",
+                      "on-error": "#ffffff",
+                      "tertiary": "#003f0b",
+                      "inverse-surface": "#2e3036",
+                      "error": "#ba1a1a",
+                      "surface-container": "#ededf5",
+                      "primary-fixed": "#d9e2ff",
+                      "on-primary-container": "#a1bbff",
+                      "on-tertiary-fixed-variant": "#005312",
+                      "tertiary-fixed": "#a3f69c",
+                      "secondary-container": "#e1dfdf",
+                      "on-secondary-fixed": "#1b1c1c",
+                      "on-primary-fixed": "#001945",
+                      "tertiary-container": "#005914",
+                      "secondary-fixed": "#e4e2e2",
+                      "inverse-on-surface": "#f0f0f8",
+                      "error-container": "#ffdad6",
+                      "secondary-fixed-dim": "#c7c6c6",
+                      "surface-container-lowest": "#ffffff",
+                      "on-tertiary-fixed": "#002204",
+                      "on-surface-variant": "#434652",
+                      "inverse-primary": "#b0c6ff",
+                      "surface-variant": "#e2e2ea",
+                      "on-surface": "#1a1b21",
+                      "background": "#faf8ff",
+                      "primary-fixed-dim": "#b0c6ff",
+                      "tertiary-fixed-dim": "#88d982",
+                      "on-secondary-container": "#626262",
+                      "outline-variant": "#c3c6d4"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "32px",
+                      "lg": "24px",
+                      "gutter": "16px",
+                      "xs": "4px",
+                      "margin-desktop": "32px",
+                      "md": "16px",
+                      "2xl": "48px",
+                      "sm": "8px",
+                      "margin-mobile": "16px",
+                      "base": "4px"
+              },
+              "fontFamily": {
+                      "headline-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-lg": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "title-md": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "JetBrains Mono"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Hanken Grotesk"
+                      ],
+                      "label-lg": [
+                              "JetBrains Mono"
+                      ],
+                      "headline-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "display-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-lg": [
+                              "22px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "title-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.15px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.5px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-lg": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.25px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "57px",
+                              {
+                                      "lineHeight": "64px",
+                                      "letterSpacing": "-0.25px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-lg min-h-screen flex flex-col md:flex-row">
+<!-- Navigation Drawer (Desktop) -->
+<nav class="hidden md:flex flex-col h-full py-xl bg-surface shadow-md h-screen w-72 rounded-r-xl sticky top-0 z-40 bg-surface-container">
+<div class="px-lg mb-8">
+<h2 class="font-title-md text-title-md font-bold text-primary">Supervisor Tools</h2>
+</div>
+<ul class="flex flex-col gap-2">
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high rounded-full mx-2 my-1 px-4 py-3 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="engineering">engineering</span>
+<span class="font-title-md text-title-md">Interventions</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 text-on-surface-variant hover:bg-surface-container-high rounded-full mx-2 my-1 px-4 py-3 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="font-title-md text-title-md">Users</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-4 bg-primary-container text-on-primary-container font-bold rounded-full mx-2 my-1 px-4 py-3 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-title-md text-title-md">Reports</span>
+</a>
+</li>
+</ul>
+</nav>
+<div class="flex-1 flex flex-col w-full pb-20 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface-container-high w-full top-0 sticky shadow-sm flex items-center justify-between px-md py-sm w-full z-30">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="security">security</span>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary">MSIS TechFlow</h1>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="person">person</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 p-margin-mobile md:p-margin-desktop overflow-y-auto">
+<div class="max-w-7xl mx-auto space-y-xl">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-outline-variant pb-md">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Rapports d'Activité</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Analyse des performances et suivi des interventions.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low rounded-lg border border-outline-variant px-3 py-2">
+<span class="material-symbols-outlined text-outline" data-icon="calendar_month">calendar_month</span>
+<select class="bg-transparent border-none text-title-md font-title-md text-on-surface focus:ring-0 p-0 cursor-pointer">
+<option>7 Derniers Jours</option>
+<option>30 Derniers Jours</option>
+<option>Ce Mois</option>
+<option>Année en Cours</option>
+</select>
+</div>
+</div>
+<!-- Metrics Overview -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Total Interventions</p>
+<p class="font-headline-md text-headline-md text-primary mt-1">1,248</p>
+<div class="flex items-center gap-1 mt-2 text-tertiary-container">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">+12%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Taux de Résolution</p>
+<p class="font-headline-md text-headline-md text-primary mt-1">94.2%</p>
+<div class="flex items-center gap-1 mt-2 text-tertiary-container">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="font-label-md text-label-md">+2.1%</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Temps Moyen (MTTR)</p>
+<p class="font-headline-md text-headline-md text-primary mt-1">4.5h</p>
+<div class="flex items-center gap-1 mt-2 text-error">
+<span class="material-symbols-outlined text-sm" data-icon="trending_down">trending_down</span>
+<span class="font-label-md text-label-md">-0.5h</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-md rounded-xl border border-outline-variant shadow-sm">
+<p class="font-label-md text-label-md text-on-surface-variant uppercase">Techniciens Actifs</p>
+<p class="font-headline-md text-headline-md text-primary mt-1">42</p>
+<div class="flex items-center gap-1 mt-2 text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="horizontal_rule">horizontal_rule</span>
+<span class="font-label-md text-label-md">Stable</span>
+</div>
+</div>
+</div>
+<!-- Charts Section Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+<!-- Line Chart -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-lg">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-4">Évolution des Tickets</h3>
+<div class="relative h-64 w-full">
+<canvas id="evolutionChart"></canvas>
+</div>
+</div>
+<!-- Pie Chart -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant shadow-sm p-lg flex flex-col">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-4">Répartition par Statut</h3>
+<div class="relative h-48 w-full flex-1 flex items-center justify-center">
+<canvas id="statusChart"></canvas>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-2">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-label-md text-label-md text-on-surface">Résolu (65%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary"></div>
+<span class="font-label-md text-label-md text-on-surface">En cours (20%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<span class="font-label-md text-label-md text-on-surface">Bloqué (10%)</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-outline"></div>
+<span class="font-label-md text-label-md text-on-surface">Nouveau (5%)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Exports Section -->
+<div>
+<h3 class="font-title-lg text-title-lg text-primary mb-md border-b border-outline-variant pb-2">Exports Disponibles</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Export Card 1 -->
+<button class="flex flex-col items-center justify-center p-lg bg-surface-container-lowest rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors duration-200 group text-left w-full shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center mb-3 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface text-center">Rapport Complet</span>
+<span class="font-label-md text-label-md text-on-surface-variant mt-1 text-center">Format PDF détaillé</span>
+</button>
+<!-- Export Card 2 -->
+<button class="flex flex-col items-center justify-center p-lg bg-surface-container-lowest rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors duration-200 group text-left w-full shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center mb-3 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="table_chart">table_chart</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface text-center">Données Brutes</span>
+<span class="font-label-md text-label-md text-on-surface-variant mt-1 text-center">Format CSV pour analyse</span>
+</button>
+<!-- Export Card 3 -->
+<button class="flex flex-col items-center justify-center p-lg bg-surface-container-lowest rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors duration-200 group text-left w-full shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center mb-3 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="person_search">person_search</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface text-center">Perf. Techniciens</span>
+<span class="font-label-md text-label-md text-on-surface-variant mt-1 text-center">Format PDF par agent</span>
+</button>
+<!-- Export Card 4 -->
+<button class="flex flex-col items-center justify-center p-lg bg-surface-container-lowest rounded-xl border border-outline-variant hover:bg-surface-container-low transition-colors duration-200 group text-left w-full shadow-sm">
+<div class="w-12 h-12 rounded-full bg-primary-container/10 flex items-center justify-center mb-3 group-hover:bg-primary-container/20 transition-colors">
+<span class="material-symbols-outlined text-primary" data-icon="location_on">location_on</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface text-center">Rapport Secteurs</span>
+<span class="font-label-md text-label-md text-on-surface-variant mt-1 text-center">Format Excel par zone</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="md:hidden bg-surface-container-low fixed bottom-0 w-full z-50 shadow-lg border-t border-outline-variant flex justify-around items-center h-16 px-gutter">
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="assignment">assignment</span>
+<span class="font-label-md text-label-md mt-1">Missions</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-label-md text-label-md mt-1">Map</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant" href="#">
+<span class="material-symbols-outlined" data-icon="chat">chat</span>
+<span class="font-label-md text-label-md mt-1">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-4 py-1" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span class="font-label-md text-label-md mt-1">Reports</span>
+</a>
+</nav>
+<script>
+        // Chart.js Configuration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Line Chart
+            const ctxEvolution = document.getElementById('evolutionChart').getContext('2d');
+            new Chart(ctxEvolution, {
+                type: 'line',
+                data: {
+                    labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                    datasets: [
+                        {
+                            label: 'Créés',
+                            data: [65, 59, 80, 81, 56, 55, 40],
+                            borderColor: '#003178', // primary
+                            backgroundColor: 'rgba(0, 49, 120, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            fill: true
+                        },
+                        {
+                            label: 'Clôturés',
+                            data: [45, 65, 60, 90, 70, 45, 50],
+                            borderColor: '#7ecf79', // on-tertiary-container roughly
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#e8e7f0' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // Pie Chart
+            const ctxStatus = document.getElementById('statusChart').getContext('2d');
+            new Chart(ctxStatus, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Résolu', 'En cours', 'Bloqué', 'Nouveau'],
+                    datasets: [{
+                        data: [65, 20, 10, 5],
+                        backgroundColor: [
+                            '#003178', // primary
+                            '#003f0b', // tertiary
+                            '#ba1a1a', // error
+                            '#737783'  // outline
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body></html>
