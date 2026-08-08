@@ -1,0 +1,19 @@
+# Repo-root context, for the root Dockerfile only (Render's default). The
+# Flutter app doesn't belong in this build at all.
+mobile
+.git
+.github
+stitch_plateforme_s_curis_e_msis
+*.md
+backend/.git
+backend/node_modules
+backend/vendor
+backend/tests
+backend/storage/logs/*.log
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/*.sqlite
+backend/database/database.sqlite
+backend/.phpunit.cache
+backend/.phpunit.result.cache
