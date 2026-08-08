@@ -52,6 +52,11 @@ class _SupervisorDashboardScreenState extends ConsumerState<SupervisorDashboardS
         actions: [
           const NotificationBellAction(),
           IconButton(
+            icon: const Icon(Icons.person_outline),
+            tooltip: 'Profil',
+            onPressed: () => context.push(RoutePaths.profile),
+          ),
+          IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await ref.read(authControllerProvider.notifier).logout();

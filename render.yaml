@@ -1,0 +1,43 @@
+# Free-tier demo/presentation deployment — NOT the SRS §25 production
+# architecture (that's docker-compose.yml + deploy/vps-setup.sh, a real VPS
+# with MySQL/Redis/Reverb). This blueprint trades persistence and realtime
+# messaging for $0 cost and no card: SQLite on ephemeral disk (resets on
+# redeploy or after ~15min idle spin-down), sync queue (no separate worker
+# process fits a single free web service), no Reverb (mobile app already has
+# a 15s REST-polling fallback built in for exactly this case — messaging
+# still works, just without the realtime push). See PRODUCTION_READINESS.md.
+#
+# Usage: connect this repo in the Render dashboard (New > Blueprint), no
+# card required for the free plan. Render reads this file automatically.
+services:
+  - type: web
+    name: msis-api-demo
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile.render
+    dockerContext: ./backend
+    plan: free
+    envVars:
+      - key: APP_NAME
+        value: MSIS
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_LOCALE
+        value: fr
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: SESSION_DRIVER
+        value: database
+      - key: BROADCAST_CONNECTION
+        value: "null"
+      - key: FILESYSTEM_DISK
+        value: local
+      - key: BCRYPT_ROUNDS
+        value: "12"
+      - key: SANCTUM_TOKEN_EXPIRATION_MINUTES
+        value: "720"

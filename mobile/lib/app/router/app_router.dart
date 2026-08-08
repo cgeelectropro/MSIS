@@ -7,6 +7,7 @@ import '../../core/di/injector.dart';
 import '../../core/storage/auth_session_store.dart';
 import '../../features/authentication/presentation/screens/forgot_password_screen.dart';
 import '../../features/authentication/presentation/screens/login_screen.dart';
+import '../../features/authentication/presentation/screens/profile_screen.dart';
 import '../../features/authentication/presentation/screens/register_screen.dart';
 import '../../features/authentication/presentation/screens/reset_password_screen.dart';
 import '../../features/authentication/presentation/screens/splash_screen.dart';
@@ -45,6 +46,26 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         return RoutePaths.login;
       }
 
+      // The server re-verifies role on every request regardless (CLAUDE.md's
+      // stated model), but a deep link or stale notification tap could still
+      // land an authenticated user on a route meant for a different role
+      // with no UI affordance ever pointing them there otherwise — this
+      // keeps the client-side experience coherent, matching the other roles.
+      if (sessionStore.isAuthenticated) {
+        final homeForRole = switch (sessionStore.role) {
+          'CLIENT' => RoutePaths.clientHome,
+          'TECHNICIEN' => RoutePaths.technicianMissions,
+          'ADMIN' => RoutePaths.supervisorDashboard,
+          _ => null,
+        };
+        const roleHomes = {RoutePaths.clientHome, RoutePaths.technicianMissions, RoutePaths.supervisorDashboard};
+        if (homeForRole != null &&
+            roleHomes.contains(state.matchedLocation) &&
+            state.matchedLocation != homeForRole) {
+          return homeForRole;
+        }
+      }
+
       return null;
     },
     routes: [
@@ -71,6 +92,7 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: RoutePaths.supervisorDashboard,
         builder: (context, state) => const SupervisorDashboardScreen(),
       ),
+      GoRoute(path: RoutePaths.profile, builder: (context, state) => const ProfileScreen()),
     ],
     debugLogDiagnostics: kDebugMode,
   );

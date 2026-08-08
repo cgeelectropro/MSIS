@@ -75,7 +75,23 @@ class MessagesController extends StateNotifier<MessagesState> {
     }
   }
 
-  Future<void> markSeen(int messageId) => _repository.markSeen(messageId);
+  /// Optimistic local update, not just a fire-and-forget API call — without
+  /// it, the screen has no way to know a message is already marked seen and
+  /// would re-call this for the same message on every rebuild until the next
+  /// poll/realtime echo caught up.
+  Future<void> markSeen(int messageId) async {
+    final current = state;
+    if (current is! MessagesLoaded) return;
+
+    state = current.copyWith(
+      messages: [
+        for (final m in current.messages)
+          if (m.id == messageId) m.copyWith(lu: true) else m,
+      ],
+    );
+
+    await _repository.markSeen(messageId);
+  }
 
   void disposeController() {
     _realtimeSub?.cancel();

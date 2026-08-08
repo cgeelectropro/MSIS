@@ -102,7 +102,7 @@ class InterventionService
         return $intervention->fresh();
     }
 
-    /** SRS FR-DET-02/BRULE-002/003 — legality already checked by InterventionPolicy::updateStatus. */
+    /** SRS FR-DET-02/BRULE-002/003 — state-machine legality already checked in UpdateInterventionStatusRequest, actor ownership already checked by InterventionPolicy::updateStatus. */
     public function updateStatus(Intervention $intervention, InterventionStatus $target, ?string $motifBlocage, ?string $rapportTechnique, User $actor): Intervention
     {
         if ($target === InterventionStatus::Bloque && blank($motifBlocage)) {

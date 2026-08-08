@@ -13,12 +13,17 @@ if (file("google-services.json").exists()) {
 
 android {
     namespace = "com.msis.msis_mobile"
-    compileSdk = flutter.compileSdkVersion
+    // permission_handler_android requires SDK 37; flutter.compileSdkVersion
+    // (36) lags behind it. Pinned explicitly rather than left to the plugin
+    // default, which broke the very first real-device build.
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        // flutter_local_notifications requires this.
+        isCoreLibraryDesugaringEnabled = true
     }
 
     defaultConfig {
@@ -49,4 +54,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/route_paths.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/utils/validators.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/auth_state.dart';
 
@@ -98,7 +99,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     controller: _passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(labelText: 'Mot de passe'),
-                    validator: (v) => (v == null || v.length < 8) ? 'Minimum 8 caractères' : null,
+                    validator: validatePassword,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   FilledButton(

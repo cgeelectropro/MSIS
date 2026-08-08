@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/route_paths.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/utils/validators.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/auth_state.dart';
 
@@ -30,15 +31,6 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
     _passwordController.dispose();
     _confirmController.dispose();
     super.dispose();
-  }
-
-  // SRS FR-AUTH-08 / BRULE-006.
-  String? _validatePassword(String? value) {
-    if (value == null || value.length < 8) return 'Minimum 8 caractères';
-    if (!RegExp(r'[A-Z]').hasMatch(value)) return 'Au moins une majuscule';
-    if (!RegExp(r'[0-9]').hasMatch(value)) return 'Au moins un chiffre';
-    if (!RegExp(r'[!@#\$&*~%^()_\-+=]').hasMatch(value)) return 'Au moins un caractère spécial';
-    return null;
   }
 
   Future<void> _submit() async {
@@ -87,7 +79,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
                     controller: _passwordController,
                     obscureText: true,
                     decoration: const InputDecoration(labelText: 'Nouveau mot de passe'),
-                    validator: _validatePassword,
+                    validator: validatePassword,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextFormField(

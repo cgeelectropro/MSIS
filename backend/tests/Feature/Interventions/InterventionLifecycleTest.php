@@ -99,14 +99,33 @@ test('a technician cannot change the status of a ticket not assigned to them', f
         ->assertForbidden();
 });
 
-// SRS TR-06 / AC: illegal transition rejected 422.
+// SRS §6.6/§8.3/UC-04/§29.4: illegal transition rejected 422, regardless of
+// actor — EN_ATTENTE -> RESOLUE isn't a legal edge in the state machine for
+// anyone. Previously asserted 403 here (a real bug: state-skip and
+// wrong-actor were conflated into one Policy check that only ever returned
+// 403 — see UpdateInterventionStatusRequest::after()).
 test('a client cannot force EN_ATTENTE directly to RESOLUE', function () {
     $client = User::factory()->create();
     $intervention = makeIntervention(['id_client' => $client->id]);
 
     $this->actingAs($client, 'sanctum')
         ->patchJson("/api/v1/interventions/{$intervention->id_intervention}/statut", ['statut' => 'RESOLUE'])
-        ->assertForbidden();
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['statut']);
+});
+
+// Same state-skip case, but with an actor (admin) who WOULD otherwise be
+// allowed to make this transition if it existed — confirms 422 fires before
+// authorization even runs, i.e. it's a true actor-independent validation
+// failure, not a lucky side-effect of the client also lacking permission.
+test('an admin also cannot force EN_ATTENTE directly to RESOLUE', function () {
+    $admin = User::factory()->admin()->create();
+    $intervention = makeIntervention();
+
+    $this->actingAs($admin, 'sanctum')
+        ->patchJson("/api/v1/interventions/{$intervention->id_intervention}/statut", ['statut' => 'RESOLUE'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['statut']);
 });
 
 // SRS BRULE-003: BLOQUE requires a reason.

@@ -59,11 +59,28 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     if (picked != null) await _send(attachmentPath: picked.path);
   }
 
+  /// SRS FR-DET-06: marks incoming, not-yet-read messages seen once they're
+  /// actually rendered in this conversation. Previously wired end-to-end
+  /// (controller/repository/API) but never called from the UI, so `lu` never
+  /// flipped and the double-check icon in MessageBubble was permanently dead.
+  void _markVisibleAsSeen(List<MessageEntity> messages, int? currentUserId) {
+    if (currentUserId == null) return;
+    for (final message in messages) {
+      if (message.idExpediteur != currentUserId && !message.lu) {
+        ref.read(messagesControllerProvider(widget.interventionId).notifier).markSeen(message.id);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(messagesControllerProvider(widget.interventionId));
     final authState = ref.watch(authControllerProvider);
     final currentUserId = authState.maybeWhen(authenticated: (u) => u.id, orElse: () => null);
+
+    if (state is MessagesLoaded) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _markVisibleAsSeen(state.messages, currentUserId));
+    }
 
     return Scaffold(
       appBar: AppBar(title: const Text('Messagerie')),

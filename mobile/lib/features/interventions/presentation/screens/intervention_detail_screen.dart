@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../shared/models/result.dart';
 import '../../../../shared/widgets/priority_chip.dart';
@@ -81,6 +82,64 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
             child: const Text('Confirmer'),
           ),
         ],
+      ),
+    );
+  }
+
+  /// SRS FR-DET-02/UC-05: 1-5 satisfaction rating on closure. Returns null if
+  /// the client dismisses without picking a rating (note_satisfaction stays
+  /// optional server-side either way).
+  Future<int?> _promptRating(String title, String body) {
+    int selected = 0;
+    return showModalBottomSheet<int>(
+      context: context,
+      isDismissible: true,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setSheetState) => Padding(
+          padding: const EdgeInsets.all(AppSpacing.marginMobile),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.titleMedium),
+              const SizedBox(height: AppSpacing.sm),
+              Text(body),
+              const SizedBox(height: AppSpacing.md),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(5, (i) {
+                  final starValue = i + 1;
+                  return IconButton(
+                    iconSize: 36,
+                    icon: Icon(
+                      starValue <= selected ? Icons.star : Icons.star_border,
+                      color: AppColors.warning,
+                    ),
+                    onPressed: () => setSheetState(() => selected = starValue),
+                  );
+                }),
+              ),
+              const SizedBox(height: AppSpacing.md),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Passer'),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.sm),
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: selected == 0 ? null : () => Navigator.pop(context, selected),
+                      child: const Text('Confirmer'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -289,9 +348,10 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
         FilledButton.icon(
           onPressed: () async {
             final confirmed = await _confirm('Confirmer la clôture', 'Le technicien a marqué cette intervention comme résolue.');
-            if (confirmed) {
-              await _runAction(() => ref.read(interventionRepositoryProvider).close(interventionId: i.id, noteSatisfaction: 5));
-            }
+            if (!confirmed || !mounted) return;
+            final rating = await _promptRating('Votre satisfaction', 'Comment évaluez-vous cette intervention ?');
+            if (!mounted) return;
+            await _runAction(() => ref.read(interventionRepositoryProvider).close(interventionId: i.id, noteSatisfaction: rating));
           },
           icon: const Icon(Icons.task_alt),
           label: const Text('Confirmer la clôture'),

@@ -33,17 +33,16 @@ class InterventionPolicy
     }
 
     /**
-     * SRS BRULE-003: ownership AND transition legality. Ownership rule mirrors
-     * §8.4 exactly — a Client may only ever trigger the terminal closure step
-     * (handled separately by `close()`), a Technicien only their own assigned
-     * tickets, an Admin anything.
+     * SRS BRULE-003: ownership only — state-machine legality (BRULE-002, the
+     * §6.6/422 case) is checked earlier in UpdateInterventionStatusRequest,
+     * since conflating "illegal transition" with "wrong actor" into one
+     * boolean here made both failures indistinguishable (always 403).
+     * Ownership rule mirrors §8.4 exactly — a Client may only ever trigger
+     * the terminal closure step (handled separately by `close()`), a
+     * Technicien only their own assigned tickets, an Admin anything.
      */
     public function updateStatus(User $user, Intervention $intervention, InterventionStatus $target): bool
     {
-        if (! $intervention->statut->canTransitionTo($target)) {
-            return false;
-        }
-
         if ($user->isAdmin()) {
             return true;
         }
