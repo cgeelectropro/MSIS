@@ -23,8 +23,9 @@ class ProfileScreen extends ConsumerWidget {
   Future<void> _confirmAndLogout(BuildContext context, WidgetRef ref, {required bool allDevices}) async {
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
+      showDragHandle: true,
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(AppSpacing.marginMobile),
+        padding: const EdgeInsets.fromLTRB(AppSpacing.marginMobile, 0, AppSpacing.marginMobile, AppSpacing.marginMobile),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,7 +34,7 @@ class ProfileScreen extends ConsumerWidget {
               allDevices ? 'Se déconnecter de tous les appareils ?' : 'Se déconnecter ?',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.lg),
             Row(
               children: [
                 Expanded(

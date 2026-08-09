@@ -4,7 +4,6 @@ namespace App\Http\Requests\Intervention;
 
 use App\Models\Intervention;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\ValidationException;
 
 /** SRS FR-CRT-04/§22 FILE-02/FILE-05: ticket-creation-time attachments (previously unimplemented). */
 class StoreInterventionAttachmentRequest extends FormRequest

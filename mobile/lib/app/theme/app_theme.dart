@@ -157,6 +157,21 @@ class AppTheme {
         indicatorSize: TabBarIndicatorSize.label,
         dividerColor: Colors.transparent,
       ),
+      // Applies to every showModalBottomSheet/AlertDialog call app-wide —
+      // without this, every one of the ~6 call sites across the app (confirm
+      // sheets, the technician picker, the satisfaction-rating sheet) renders
+      // with Material's default square corners, visibly inconsistent with
+      // everything else now using AppSpacing's rounded-corner scale.
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: colorScheme.surface,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusSheet)),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.radiusSheet)),
+      ),
     );
   }
 }

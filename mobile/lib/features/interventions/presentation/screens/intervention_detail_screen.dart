@@ -95,6 +95,7 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
     return showModalBottomSheet<int>(
       context: context,
       isDismissible: true,
+      showDragHandle: true,
       builder: (context) => StatefulBuilder(
         builder: (context, setSheetState) => Padding(
           padding: const EdgeInsets.all(AppSpacing.marginMobile),
@@ -148,6 +149,7 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
   Future<bool> _confirm(String title, String body) async {
     final confirmed = await showModalBottomSheet<bool>(
       context: context,
+      showDragHandle: true,
       builder: (context) => Padding(
         padding: const EdgeInsets.all(AppSpacing.marginMobile),
         child: Column(
@@ -190,11 +192,28 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
     if (!mounted) return;
     final selected = await showModalBottomSheet<int>(
       context: context,
+      showDragHandle: true,
       builder: (context) => ListView(
         shrinkWrap: true,
-        children: technicians
-            .map((t) => ListTile(title: Text(t.nom), subtitle: Text(t.email), onTap: () => Navigator.pop(context, t.id)))
-            .toList(),
+        padding: const EdgeInsets.only(bottom: AppSpacing.md),
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(AppSpacing.md, 0, AppSpacing.md, AppSpacing.sm),
+            child: Text('Choisir un technicien', style: Theme.of(context).textTheme.titleMedium),
+          ),
+          ...technicians.map(
+            (t) => ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.12),
+                foregroundColor: Theme.of(context).colorScheme.primary,
+                child: Text(t.nom.isNotEmpty ? t.nom[0].toUpperCase() : '?', style: const TextStyle(fontWeight: FontWeight.w700)),
+              ),
+              title: Text(t.nom, style: const TextStyle(fontWeight: FontWeight.w600)),
+              subtitle: Text(t.email),
+              onTap: () => Navigator.pop(context, t.id),
+            ),
+          ),
+        ],
       ),
     );
 

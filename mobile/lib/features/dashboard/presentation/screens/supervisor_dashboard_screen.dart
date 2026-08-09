@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/route_paths.dart';
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/intervention_card.dart';
@@ -197,6 +198,7 @@ class _UsersTabState extends ConsumerState<_UsersTab> {
     final created = await showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
+      showDragHandle: true,
       builder: (context) => Padding(
         padding: EdgeInsets.only(
           left: AppSpacing.marginMobile,
@@ -214,17 +216,24 @@ class _UsersTabState extends ConsumerState<_UsersTab> {
               'Nouveau compte technicien',
               style: Theme.of(context).textTheme.titleMedium,
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: 4),
+            Text(
+              'Une invitation sera envoyée par email.',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
+            const SizedBox(height: AppSpacing.lg),
             TextField(
               controller: nomController,
-              decoration: const InputDecoration(labelText: 'Nom'),
+              decoration: const InputDecoration(labelText: 'Nom', prefixIcon: Icon(Icons.badge_outlined)),
             ),
             const SizedBox(height: AppSpacing.sm),
             TextField(
               controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
+              decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.mail_outline)),
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(height: AppSpacing.lg),
             FilledButton(
               onPressed: () async {
                 final success = await ref
@@ -316,8 +325,12 @@ class _UsersTabState extends ConsumerState<_UsersTab> {
                                     ? true
                                     : await showModalBottomSheet<bool>(
                                             context: context,
+                                            showDragHandle: true,
                                             builder: (context) => Padding(
-                                              padding: const EdgeInsets.all(
+                                              padding: const EdgeInsets.fromLTRB(
+                                                AppSpacing.marginMobile,
+                                                0,
+                                                AppSpacing.marginMobile,
                                                 AppSpacing.marginMobile,
                                               ),
                                               child: Column(
@@ -325,19 +338,24 @@ class _UsersTabState extends ConsumerState<_UsersTab> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.stretch,
                                                 children: [
-                                                  const Text(
+                                                  Text(
                                                     'Désactiver ce compte ?',
+                                                    style: Theme.of(context).textTheme.titleMedium,
                                                   ),
                                                   const SizedBox(
                                                     height: AppSpacing.sm,
                                                   ),
-                                                  const Text(
+                                                  Text(
                                                     'Ses interventions en attente non commencées seront libérées pour réaffectation.',
+                                                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
                                                   ),
                                                   const SizedBox(
-                                                    height: AppSpacing.md,
+                                                    height: AppSpacing.lg,
                                                   ),
                                                   FilledButton(
+                                                    style: FilledButton.styleFrom(
+                                                      backgroundColor: AppColors.danger,
+                                                    ),
                                                     onPressed: () =>
                                                         Navigator.pop(
                                                           context,
