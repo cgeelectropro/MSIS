@@ -55,8 +55,26 @@ class DatabaseSeeder extends Seeder
         );
 
         // A few extra accounts so list/assignment screens have more than one
-        // row to show.
-        User::factory()->technicien()->count(2)->create();
-        User::factory()->count(3)->create();
+        // row to show. Not factory-built: fakerphp/faker is require-dev and
+        // the Render image is built with `composer install --no-dev`, so
+        // `fake()` isn't available at runtime there.
+        foreach ([
+            ['nom' => 'Technicien Deux', 'email' => 'technicien2@msis.test', 'role' => UserRole::Technicien, 'phone' => '+237600000004'],
+            ['nom' => 'Technicien Trois', 'email' => 'technicien3@msis.test', 'role' => UserRole::Technicien, 'phone' => '+237600000005'],
+            ['nom' => 'Client Deux', 'email' => 'client2@msis.test', 'role' => UserRole::Client, 'phone' => '+237600000006'],
+            ['nom' => 'Client Trois', 'email' => 'client3@msis.test', 'role' => UserRole::Client, 'phone' => '+237600000007'],
+        ] as $extra) {
+            User::updateOrCreate(
+                ['email' => $extra['email']],
+                [
+                    'nom' => $extra['nom'],
+                    'password' => Hash::make('Password123!'),
+                    'role' => $extra['role'],
+                    'telephone' => $extra['phone'],
+                    'actif' => true,
+                    'email_verified_at' => now(),
+                ],
+            );
+        }
     }
 }
