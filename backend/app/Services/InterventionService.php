@@ -6,8 +6,10 @@ use App\Enums\InterventionStatus;
 use App\Enums\UserRole;
 use App\Models\Intervention;
 use App\Models\InterventionStatusHistory;
+use App\Models\PieceJointe;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -171,6 +173,20 @@ class InterventionService
         });
 
         return $intervention->fresh();
+    }
+
+    /** SRS FR-CRT-04/§22: ticket-creation-time attachment (message-time attachments are a separate path, MessageService::send). */
+    public function addAttachment(Intervention $intervention, UploadedFile $file, User $actor): PieceJointe
+    {
+        $path = $file->store('interventions/'.$intervention->id_intervention, 'local');
+
+        return PieceJointe::create([
+            'id_intervention' => $intervention->id_intervention,
+            'chemin_fichier' => $path,
+            'type_mime' => $file->getMimeType(),
+            'taille_octets' => $file->getSize(),
+            'uploaded_by' => $actor->id,
+        ]);
     }
 
     private function recordTransition(Intervention $intervention, ?InterventionStatus $from, InterventionStatus $to, User $actor): void

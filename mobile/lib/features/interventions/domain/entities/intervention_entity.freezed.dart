@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InterventionEntity {
 
- int get id; String get titre; String get description; InterventionStatus get statut; InterventionPriority get priorite; int get idClient; int? get idTechnicien; UserEntity? get client; UserEntity? get technicien; String? get motifBlocage; String? get rapportTechnique; int? get noteSatisfaction; DateTime? get dateCloture; DateTime get createdAt;
+ int get id; String get titre; String get description; InterventionStatus get statut; InterventionPriority get priorite; int get idClient; int? get idTechnicien; UserEntity? get client; UserEntity? get technicien; String? get motifBlocage; String? get rapportTechnique; int? get noteSatisfaction; DateTime? get dateCloture; DateTime get createdAt; List<AttachmentEntity> get attachments;
 /// Create a copy of InterventionEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -26,16 +26,16 @@ $InterventionEntityCopyWith<InterventionEntity> get copyWith => _$InterventionEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InterventionEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InterventionEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.attachments, attachments));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt);
+int get hashCode => Object.hash(runtimeType,id,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt,const DeepCollectionEquality().hash(attachments));
 
 @override
 String toString() {
-  return 'InterventionEntity(id: $id, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt)';
+  return 'InterventionEntity(id: $id, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt, attachments: $attachments)';
 }
 
 
@@ -46,7 +46,7 @@ abstract mixin class $InterventionEntityCopyWith<$Res>  {
   factory $InterventionEntityCopyWith(InterventionEntity value, $Res Function(InterventionEntity) _then) = _$InterventionEntityCopyWithImpl;
 @useResult
 $Res call({
- int id, String titre, String description, InterventionStatus statut, InterventionPriority priorite, int idClient, int? idTechnicien, UserEntity? client, UserEntity? technicien, String? motifBlocage, String? rapportTechnique, int? noteSatisfaction, DateTime? dateCloture, DateTime createdAt
+ int id, String titre, String description, InterventionStatus statut, InterventionPriority priorite, int idClient, int? idTechnicien, UserEntity? client, UserEntity? technicien, String? motifBlocage, String? rapportTechnique, int? noteSatisfaction, DateTime? dateCloture, DateTime createdAt, List<AttachmentEntity> attachments
 });
 
 
@@ -63,7 +63,7 @@ class _$InterventionEntityCopyWithImpl<$Res>
 
 /// Create a copy of InterventionEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,Object? attachments = null,}) {
   return _then(InterventionEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,titre: null == titre ? _self.titre : titre // ignore: cast_nullable_to_non_nullable
@@ -79,7 +79,8 @@ as String?,rapportTechnique: freezed == rapportTechnique ? _self.rapportTechniqu
 as String?,noteSatisfaction: freezed == noteSatisfaction ? _self.noteSatisfaction : noteSatisfaction // ignore: cast_nullable_to_non_nullable
 as int?,dateCloture: freezed == dateCloture ? _self.dateCloture : dateCloture // ignore: cast_nullable_to_non_nullable
 as DateTime?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,attachments: null == attachments ? _self.attachments : attachments // ignore: cast_nullable_to_non_nullable
+as List<AttachmentEntity>,
   ));
 }
 /// Create a copy of InterventionEntity
@@ -188,10 +189,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String titre,  String description,  InterventionStatus statut,  InterventionPriority priorite,  int idClient,  int? idTechnicien,  UserEntity? client,  UserEntity? technicien,  String? motifBlocage,  String? rapportTechnique,  int? noteSatisfaction,  DateTime? dateCloture,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  String titre,  String description,  InterventionStatus statut,  InterventionPriority priorite,  int idClient,  int? idTechnicien,  UserEntity? client,  UserEntity? technicien,  String? motifBlocage,  String? rapportTechnique,  int? noteSatisfaction,  DateTime? dateCloture,  DateTime createdAt,  List<AttachmentEntity> attachments)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InterventionEntity() when $default != null:
-return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt);case _:
+return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt,_that.attachments);case _:
   return orElse();
 
 }
@@ -209,10 +210,10 @@ return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priori
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String titre,  String description,  InterventionStatus statut,  InterventionPriority priorite,  int idClient,  int? idTechnicien,  UserEntity? client,  UserEntity? technicien,  String? motifBlocage,  String? rapportTechnique,  int? noteSatisfaction,  DateTime? dateCloture,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  String titre,  String description,  InterventionStatus statut,  InterventionPriority priorite,  int idClient,  int? idTechnicien,  UserEntity? client,  UserEntity? technicien,  String? motifBlocage,  String? rapportTechnique,  int? noteSatisfaction,  DateTime? dateCloture,  DateTime createdAt,  List<AttachmentEntity> attachments)  $default,) {final _that = this;
 switch (_that) {
 case _InterventionEntity():
-return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt);case _:
+return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt,_that.attachments);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -229,10 +230,10 @@ return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priori
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String titre,  String description,  InterventionStatus statut,  InterventionPriority priorite,  int idClient,  int? idTechnicien,  UserEntity? client,  UserEntity? technicien,  String? motifBlocage,  String? rapportTechnique,  int? noteSatisfaction,  DateTime? dateCloture,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  String titre,  String description,  InterventionStatus statut,  InterventionPriority priorite,  int idClient,  int? idTechnicien,  UserEntity? client,  UserEntity? technicien,  String? motifBlocage,  String? rapportTechnique,  int? noteSatisfaction,  DateTime? dateCloture,  DateTime createdAt,  List<AttachmentEntity> attachments)?  $default,) {final _that = this;
 switch (_that) {
 case _InterventionEntity() when $default != null:
-return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt);case _:
+return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt,_that.attachments);case _:
   return null;
 
 }
@@ -244,7 +245,7 @@ return $default(_that.id,_that.titre,_that.description,_that.statut,_that.priori
 
 
 class _InterventionEntity implements InterventionEntity {
-  const _InterventionEntity({required this.id, required this.titre, required this.description, required this.statut, required this.priorite, required this.idClient, this.idTechnicien, this.client, this.technicien, this.motifBlocage, this.rapportTechnique, this.noteSatisfaction, this.dateCloture, required this.createdAt});
+  const _InterventionEntity({required this.id, required this.titre, required this.description, required this.statut, required this.priorite, required this.idClient, this.idTechnicien, this.client, this.technicien, this.motifBlocage, this.rapportTechnique, this.noteSatisfaction, this.dateCloture, required this.createdAt,  List<AttachmentEntity> attachments = const []}): _attachments = attachments;
   
 
 @override final  int id;
@@ -261,6 +262,13 @@ class _InterventionEntity implements InterventionEntity {
 @override final  int? noteSatisfaction;
 @override final  DateTime? dateCloture;
 @override final  DateTime createdAt;
+ final  List<AttachmentEntity> _attachments;
+@override@JsonKey() List<AttachmentEntity> get attachments {
+  if (_attachments is EqualUnmodifiableListView) return _attachments;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_attachments);
+}
+
 
 /// Create a copy of InterventionEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -272,16 +280,16 @@ _$InterventionEntityCopyWith<_InterventionEntity> get copyWith => __$Interventio
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InterventionEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InterventionEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._attachments, _attachments));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt);
+int get hashCode => Object.hash(runtimeType,id,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt,const DeepCollectionEquality().hash(_attachments));
 
 @override
 String toString() {
-  return 'InterventionEntity(id: $id, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt)';
+  return 'InterventionEntity(id: $id, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt, attachments: $attachments)';
 }
 
 
@@ -292,7 +300,7 @@ abstract mixin class _$InterventionEntityCopyWith<$Res> implements $Intervention
   factory _$InterventionEntityCopyWith(_InterventionEntity value, $Res Function(_InterventionEntity) _then) = __$InterventionEntityCopyWithImpl;
 @override @useResult
 $Res call({
- int id, String titre, String description, InterventionStatus statut, InterventionPriority priorite, int idClient, int? idTechnicien, UserEntity? client, UserEntity? technicien, String? motifBlocage, String? rapportTechnique, int? noteSatisfaction, DateTime? dateCloture, DateTime createdAt
+ int id, String titre, String description, InterventionStatus statut, InterventionPriority priorite, int idClient, int? idTechnicien, UserEntity? client, UserEntity? technicien, String? motifBlocage, String? rapportTechnique, int? noteSatisfaction, DateTime? dateCloture, DateTime createdAt, List<AttachmentEntity> attachments
 });
 
 
@@ -309,7 +317,7 @@ class __$InterventionEntityCopyWithImpl<$Res>
 
 /// Create a copy of InterventionEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,Object? attachments = null,}) {
   return _then(_InterventionEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,titre: null == titre ? _self.titre : titre // ignore: cast_nullable_to_non_nullable
@@ -325,7 +333,8 @@ as String?,rapportTechnique: freezed == rapportTechnique ? _self.rapportTechniqu
 as String?,noteSatisfaction: freezed == noteSatisfaction ? _self.noteSatisfaction : noteSatisfaction // ignore: cast_nullable_to_non_nullable
 as int?,dateCloture: freezed == dateCloture ? _self.dateCloture : dateCloture // ignore: cast_nullable_to_non_nullable
 as DateTime?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,attachments: null == attachments ? _self._attachments : attachments // ignore: cast_nullable_to_non_nullable
+as List<AttachmentEntity>,
   ));
 }
 

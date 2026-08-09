@@ -67,4 +67,15 @@ class InterventionRemoteDataSource {
     final response = await _dio.patch<Map<String, dynamic>>(ApiEndpoints.interventionCancel(interventionId));
     return InterventionDto.fromJson(response.data!['data'] as Map<String, dynamic>);
   }
+
+  /// SRS FR-CRT-04/§17.2. Returns the intervention as it stands after the
+  /// upload, re-fetched rather than assembled client-side — simplest way to
+  /// get the authoritative `attachments` list back in one round trip.
+  Future<InterventionDto> addAttachment({required int interventionId, required String filePath}) async {
+    await _dio.post<Map<String, dynamic>>(
+      ApiEndpoints.interventionAttachments(interventionId),
+      data: FormData.fromMap({'fichier': await MultipartFile.fromFile(filePath)}),
+    );
+    return show(interventionId);
+  }
 }

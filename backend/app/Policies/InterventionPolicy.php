@@ -67,4 +67,20 @@ class InterventionPolicy
         return $user->id === $intervention->id_client
             && $intervention->statut === InterventionStatus::EnAttente;
     }
+
+    /**
+     * SRS FR-CRT-04: the owning client (or an Admin acting on their behalf,
+     * mirroring `create()`) may attach files up until the ticket reaches a
+     * terminal state — same closed-conversation boundary MessagePolicy
+     * already applies to messaging, so attachments can't be added to a
+     * ticket nobody can act on anymore.
+     */
+    public function addAttachment(User $user, Intervention $intervention): bool
+    {
+        if (in_array($intervention->statut, [InterventionStatus::Cloturee, InterventionStatus::Annulee], true)) {
+            return false;
+        }
+
+        return $user->id === $intervention->id_client || $user->isAdmin();
+    }
 }

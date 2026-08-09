@@ -111,19 +111,23 @@ class _ReportsTabState extends ConsumerState<ReportsTab> {
 
   Widget _kpiGrid(DashboardReportEntity report) {
     final tiles = [
-      _KpiTile('Total', '${report.total}'),
-      _KpiTile('En attente', '${report.parStatut['EN_ATTENTE'] ?? 0}'),
-      _KpiTile('En cours', '${report.parStatut['EN_COURS'] ?? 0}'),
-      _KpiTile('Clôturées', '${report.parStatut['CLOTUREE'] ?? 0}'),
+      _KpiTile('Total', '${report.total}', Icons.list_alt_outlined, AppColors.primary),
+      _KpiTile('En attente', '${report.parStatut['EN_ATTENTE'] ?? 0}', Icons.hourglass_empty, AppColors.warning),
+      _KpiTile('En cours', '${report.parStatut['EN_COURS'] ?? 0}', Icons.autorenew, AppColors.primary),
+      _KpiTile('Clôturées', '${report.parStatut['CLOTUREE'] ?? 0}', Icons.check_circle_outline, AppColors.success),
       _KpiTile(
         'Délai moyen de prise en charge',
         report.delaiMoyenPriseEnChargeMinutes != null ? '${report.delaiMoyenPriseEnChargeMinutes!.round()} min' : '—',
+        Icons.timer_outlined,
+        AppColors.secondary,
       ),
       _KpiTile(
         'Délai moyen de résolution',
         report.delaiMoyenResolutionMinutes != null ? '${report.delaiMoyenResolutionMinutes!.round()} min' : '—',
+        Icons.task_alt,
+        AppColors.secondary,
       ),
-      _KpiTile('Satisfaction moyenne', '${report.satisfactionMoyenne.toStringAsFixed(1)} / 5'),
+      _KpiTile('Satisfaction moyenne', '${report.satisfactionMoyenne.toStringAsFixed(1)} / 5', Icons.star_outline, AppColors.warning),
     ];
 
     return Wrap(
@@ -134,31 +138,52 @@ class _ReportsTabState extends ConsumerState<ReportsTab> {
   }
 
   Widget _barChart(Map<String, int> data) {
-    if (data.isEmpty) return const Text('Aucune donnée', style: TextStyle(color: Colors.grey));
+    if (data.isEmpty) {
+      return Text('Aucune donnée', style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant));
+    }
     final maxValue = data.values.fold(0, (a, b) => a > b ? a : b).clamp(1, 1 << 30);
 
     return Column(
       children: data.entries.map((entry) {
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 4),
+          padding: const EdgeInsets.symmetric(vertical: 5),
           child: Row(
             children: [
-              SizedBox(width: 100, child: Text(entry.key, overflow: TextOverflow.ellipsis)),
+              SizedBox(
+                width: 100,
+                child: Text(entry.key, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w500)),
+              ),
               Expanded(
-                child: FractionallySizedBox(
-                  alignment: Alignment.centerLeft,
-                  widthFactor: entry.value / maxValue,
-                  child: Container(
-                    height: 16,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(AppSpacing.radiusSmall),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 18,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                      ),
                     ),
-                  ),
+                    FractionallySizedBox(
+                      alignment: Alignment.centerLeft,
+                      widthFactor: entry.value / maxValue,
+                      child: Container(
+                        height: 18,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [AppColors.primary.withValues(alpha: 0.7), AppColors.primary],
+                          ),
+                          borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: AppSpacing.sm),
-              Text('${entry.value}'),
+              SizedBox(
+                width: 28,
+                child: Text('${entry.value}', textAlign: TextAlign.right, style: const TextStyle(fontWeight: FontWeight.w700)),
+              ),
             ],
           ),
         );
@@ -168,20 +193,33 @@ class _ReportsTabState extends ConsumerState<ReportsTab> {
 }
 
 class _KpiTile extends StatelessWidget {
-  const _KpiTile(this.label, this.value);
+  const _KpiTile(this.label, this.value, this.icon, this.color);
   final String label;
   final String value;
+  final IconData icon;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.sm),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Container(
+              width: 32,
+              height: 32,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(AppSpacing.radiusSmall)),
+              child: Icon(icon, size: 18, color: color),
+            ),
+            const SizedBox(height: AppSpacing.sm),
             Text(value, style: Theme.of(context).textTheme.titleLarge),
-            Text(label, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+            Text(
+              label,
+              style: TextStyle(fontSize: 11, color: Theme.of(context).colorScheme.onSurfaceVariant),
+            ),
           ],
         ),
       ),

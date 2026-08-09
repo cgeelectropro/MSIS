@@ -57,6 +57,7 @@ Route::prefix('v1')->group(function () {
         Route::post('interventions', [InterventionController::class, 'store'])
             ->middleware('throttle:20,60'); // BRULE-014
         Route::get('interventions/{intervention}', [InterventionController::class, 'show']);
+        Route::post('interventions/{intervention}/pieces-jointes', [InterventionController::class, 'storeAttachment']); // §17.2/FR-CRT-04
         Route::patch('interventions/{intervention}/statut', [InterventionController::class, 'updateStatus']);
         Route::patch('interventions/{intervention}/assigner', [InterventionController::class, 'assign']);
         Route::patch('interventions/{intervention}/cloturer', [InterventionController::class, 'close']);

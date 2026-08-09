@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/route_paths.dart';
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../domain/entities/user_entity.dart';
 import '../controllers/auth_controller.dart';
@@ -79,11 +80,28 @@ class ProfileScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(AppSpacing.marginMobile),
               children: [
                 Center(
-                  child: CircleAvatar(
-                    radius: 40,
+                  child: Container(
+                    width: 88,
+                    height: 88,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Theme.of(context).colorScheme.primary, AppColors.primaryContainer],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.25),
+                          blurRadius: 20,
+                          offset: const Offset(0, 6),
+                        ),
+                      ],
+                    ),
                     child: Text(
                       user.nom.isNotEmpty ? user.nom[0].toUpperCase() : '?',
-                      style: const TextStyle(fontSize: 28),
+                      style: const TextStyle(fontSize: 32, color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
                 ),
@@ -91,29 +109,46 @@ class ProfileScreen extends ConsumerWidget {
                 Center(
                   child: Text(user.nom, style: Theme.of(context).textTheme.titleLarge),
                 ),
+                const SizedBox(height: 4),
                 Center(
-                  child: Text(_roleLabel(user.role), style: Theme.of(context).textTheme.bodyMedium),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                    ),
+                    child: Text(
+                      _roleLabel(user.role),
+                      style: TextStyle(color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.w600, fontSize: 12),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
                 Card(
                   child: Column(
                     children: [
                       ListTile(leading: const Icon(Icons.email_outlined), title: const Text('Email'), subtitle: Text(user.email)),
-                      if (user.telephone != null && user.telephone!.isNotEmpty)
+                      if (user.telephone != null && user.telephone!.isNotEmpty) ...[
+                        const Divider(height: 1, indent: AppSpacing.md, endIndent: AppSpacing.md),
                         ListTile(
                           leading: const Icon(Icons.phone_outlined),
                           title: const Text('Téléphone'),
                           subtitle: Text(user.telephone!),
                         ),
+                      ],
+                      const Divider(height: 1, indent: AppSpacing.md, endIndent: AppSpacing.md),
                       ListTile(
-                        leading: Icon(user.actif ? Icons.check_circle_outline : Icons.block_outlined),
+                        leading: Icon(
+                          user.actif ? Icons.check_circle_outline : Icons.block_outlined,
+                          color: user.actif ? AppColors.success : AppColors.danger,
+                        ),
                         title: const Text('Statut du compte'),
                         subtitle: Text(user.actif ? 'Actif' : 'Désactivé'),
                       ),
                     ],
                   ),
                 ),
-                const SizedBox(height: AppSpacing.lg),
+                const SizedBox(height: AppSpacing.xl),
                 OutlinedButton.icon(
                   onPressed: () => _confirmAndLogout(context, ref, allDevices: false),
                   icon: const Icon(Icons.logout),
@@ -121,6 +156,10 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: AppSpacing.sm),
                 OutlinedButton.icon(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.danger,
+                    side: const BorderSide(color: AppColors.danger),
+                  ),
                   onPressed: () => _confirmAndLogout(context, ref, allDevices: true),
                   icon: const Icon(Icons.logout),
                   label: const Text('Se déconnecter de tous les appareils'),

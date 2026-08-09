@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../authentication/domain/entities/user_entity.dart';
+import '../../../messages/domain/entities/message_entity.dart' show AttachmentEntity;
 
 part 'intervention_entity.freezed.dart';
 
@@ -64,5 +65,6 @@ abstract class InterventionEntity with _$InterventionEntity {
     int? noteSatisfaction,
     DateTime? dateCloture,
     required DateTime createdAt,
+    @Default([]) List<AttachmentEntity> attachments,
   }) = _InterventionEntity;
 }

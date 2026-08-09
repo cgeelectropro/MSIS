@@ -32,14 +32,23 @@ class InterventionsController extends StateNotifier<InterventionsState> {
     };
   }
 
-  Future<bool> create({required String titre, required String description, InterventionPriority? priorite}) async {
+  /// Returns the created ticket (so the caller can immediately attach files
+  /// to it, SRS FR-CRT-04 — needs the server-assigned id) or null on failure.
+  Future<InterventionEntity?> create({
+    required String titre,
+    required String description,
+    InterventionPriority? priorite,
+  }) async {
     final result = await _repository.create(titre: titre, description: description, priorite: priorite);
-    if (result.isSuccess) {
+    if (result case Success(:final data)) {
       await load();
-      return true;
+      return data;
     }
-    return false;
+    return null;
   }
+
+  Future<Result<InterventionEntity>> addAttachment({required int interventionId, required String filePath}) =>
+      _repository.addAttachment(interventionId: interventionId, filePath: filePath);
 
   Future<bool> cancel(int id) async {
     final result = await _repository.cancel(id);

@@ -6,9 +6,11 @@ use App\Enums\InterventionStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Intervention\AssignInterventionRequest;
 use App\Http\Requests\Intervention\CloseInterventionRequest;
+use App\Http\Requests\Intervention\StoreInterventionAttachmentRequest;
 use App\Http\Requests\Intervention\StoreInterventionRequest;
 use App\Http\Requests\Intervention\UpdateInterventionStatusRequest;
 use App\Http\Resources\InterventionResource;
+use App\Http\Resources\PieceJointeResource;
 use App\Models\Intervention;
 use App\Models\User;
 use App\Services\InterventionService;
@@ -29,7 +31,7 @@ class InterventionController extends Controller
                 $status,
                 $request->string('search')->toString() ?: null,
                 $request->string('priorite')->toString() ?: null,
-            )->load(['client', 'technicien'])
+            )->load(['client', 'technicien', 'attachments'])
         );
     }
 
@@ -44,7 +46,14 @@ class InterventionController extends Controller
     {
         $this->authorize('view', $intervention);
 
-        return new InterventionResource($intervention->load(['client', 'technicien']));
+        return new InterventionResource($intervention->load(['client', 'technicien', 'attachments']));
+    }
+
+    public function storeAttachment(StoreInterventionAttachmentRequest $request, Intervention $intervention): mixed
+    {
+        $pieceJointe = $this->interventionService->addAttachment($intervention, $request->file('fichier'), $request->user());
+
+        return (new PieceJointeResource($pieceJointe))->response()->setStatusCode(201);
     }
 
     public function assign(AssignInterventionRequest $request, Intervention $intervention): InterventionResource

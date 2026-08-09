@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/router/route_paths.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../shared/utils/validators.dart';
+import '../../../../shared/widgets/app_logo_mark.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/auth_state.dart';
 
@@ -67,7 +68,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       appBar: AppBar(title: const Text('Créer un compte')),
       body: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 400),
+          constraints: const BoxConstraints(maxWidth: 440),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.marginMobile),
             child: Form(
@@ -75,16 +76,39 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const SizedBox(height: AppSpacing.sm),
+                  const AppLogoMark(size: 64),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    'Rejoignez MSIS',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Créez votre compte client pour suivre vos interventions',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
                   TextFormField(
                     controller: _nomController,
-                    decoration: const InputDecoration(labelText: 'Nom complet'),
+                    decoration: const InputDecoration(
+                      labelText: 'Nom complet',
+                      prefixIcon: Icon(Icons.badge_outlined),
+                    ),
                     validator: (v) => (v == null || v.length < 2) ? 'Champ requis' : null,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(labelText: 'Email'),
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      prefixIcon: Icon(Icons.mail_outline),
+                    ),
                     validator: (v) =>
                         (v == null || !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(v)) ? 'Email invalide' : null,
                   ),
@@ -92,16 +116,22 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   TextFormField(
                     controller: _telephoneController,
                     keyboardType: TextInputType.phone,
-                    decoration: const InputDecoration(labelText: 'Téléphone (optionnel)'),
+                    decoration: const InputDecoration(
+                      labelText: 'Téléphone (optionnel)',
+                      prefixIcon: Icon(Icons.phone_outlined),
+                    ),
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Mot de passe'),
+                    decoration: const InputDecoration(
+                      labelText: 'Mot de passe',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
                     validator: validatePassword,
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.lg),
                   FilledButton(
                     onPressed: isLoading ? null : _submit,
                     child: isLoading
@@ -112,6 +142,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                           )
                         : const Text("S'inscrire"),
                   ),
+                  const SizedBox(height: AppSpacing.md),
                 ],
               ),
             ),

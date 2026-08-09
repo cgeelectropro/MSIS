@@ -16,12 +16,19 @@ class StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
       ),
-      child: Text(
-        status.labelFr,
-        style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w600),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(width: 6, height: 6, decoration: BoxDecoration(shape: BoxShape.circle, color: color)),
+          const SizedBox(width: 6),
+          Text(
+            status.labelFr,
+            style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w700),
+          ),
+        ],
       ),
     );
   }

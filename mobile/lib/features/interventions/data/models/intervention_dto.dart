@@ -1,6 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../../../authentication/data/models/user_dto.dart';
+import '../../../messages/data/models/message_dto.dart' show AttachmentDto;
+import '../../../messages/domain/entities/message_entity.dart' show AttachmentEntity;
 import '../../domain/entities/intervention_entity.dart';
 
 part 'intervention_dto.freezed.dart';
@@ -24,6 +26,7 @@ abstract class InterventionDto with _$InterventionDto {
     @JsonKey(name: 'note_satisfaction') int? noteSatisfaction,
     @JsonKey(name: 'date_cloture') DateTime? dateCloture,
     @JsonKey(name: 'created_at') required DateTime createdAt,
+    List<AttachmentDto>? attachments,
   } ) = _InterventionDto;
 
   factory InterventionDto.fromJson(Map<String, dynamic> json) => _$InterventionDtoFromJson(json);
@@ -45,5 +48,10 @@ extension InterventionDtoMapper on InterventionDto {
     noteSatisfaction: noteSatisfaction,
     dateCloture: dateCloture,
     createdAt: createdAt,
+    attachments: (attachments ?? [])
+        .map(
+          (a) => AttachmentEntity(id: a.id, typeMime: a.typeMime, tailleOctets: a.tailleOctets, url: a.url),
+        )
+        .toList(),
   );
 }

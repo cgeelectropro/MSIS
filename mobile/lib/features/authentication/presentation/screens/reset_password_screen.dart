@@ -63,6 +63,7 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(title: const Text('Réinitialiser le mot de passe')),
       body: Center(
@@ -75,20 +76,44 @@ class _ResetPasswordScreenState extends ConsumerState<ResetPasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  Container(
+                    width: 72,
+                    height: 72,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: theme.colorScheme.primary.withValues(alpha: 0.08),
+                    ),
+                    child: Icon(Icons.password_outlined, size: 32, color: theme.colorScheme.primary),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
+                  Text('Nouveau mot de passe', style: theme.textTheme.headlineSmall),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Choisissez un mot de passe fort pour ${widget.email}',
+                    style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Nouveau mot de passe'),
+                    decoration: const InputDecoration(
+                      labelText: 'Nouveau mot de passe',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
                     validator: validatePassword,
                   ),
                   const SizedBox(height: AppSpacing.md),
                   TextFormField(
                     controller: _confirmController,
                     obscureText: true,
-                    decoration: const InputDecoration(labelText: 'Confirmer le mot de passe'),
+                    decoration: const InputDecoration(
+                      labelText: 'Confirmer le mot de passe',
+                      prefixIcon: Icon(Icons.lock_outline),
+                    ),
                     validator: (value) => (value == null || value.isEmpty) ? 'Champ requis' : null,
                   ),
-                  const SizedBox(height: AppSpacing.md),
+                  const SizedBox(height: AppSpacing.lg),
                   FilledButton(
                     onPressed: _isSubmitting ? null : _submit,
                     child: _isSubmitting

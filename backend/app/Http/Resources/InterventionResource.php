@@ -21,6 +21,7 @@ class InterventionResource extends JsonResource
             'id_technicien' => $this->id_technicien,
             'client' => new UserResource($this->whenLoaded('client')),
             'technicien' => new UserResource($this->whenLoaded('technicien')),
+            'attachments' => PieceJointeResource::collection($this->whenLoaded('attachments')),
             'motif_blocage' => $this->motif_blocage,
             'rapport_technique' => $this->rapport_technique,
             'note_satisfaction' => $this->note_satisfaction,

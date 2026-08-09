@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/message_bubble.dart';
 import '../../../authentication/presentation/controllers/auth_controller.dart';
 import '../../../authentication/presentation/controllers/auth_state.dart';
@@ -90,21 +91,38 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
           // the copy reflects that exactly, never a "zero-knowledge" claim.
           Container(
             width: double.infinity,
-            color: AppColors.primaryContainer.withValues(alpha: 0.15),
-            padding: const EdgeInsets.all(AppSpacing.sm),
+            color: AppColors.primaryContainer.withValues(alpha: 0.12),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
             child: const Row(
               children: [
-                Icon(Icons.lock, size: 16, color: AppColors.primary),
+                Icon(Icons.lock_outline, size: 15, color: AppColors.primary),
                 SizedBox(width: AppSpacing.xs),
-                Expanded(child: Text('Conversation chiffrée et strictement confidentielle', style: TextStyle(fontSize: 12))),
+                Expanded(
+                  child: Text(
+                    'Conversation chiffrée et strictement confidentielle',
+                    style: TextStyle(fontSize: 12, color: AppColors.primary, fontWeight: FontWeight.w600),
+                  ),
+                ),
               ],
             ),
           ),
           Expanded(child: _buildList(state, currentUserId)),
           if (widget.isClosed)
-            const Padding(
-              padding: EdgeInsets.all(AppSpacing.md),
-              child: Text('Conversation clôturée', style: TextStyle(color: Colors.grey)),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(AppSpacing.md),
+              color: Theme.of(context).colorScheme.surfaceContainerHighest,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.lock_clock_outlined, size: 16, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(
+                    'Conversation clôturée',
+                    style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+                  ),
+                ],
+              ),
             )
           else
             _buildComposer(state),
@@ -118,19 +136,10 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
       MessagesInitial() || MessagesLoading() => const Center(child: CircularProgressIndicator()),
       MessagesError(:final failure) => Center(child: Text(failure.message)),
       MessagesLoaded(:final messages) => messages.isEmpty
-          ? const Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.chat_bubble_outline, size: 48, color: Colors.grey),
-                  SizedBox(height: AppSpacing.sm),
-                  Text('Aucune conversation'),
-                  Text(
-                    'Les conversations démarrées depuis les interventions apparaîtront ici.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
-                  ),
-                ],
-              ),
+          ? const EmptyStateView(
+              icon: Icons.chat_bubble_outline,
+              title: 'Aucun message',
+              subtitle: 'Démarrez la conversation ci-dessous.',
             )
           : ListView.builder(
               controller: _scrollController,
@@ -154,9 +163,14 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
     final sending = state is MessagesLoaded && state.sending;
 
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.sm),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: AppSpacing.sm),
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border(top: BorderSide(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3))),
+        ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             IconButton(icon: const Icon(Icons.photo_camera_outlined), onPressed: sending ? null : _pickAndSendPhoto),
             Expanded(
@@ -164,14 +178,24 @@ class _ConversationScreenState extends ConsumerState<ConversationScreen> {
                 controller: _textController,
                 minLines: 1,
                 maxLines: 4,
-                decoration: const InputDecoration(hintText: 'Écrire un message…', border: OutlineInputBorder()),
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  hintText: 'Écrire un message…',
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(AppSpacing.radiusFull)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.6)),
+                  ),
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.xs),
             IconButton.filled(
               icon: sending
                   ? const SizedBox(height: 16, width: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                  : const Icon(Icons.send),
+                  : const Icon(Icons.send_rounded),
               onPressed: sending ? null : () => _send(),
             ),
           ],

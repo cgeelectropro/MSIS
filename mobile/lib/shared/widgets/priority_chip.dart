@@ -13,11 +13,13 @@ class PriorityChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = priority.color;
     return Chip(
-      label: Text(priority.labelFr, style: TextStyle(color: color, fontSize: 12)),
-      backgroundColor: color.withValues(alpha: 0.15),
+      avatar: Icon(Icons.flag_rounded, size: 14, color: color),
+      label: Text(priority.labelFr, style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.w700)),
+      backgroundColor: color.withValues(alpha: 0.12),
       side: BorderSide.none,
       visualDensity: VisualDensity.compact,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
     );
   }
 }

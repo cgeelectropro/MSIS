@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../controllers/auth_controller.dart';
 
@@ -55,20 +56,37 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   Widget _buildForm() {
+    final theme = Theme.of(context);
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text('Saisissez votre email pour recevoir un lien de réinitialisation.'),
-          const SizedBox(height: AppSpacing.md),
+          Container(
+            width: 72,
+            height: 72,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: theme.colorScheme.primary.withValues(alpha: 0.08),
+            ),
+            child: Icon(Icons.lock_reset_outlined, size: 32, color: theme.colorScheme.primary),
+          ),
+          const SizedBox(height: AppSpacing.lg),
+          Text('Mot de passe oublié ?', style: theme.textTheme.headlineSmall),
+          const SizedBox(height: AppSpacing.xs),
+          Text(
+            'Saisissez votre email pour recevoir un lien de réinitialisation.',
+            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+          ),
+          const SizedBox(height: AppSpacing.lg),
           TextFormField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
             decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.mail_outline)),
             validator: (value) => (value == null || value.isEmpty) ? 'Champ requis' : null,
           ),
-          const SizedBox(height: AppSpacing.md),
+          const SizedBox(height: AppSpacing.lg),
           FilledButton(
             onPressed: _isSubmitting ? null : _submit,
             child: _isSubmitting
@@ -85,14 +103,27 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   Widget _buildConfirmation(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.mark_email_read_outlined, size: 56, color: Theme.of(context).colorScheme.primary),
-        const SizedBox(height: AppSpacing.md),
-        const Text(
+        Container(
+          width: 88,
+          height: 88,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.success.withValues(alpha: 0.1),
+          ),
+          child: const Icon(Icons.mark_email_read_outlined, size: 40, color: AppColors.success),
+        ),
+        const SizedBox(height: AppSpacing.lg),
+        Text('Vérifiez votre boîte mail', style: theme.textTheme.titleLarge),
+        const SizedBox(height: AppSpacing.xs),
+        Text(
           'Si un compte existe pour cet email, un lien de réinitialisation a été envoyé.',
           textAlign: TextAlign.center,
+          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
         ),
       ],
     );

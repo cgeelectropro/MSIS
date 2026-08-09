@@ -16,7 +16,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$InterventionDto {
 
-@JsonKey(name: 'id_intervention') int get idIntervention; String get titre; String get description; String get statut; String get priorite;@JsonKey(name: 'id_client') int get idClient;@JsonKey(name: 'id_technicien') int? get idTechnicien; UserDto? get client; UserDto? get technicien;@JsonKey(name: 'motif_blocage') String? get motifBlocage;@JsonKey(name: 'rapport_technique') String? get rapportTechnique;@JsonKey(name: 'note_satisfaction') int? get noteSatisfaction;@JsonKey(name: 'date_cloture') DateTime? get dateCloture;@JsonKey(name: 'created_at') DateTime get createdAt;
+@JsonKey(name: 'id_intervention') int get idIntervention; String get titre; String get description; String get statut; String get priorite;@JsonKey(name: 'id_client') int get idClient;@JsonKey(name: 'id_technicien') int? get idTechnicien; UserDto? get client; UserDto? get technicien;@JsonKey(name: 'motif_blocage') String? get motifBlocage;@JsonKey(name: 'rapport_technique') String? get rapportTechnique;@JsonKey(name: 'note_satisfaction') int? get noteSatisfaction;@JsonKey(name: 'date_cloture') DateTime? get dateCloture;@JsonKey(name: 'created_at') DateTime get createdAt; List<AttachmentDto>? get attachments;
 /// Create a copy of InterventionDto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,16 +29,16 @@ $InterventionDtoCopyWith<InterventionDto> get copyWith => _$InterventionDtoCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InterventionDto&&(identical(other.idIntervention, idIntervention) || other.idIntervention == idIntervention)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is InterventionDto&&(identical(other.idIntervention, idIntervention) || other.idIntervention == idIntervention)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other.attachments, attachments));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,idIntervention,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt);
+int get hashCode => Object.hash(runtimeType,idIntervention,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt,const DeepCollectionEquality().hash(attachments));
 
 @override
 String toString() {
-  return 'InterventionDto(idIntervention: $idIntervention, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt)';
+  return 'InterventionDto(idIntervention: $idIntervention, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt, attachments: $attachments)';
 }
 
 
@@ -49,7 +49,7 @@ abstract mixin class $InterventionDtoCopyWith<$Res>  {
   factory $InterventionDtoCopyWith(InterventionDto value, $Res Function(InterventionDto) _then) = _$InterventionDtoCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(name: 'id_intervention') int idIntervention, String titre, String description, String statut, String priorite,@JsonKey(name: 'id_client') int idClient,@JsonKey(name: 'id_technicien') int? idTechnicien, UserDto? client, UserDto? technicien,@JsonKey(name: 'motif_blocage') String? motifBlocage,@JsonKey(name: 'rapport_technique') String? rapportTechnique,@JsonKey(name: 'note_satisfaction') int? noteSatisfaction,@JsonKey(name: 'date_cloture') DateTime? dateCloture,@JsonKey(name: 'created_at') DateTime createdAt
+@JsonKey(name: 'id_intervention') int idIntervention, String titre, String description, String statut, String priorite,@JsonKey(name: 'id_client') int idClient,@JsonKey(name: 'id_technicien') int? idTechnicien, UserDto? client, UserDto? technicien,@JsonKey(name: 'motif_blocage') String? motifBlocage,@JsonKey(name: 'rapport_technique') String? rapportTechnique,@JsonKey(name: 'note_satisfaction') int? noteSatisfaction,@JsonKey(name: 'date_cloture') DateTime? dateCloture,@JsonKey(name: 'created_at') DateTime createdAt, List<AttachmentDto>? attachments
 });
 
 
@@ -66,7 +66,7 @@ class _$InterventionDtoCopyWithImpl<$Res>
 
 /// Create a copy of InterventionDto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? idIntervention = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? idIntervention = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,Object? attachments = freezed,}) {
   return _then(InterventionDto(
 idIntervention: null == idIntervention ? _self.idIntervention : idIntervention // ignore: cast_nullable_to_non_nullable
 as int,titre: null == titre ? _self.titre : titre // ignore: cast_nullable_to_non_nullable
@@ -82,7 +82,8 @@ as String?,rapportTechnique: freezed == rapportTechnique ? _self.rapportTechniqu
 as String?,noteSatisfaction: freezed == noteSatisfaction ? _self.noteSatisfaction : noteSatisfaction // ignore: cast_nullable_to_non_nullable
 as int?,dateCloture: freezed == dateCloture ? _self.dateCloture : dateCloture // ignore: cast_nullable_to_non_nullable
 as DateTime?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,attachments: freezed == attachments ? _self.attachments : attachments // ignore: cast_nullable_to_non_nullable
+as List<AttachmentDto>?,
   ));
 }
 /// Create a copy of InterventionDto
@@ -191,10 +192,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_intervention')  int idIntervention,  String titre,  String description,  String statut,  String priorite, @JsonKey(name: 'id_client')  int idClient, @JsonKey(name: 'id_technicien')  int? idTechnicien,  UserDto? client,  UserDto? technicien, @JsonKey(name: 'motif_blocage')  String? motifBlocage, @JsonKey(name: 'rapport_technique')  String? rapportTechnique, @JsonKey(name: 'note_satisfaction')  int? noteSatisfaction, @JsonKey(name: 'date_cloture')  DateTime? dateCloture, @JsonKey(name: 'created_at')  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_intervention')  int idIntervention,  String titre,  String description,  String statut,  String priorite, @JsonKey(name: 'id_client')  int idClient, @JsonKey(name: 'id_technicien')  int? idTechnicien,  UserDto? client,  UserDto? technicien, @JsonKey(name: 'motif_blocage')  String? motifBlocage, @JsonKey(name: 'rapport_technique')  String? rapportTechnique, @JsonKey(name: 'note_satisfaction')  int? noteSatisfaction, @JsonKey(name: 'date_cloture')  DateTime? dateCloture, @JsonKey(name: 'created_at')  DateTime createdAt,  List<AttachmentDto>? attachments)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _InterventionDto() when $default != null:
-return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt);case _:
+return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt,_that.attachments);case _:
   return orElse();
 
 }
@@ -212,10 +213,10 @@ return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_intervention')  int idIntervention,  String titre,  String description,  String statut,  String priorite, @JsonKey(name: 'id_client')  int idClient, @JsonKey(name: 'id_technicien')  int? idTechnicien,  UserDto? client,  UserDto? technicien, @JsonKey(name: 'motif_blocage')  String? motifBlocage, @JsonKey(name: 'rapport_technique')  String? rapportTechnique, @JsonKey(name: 'note_satisfaction')  int? noteSatisfaction, @JsonKey(name: 'date_cloture')  DateTime? dateCloture, @JsonKey(name: 'created_at')  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(name: 'id_intervention')  int idIntervention,  String titre,  String description,  String statut,  String priorite, @JsonKey(name: 'id_client')  int idClient, @JsonKey(name: 'id_technicien')  int? idTechnicien,  UserDto? client,  UserDto? technicien, @JsonKey(name: 'motif_blocage')  String? motifBlocage, @JsonKey(name: 'rapport_technique')  String? rapportTechnique, @JsonKey(name: 'note_satisfaction')  int? noteSatisfaction, @JsonKey(name: 'date_cloture')  DateTime? dateCloture, @JsonKey(name: 'created_at')  DateTime createdAt,  List<AttachmentDto>? attachments)  $default,) {final _that = this;
 switch (_that) {
 case _InterventionDto():
-return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt);case _:
+return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt,_that.attachments);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -232,10 +233,10 @@ return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_intervention')  int idIntervention,  String titre,  String description,  String statut,  String priorite, @JsonKey(name: 'id_client')  int idClient, @JsonKey(name: 'id_technicien')  int? idTechnicien,  UserDto? client,  UserDto? technicien, @JsonKey(name: 'motif_blocage')  String? motifBlocage, @JsonKey(name: 'rapport_technique')  String? rapportTechnique, @JsonKey(name: 'note_satisfaction')  int? noteSatisfaction, @JsonKey(name: 'date_cloture')  DateTime? dateCloture, @JsonKey(name: 'created_at')  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(name: 'id_intervention')  int idIntervention,  String titre,  String description,  String statut,  String priorite, @JsonKey(name: 'id_client')  int idClient, @JsonKey(name: 'id_technicien')  int? idTechnicien,  UserDto? client,  UserDto? technicien, @JsonKey(name: 'motif_blocage')  String? motifBlocage, @JsonKey(name: 'rapport_technique')  String? rapportTechnique, @JsonKey(name: 'note_satisfaction')  int? noteSatisfaction, @JsonKey(name: 'date_cloture')  DateTime? dateCloture, @JsonKey(name: 'created_at')  DateTime createdAt,  List<AttachmentDto>? attachments)?  $default,) {final _that = this;
 switch (_that) {
 case _InterventionDto() when $default != null:
-return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt);case _:
+return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,_that.priorite,_that.idClient,_that.idTechnicien,_that.client,_that.technicien,_that.motifBlocage,_that.rapportTechnique,_that.noteSatisfaction,_that.dateCloture,_that.createdAt,_that.attachments);case _:
   return null;
 
 }
@@ -247,7 +248,7 @@ return $default(_that.idIntervention,_that.titre,_that.description,_that.statut,
 @JsonSerializable()
 
 class _InterventionDto implements InterventionDto {
-  const _InterventionDto({@JsonKey(name: 'id_intervention') required this.idIntervention, required this.titre, required this.description, required this.statut, required this.priorite, @JsonKey(name: 'id_client') required this.idClient, @JsonKey(name: 'id_technicien') this.idTechnicien, this.client, this.technicien, @JsonKey(name: 'motif_blocage') this.motifBlocage, @JsonKey(name: 'rapport_technique') this.rapportTechnique, @JsonKey(name: 'note_satisfaction') this.noteSatisfaction, @JsonKey(name: 'date_cloture') this.dateCloture, @JsonKey(name: 'created_at') required this.createdAt});
+  const _InterventionDto({@JsonKey(name: 'id_intervention') required this.idIntervention, required this.titre, required this.description, required this.statut, required this.priorite, @JsonKey(name: 'id_client') required this.idClient, @JsonKey(name: 'id_technicien') this.idTechnicien, this.client, this.technicien, @JsonKey(name: 'motif_blocage') this.motifBlocage, @JsonKey(name: 'rapport_technique') this.rapportTechnique, @JsonKey(name: 'note_satisfaction') this.noteSatisfaction, @JsonKey(name: 'date_cloture') this.dateCloture, @JsonKey(name: 'created_at') required this.createdAt,  List<AttachmentDto>? attachments}): _attachments = attachments;
   factory _InterventionDto.fromJson(Map<String, dynamic> json) => _$InterventionDtoFromJson(json);
 
 @override@JsonKey(name: 'id_intervention') final  int idIntervention;
@@ -264,6 +265,15 @@ class _InterventionDto implements InterventionDto {
 @override@JsonKey(name: 'note_satisfaction') final  int? noteSatisfaction;
 @override@JsonKey(name: 'date_cloture') final  DateTime? dateCloture;
 @override@JsonKey(name: 'created_at') final  DateTime createdAt;
+ final  List<AttachmentDto>? _attachments;
+@override List<AttachmentDto>? get attachments {
+  final value = _attachments;
+  if (value == null) return null;
+  if (_attachments is EqualUnmodifiableListView) return _attachments;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
 
 /// Create a copy of InterventionDto
 /// with the given fields replaced by the non-null parameter values.
@@ -278,16 +288,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InterventionDto&&(identical(other.idIntervention, idIntervention) || other.idIntervention == idIntervention)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _InterventionDto&&(identical(other.idIntervention, idIntervention) || other.idIntervention == idIntervention)&&(identical(other.titre, titre) || other.titre == titre)&&(identical(other.description, description) || other.description == description)&&(identical(other.statut, statut) || other.statut == statut)&&(identical(other.priorite, priorite) || other.priorite == priorite)&&(identical(other.idClient, idClient) || other.idClient == idClient)&&(identical(other.idTechnicien, idTechnicien) || other.idTechnicien == idTechnicien)&&(identical(other.client, client) || other.client == client)&&(identical(other.technicien, technicien) || other.technicien == technicien)&&(identical(other.motifBlocage, motifBlocage) || other.motifBlocage == motifBlocage)&&(identical(other.rapportTechnique, rapportTechnique) || other.rapportTechnique == rapportTechnique)&&(identical(other.noteSatisfaction, noteSatisfaction) || other.noteSatisfaction == noteSatisfaction)&&(identical(other.dateCloture, dateCloture) || other.dateCloture == dateCloture)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&const DeepCollectionEquality().equals(other._attachments, _attachments));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,idIntervention,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt);
+int get hashCode => Object.hash(runtimeType,idIntervention,titre,description,statut,priorite,idClient,idTechnicien,client,technicien,motifBlocage,rapportTechnique,noteSatisfaction,dateCloture,createdAt,const DeepCollectionEquality().hash(_attachments));
 
 @override
 String toString() {
-  return 'InterventionDto(idIntervention: $idIntervention, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt)';
+  return 'InterventionDto(idIntervention: $idIntervention, titre: $titre, description: $description, statut: $statut, priorite: $priorite, idClient: $idClient, idTechnicien: $idTechnicien, client: $client, technicien: $technicien, motifBlocage: $motifBlocage, rapportTechnique: $rapportTechnique, noteSatisfaction: $noteSatisfaction, dateCloture: $dateCloture, createdAt: $createdAt, attachments: $attachments)';
 }
 
 
@@ -298,7 +308,7 @@ abstract mixin class _$InterventionDtoCopyWith<$Res> implements $InterventionDto
   factory _$InterventionDtoCopyWith(_InterventionDto value, $Res Function(_InterventionDto) _then) = __$InterventionDtoCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(name: 'id_intervention') int idIntervention, String titre, String description, String statut, String priorite,@JsonKey(name: 'id_client') int idClient,@JsonKey(name: 'id_technicien') int? idTechnicien, UserDto? client, UserDto? technicien,@JsonKey(name: 'motif_blocage') String? motifBlocage,@JsonKey(name: 'rapport_technique') String? rapportTechnique,@JsonKey(name: 'note_satisfaction') int? noteSatisfaction,@JsonKey(name: 'date_cloture') DateTime? dateCloture,@JsonKey(name: 'created_at') DateTime createdAt
+@JsonKey(name: 'id_intervention') int idIntervention, String titre, String description, String statut, String priorite,@JsonKey(name: 'id_client') int idClient,@JsonKey(name: 'id_technicien') int? idTechnicien, UserDto? client, UserDto? technicien,@JsonKey(name: 'motif_blocage') String? motifBlocage,@JsonKey(name: 'rapport_technique') String? rapportTechnique,@JsonKey(name: 'note_satisfaction') int? noteSatisfaction,@JsonKey(name: 'date_cloture') DateTime? dateCloture,@JsonKey(name: 'created_at') DateTime createdAt, List<AttachmentDto>? attachments
 });
 
 
@@ -315,7 +325,7 @@ class __$InterventionDtoCopyWithImpl<$Res>
 
 /// Create a copy of InterventionDto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? idIntervention = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? idIntervention = null,Object? titre = null,Object? description = null,Object? statut = null,Object? priorite = null,Object? idClient = null,Object? idTechnicien = freezed,Object? client = freezed,Object? technicien = freezed,Object? motifBlocage = freezed,Object? rapportTechnique = freezed,Object? noteSatisfaction = freezed,Object? dateCloture = freezed,Object? createdAt = null,Object? attachments = freezed,}) {
   return _then(_InterventionDto(
 idIntervention: null == idIntervention ? _self.idIntervention : idIntervention // ignore: cast_nullable_to_non_nullable
 as int,titre: null == titre ? _self.titre : titre // ignore: cast_nullable_to_non_nullable
@@ -331,7 +341,8 @@ as String?,rapportTechnique: freezed == rapportTechnique ? _self.rapportTechniqu
 as String?,noteSatisfaction: freezed == noteSatisfaction ? _self.noteSatisfaction : noteSatisfaction // ignore: cast_nullable_to_non_nullable
 as int?,dateCloture: freezed == dateCloture ? _self.dateCloture : dateCloture // ignore: cast_nullable_to_non_nullable
 as DateTime?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
-as DateTime,
+as DateTime,attachments: freezed == attachments ? _self._attachments : attachments // ignore: cast_nullable_to_non_nullable
+as List<AttachmentDto>?,
   ));
 }
 

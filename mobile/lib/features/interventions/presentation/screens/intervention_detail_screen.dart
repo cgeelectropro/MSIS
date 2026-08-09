@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../shared/models/result.dart';
+import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/priority_chip.dart';
 import '../../../../shared/widgets/status_badge.dart';
 import '../../../authentication/domain/entities/user_entity.dart';
@@ -233,13 +234,62 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _intervention == null
-          ? const Center(child: Text('Ticket introuvable.'))
+          ? const EmptyStateView(icon: Icons.error_outline, title: 'Ticket introuvable')
           : _buildBody(context, currentUser),
+    );
+  }
+
+  /// SRS FR-DET-01 "pièces jointes en galerie miniature" — thumbnails for
+  /// images, a generic file tile for documents (PDF), both opening the
+  /// signed download URL already embedded in each AttachmentEntity.
+  Widget _buildAttachmentGallery(InterventionEntity intervention) {
+    return SizedBox(
+      height: 88,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: intervention.attachments.length,
+        separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.xs),
+        itemBuilder: (context, index) {
+          final attachment = intervention.attachments[index];
+          final isImage = attachment.typeMime.startsWith('image/');
+          return GestureDetector(
+            onTap: () => showDialog<void>(
+              context: context,
+              builder: (_) => Dialog(
+                child: isImage
+                    ? InteractiveViewer(child: Image.network(attachment.url))
+                    : Padding(
+                        padding: const EdgeInsets.all(AppSpacing.marginMobile),
+                        child: Text('Document : ${attachment.typeMime}'),
+                      ),
+              ),
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppSpacing.radiusSmall),
+              child: isImage
+                  ? Image.network(
+                      attachment.url,
+                      width: 88,
+                      height: 88,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const Icon(Icons.broken_image_outlined, size: 40),
+                    )
+                  : Container(
+                      width: 88,
+                      height: 88,
+                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      child: Icon(Icons.picture_as_pdf_outlined, size: 32, color: Theme.of(context).colorScheme.onSurfaceVariant),
+                    ),
+            ),
+          );
+        },
+      ),
     );
   }
 
   Widget _buildBody(BuildContext context, UserEntity? currentUser) {
     final i = _intervention!;
+    final theme = Theme.of(context);
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSpacing.marginMobile),
@@ -248,22 +298,85 @@ class _InterventionDetailScreenState extends ConsumerState<InterventionDetailScr
         children: [
           Row(children: [StatusBadge(status: i.statut), const SizedBox(width: AppSpacing.sm), PriorityChip(priority: i.priorite)]),
           const SizedBox(height: AppSpacing.md),
-          Text(i.titre, style: Theme.of(context).textTheme.titleLarge),
+          Text(i.titre, style: theme.textTheme.headlineSmall),
           const SizedBox(height: AppSpacing.sm),
-          Text(i.description),
-          const SizedBox(height: AppSpacing.md),
-          if (i.client != null) Text('Client : ${i.client!.nom}', style: const TextStyle(fontWeight: FontWeight.w600)),
-          if (i.technicien != null) Text('Technicien : ${i.technicien!.nom}', style: const TextStyle(fontWeight: FontWeight.w600)),
+          Text(i.description, style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+          const SizedBox(height: AppSpacing.lg),
+          if (i.client != null || i.technicien != null)
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (i.client != null) _personRow(context, Icons.person_outline, 'Client', i.client!.nom),
+                    if (i.client != null && i.technicien != null) const SizedBox(height: AppSpacing.sm),
+                    if (i.technicien != null) _personRow(context, Icons.engineering_outlined, 'Technicien', i.technicien!.nom),
+                  ],
+                ),
+              ),
+            ),
           if (i.motifBlocage != null) ...[
             const SizedBox(height: AppSpacing.sm),
-            Text('Motif du blocage : ${i.motifBlocage}'),
+            _noteCard(context, icon: Icons.block, color: AppColors.statusBloque, label: 'Motif du blocage', text: i.motifBlocage!),
           ],
           if (i.rapportTechnique != null) ...[
             const SizedBox(height: AppSpacing.sm),
-            Text('Rapport technique : ${i.rapportTechnique}'),
+            _noteCard(context, icon: Icons.description_outlined, color: AppColors.success, label: 'Rapport technique', text: i.rapportTechnique!),
+          ],
+          if (i.attachments.isNotEmpty) ...[
+            const SizedBox(height: AppSpacing.lg),
+            Text('Pièces jointes', style: theme.textTheme.titleSmall),
+            const SizedBox(height: AppSpacing.sm),
+            _buildAttachmentGallery(i),
           ],
           const SizedBox(height: AppSpacing.lg),
           if (_acting) const Center(child: CircularProgressIndicator()) else _buildActions(currentUser, i),
+        ],
+      ),
+    );
+  }
+
+  Widget _personRow(BuildContext context, IconData icon, String label, String name) {
+    final theme = Theme.of(context);
+    return Row(
+      children: [
+        Icon(icon, size: 20, color: theme.colorScheme.onSurfaceVariant),
+        const SizedBox(width: AppSpacing.sm),
+        Text(label, style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant)),
+        const Spacer(),
+        Text(name, style: const TextStyle(fontWeight: FontWeight.w600)),
+      ],
+    );
+  }
+
+  Widget _noteCard(
+    BuildContext context, {
+    required IconData icon,
+    required Color color,
+    required String label,
+    required String text,
+  }) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(AppSpacing.md),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusStandard),
+        border: Border.all(color: color.withValues(alpha: 0.25)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, size: 16, color: color),
+              const SizedBox(width: AppSpacing.xs),
+              Text(label, style: TextStyle(color: color, fontWeight: FontWeight.w700, fontSize: 13)),
+            ],
+          ),
+          const SizedBox(height: AppSpacing.xs),
+          Text(text),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_spacing.dart';
@@ -27,9 +28,14 @@ class MessageBubble extends StatelessWidget {
           padding: const EdgeInsets.all(AppSpacing.sm),
           constraints: const BoxConstraints(maxWidth: 280),
           decoration: BoxDecoration(
-            color: isOutgoing ? AppColors.primaryContainer.withValues(alpha: 0.25) : colorScheme.surface,
-            border: isOutgoing ? null : Border.all(color: colorScheme.outline),
-            borderRadius: BorderRadius.circular(AppSpacing.radiusStandard),
+            color: isOutgoing ? colorScheme.primary.withValues(alpha: 0.14) : colorScheme.surfaceContainerHighest,
+            border: isOutgoing ? null : Border.all(color: colorScheme.outline.withValues(alpha: 0.4)),
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(AppSpacing.radiusStandard),
+              topRight: const Radius.circular(AppSpacing.radiusStandard),
+              bottomLeft: Radius.circular(isOutgoing ? AppSpacing.radiusStandard : AppSpacing.xs),
+              bottomRight: Radius.circular(isOutgoing ? AppSpacing.xs : AppSpacing.radiusStandard),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +54,7 @@ class MessageBubble extends StatelessWidget {
                 children: [
                   Text(
                     _formatTime(message.createdAt),
-                    style: const TextStyle(fontSize: 11, fontFamily: 'JetBrainsMono', color: Colors.grey),
+                    style: GoogleFonts.jetBrainsMono(fontSize: 11, color: colorScheme.onSurfaceVariant),
                   ),
                   if (isOutgoing) ...[
                     const SizedBox(width: 4),
@@ -61,7 +67,7 @@ class MessageBubble extends StatelessWidget {
                           ? Icons.done_all
                           : Icons.done,
                       size: 14,
-                      color: isFailed ? AppColors.danger : (message.lu ? AppColors.primary : Colors.grey),
+                      color: isFailed ? AppColors.danger : (message.lu ? AppColors.primary : colorScheme.onSurfaceVariant),
                     ),
                   ],
                 ],

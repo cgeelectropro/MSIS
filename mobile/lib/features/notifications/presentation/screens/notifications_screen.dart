@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../interventions/presentation/screens/intervention_detail_screen.dart';
 import '../../domain/entities/notification_entity.dart';
 import '../controllers/notifications_controller.dart';
@@ -55,15 +56,10 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
           NotificationsLoaded(:final items) => items.isEmpty
               ? ListView(
                   children: const [
-                    SizedBox(height: 120),
-                    Center(
-                      child: Column(
-                        children: [
-                          Icon(Icons.notifications_none, size: 48, color: Colors.grey),
-                          SizedBox(height: AppSpacing.sm),
-                          Text('Aucune notification'),
-                        ],
-                      ),
+                    EmptyStateView(
+                      icon: Icons.notifications_none_rounded,
+                      title: 'Aucune notification',
+                      subtitle: 'Vous serez averti ici des mises à jour importantes.',
                     ),
                   ],
                 )
@@ -87,22 +83,31 @@ class _NotificationsScreenState extends ConsumerState<NotificationsScreen> {
               padding: const EdgeInsets.fromLTRB(AppSpacing.md, AppSpacing.sm, AppSpacing.md, AppSpacing.xs),
               child: Text(
                 group.label,
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: Colors.grey),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
             for (final n in group.items)
-              ListTile(
-                leading: Icon(
-                  n.lu ? Icons.circle_outlined : Icons.circle,
-                  size: 10,
-                  color: n.lu ? Colors.grey : Theme.of(context).colorScheme.primary,
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: AppSpacing.sm, vertical: 2),
+                decoration: BoxDecoration(
+                  color: n.lu ? null : Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusStandard),
                 ),
-                title: Text(
-                  n.contenu,
-                  style: TextStyle(fontWeight: n.lu ? FontWeight.normal : FontWeight.bold),
+                child: ListTile(
+                  leading: Icon(
+                    n.lu ? Icons.circle_outlined : Icons.circle,
+                    size: 10,
+                    color: n.lu ? Theme.of(context).colorScheme.onSurfaceVariant : Theme.of(context).colorScheme.primary,
+                  ),
+                  title: Text(
+                    n.contenu,
+                    style: TextStyle(fontWeight: n.lu ? FontWeight.normal : FontWeight.w700),
+                  ),
+                  subtitle: Text('${n.createdAt.hour.toString().padLeft(2, '0')}:${n.createdAt.minute.toString().padLeft(2, '0')}'),
+                  onTap: () => _openNotification(n),
                 ),
-                subtitle: Text('${n.createdAt.hour.toString().padLeft(2, '0')}:${n.createdAt.minute.toString().padLeft(2, '0')}'),
-                onTap: () => _openNotification(n),
               ),
           ],
         );

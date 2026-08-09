@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/route_paths.dart';
-import '../../../../app/theme/app_colors.dart';
+import '../../../../shared/widgets/app_logo_mark.dart';
+import '../../../../shared/widgets/brand_gradient_background.dart';
 import '../../domain/entities/user_entity.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/auth_state.dart';
@@ -16,11 +17,26 @@ class SplashScreen extends ConsumerStatefulWidget {
   ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 700),
+  )..forward();
+  late final Animation<double> _fade = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+  late final Animation<double> _scale = Tween(begin: 0.9, end: 1.0).animate(
+    CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
+  );
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _bootstrap());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> _bootstrap() async {
@@ -45,12 +61,45 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppColors.primary,
-      body: Center(
-        child: Text(
-          'MSIS',
-          style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+    return Scaffold(
+      body: BrandGradientBackground(
+        child: Center(
+          child: FadeTransition(
+            opacity: _fade,
+            child: ScaleTransition(
+              scale: _scale,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const AppLogoMark(size: 96, onGradient: true),
+                  const SizedBox(height: 24),
+                  Text(
+                    'MSIS',
+                    style: Theme.of(context).textTheme.displayMedium?.copyWith(
+                      color: Colors.white,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Interventions techniques sécurisées',
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.copyWith(color: Colors.white.withValues(alpha: 0.75)),
+                  ),
+                  const SizedBox(height: 40),
+                  SizedBox(
+                    width: 28,
+                    height: 28,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation(Colors.white.withValues(alpha: 0.8)),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

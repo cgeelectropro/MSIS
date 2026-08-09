@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/route_paths.dart';
+import '../../../../shared/widgets/empty_state_view.dart';
 import '../../../../shared/widgets/intervention_card.dart';
 import '../../../../shared/widgets/notification_bell_action.dart';
 import '../../../../shared/widgets/offline_banner.dart';
+import '../../../../shared/widgets/status_filter_chips.dart';
 import '../../../authentication/presentation/controllers/auth_controller.dart';
+import '../../../interventions/domain/entities/intervention_entity.dart';
 import '../../../interventions/presentation/controllers/interventions_controller.dart';
 import '../../../interventions/presentation/controllers/interventions_state.dart';
 import '../../../interventions/presentation/screens/create_intervention_screen.dart';
@@ -21,10 +24,19 @@ class ClientHomeScreen extends ConsumerStatefulWidget {
 }
 
 class _ClientHomeScreenState extends ConsumerState<ClientHomeScreen> {
+  InterventionStatus? _statusFilter;
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => ref.read(interventionsControllerProvider.notifier).load());
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ref.read(interventionsControllerProvider.notifier).load(),
+    );
+  }
+
+  void _onFilterChanged(InterventionStatus? status) {
+    setState(() => _statusFilter = status);
+    ref.read(interventionsControllerProvider.notifier).load(status: status);
   }
 
   @override
@@ -53,19 +65,36 @@ class _ClientHomeScreenState extends ConsumerState<ClientHomeScreen> {
       body: Column(
         children: [
           const OfflineBanner(),
+          const SizedBox(height: 8),
+          StatusFilterChips(
+            selected: _statusFilter,
+            onSelected: _onFilterChanged,
+          ),
+          const SizedBox(height: 8),
           Expanded(
             child: RefreshIndicator(
-              onRefresh: () => ref.read(interventionsControllerProvider.notifier).load(),
+              onRefresh: () => ref
+                  .read(interventionsControllerProvider.notifier)
+                  .load(status: _statusFilter),
               child: state.when(
                 initial: () => const SizedBox.shrink(),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (failure) => Center(child: Text(failure.message)),
                 loaded: (items) => items.isEmpty
                     ? ListView(
-                        children: const [
-                          SizedBox(height: 120),
-                          Center(child: Text('Aucune intervention')),
-                          Center(child: Text('Créez votre première demande d\'intervention.')),
+                        children: [
+                          EmptyStateView(
+                            icon: Icons.build_circle_outlined,
+                            title: 'Aucune intervention',
+                            subtitle: 'Créez votre première demande d\'intervention.',
+                            actionLabel: 'Nouvelle demande',
+                            onAction: () async {
+                              await Navigator.of(context).push(
+                                MaterialPageRoute(builder: (_) => const CreateInterventionScreen()),
+                              );
+                              ref.read(interventionsControllerProvider.notifier).load(status: _statusFilter);
+                            },
+                          ),
                         ],
                       )
                     : ListView.builder(
@@ -75,12 +104,22 @@ class _ClientHomeScreenState extends ConsumerState<ClientHomeScreen> {
                           final item = items[index];
                           return InterventionCard(
                             intervention: item,
-                            subtitle: item.technicien != null ? 'Technicien : ${item.technicien!.nom}' : null,
+                            subtitle: item.technicien != null
+                                ? 'Technicien : ${item.technicien!.nom}'
+                                : null,
                             onTap: () async {
                               await Navigator.of(context).push(
-                                MaterialPageRoute(builder: (_) => InterventionDetailScreen(interventionId: item.id)),
+                                MaterialPageRoute(
+                                  builder: (_) => InterventionDetailScreen(
+                                    interventionId: item.id,
+                                  ),
+                                ),
                               );
-                              ref.read(interventionsControllerProvider.notifier).load();
+                              ref
+                                  .read(
+                                    interventionsControllerProvider.notifier,
+                                  )
+                                  .load(status: _statusFilter);
                             },
                           );
                         },
@@ -92,8 +131,12 @@ class _ClientHomeScreenState extends ConsumerState<ClientHomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.of(context).push(MaterialPageRoute(builder: (_) => const CreateInterventionScreen()));
-          ref.read(interventionsControllerProvider.notifier).load();
+          await Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const CreateInterventionScreen()),
+          );
+          ref
+              .read(interventionsControllerProvider.notifier)
+              .load(status: _statusFilter);
         },
         child: const Icon(Icons.add),
       ),

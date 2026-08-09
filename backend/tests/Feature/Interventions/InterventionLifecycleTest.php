@@ -3,7 +3,10 @@
 use App\Enums\InterventionStatus;
 use App\Models\AppNotification;
 use App\Models\Intervention;
+use App\Models\PieceJointe;
 use App\Models\User;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 function makeIntervention(array $overrides = []): Intervention
 {
@@ -217,4 +220,72 @@ test('a technician only sees interventions assigned to them in the list', functi
 
     $response->assertOk();
     expect($response->json('data'))->toHaveCount(1);
+});
+
+// SRS FR-CRT-04/§17.2: ticket-creation-time attachments (previously unimplemented).
+test('the owning client can attach a photo to their ticket', function () {
+    Storage::fake('local');
+    $client = User::factory()->create();
+    $intervention = makeIntervention(['id_client' => $client->id]);
+    $file = UploadedFile::fake()->image('panne.jpg', 800, 600)->size(500);
+
+    $response = $this->actingAs($client, 'sanctum')
+        ->post("/api/v1/interventions/{$intervention->id_intervention}/pieces-jointes", ['fichier' => $file]);
+
+    $response->assertCreated()->assertJsonPath('data.type_mime', 'image/jpeg');
+    expect(PieceJointe::where('id_intervention', $intervention->id_intervention)->count())->toBe(1);
+});
+
+test('a user unrelated to the ticket cannot attach a file to it', function () {
+    Storage::fake('local');
+    $intruder = User::factory()->create();
+    $intervention = makeIntervention();
+    $file = UploadedFile::fake()->image('panne.jpg');
+
+    $this->actingAs($intruder, 'sanctum')
+        ->post("/api/v1/interventions/{$intervention->id_intervention}/pieces-jointes", ['fichier' => $file])
+        ->assertForbidden();
+});
+
+test('attachments are rejected once the ticket is closed', function () {
+    Storage::fake('local');
+    $client = User::factory()->create();
+    $intervention = makeIntervention(['id_client' => $client->id, 'statut' => InterventionStatus::Cloturee]);
+    $file = UploadedFile::fake()->image('panne.jpg');
+
+    $this->actingAs($client, 'sanctum')
+        ->post("/api/v1/interventions/{$intervention->id_intervention}/pieces-jointes", ['fichier' => $file])
+        ->assertForbidden();
+});
+
+test('a disallowed file type is rejected', function () {
+    Storage::fake('local');
+    $client = User::factory()->create();
+    $intervention = makeIntervention(['id_client' => $client->id]);
+    $file = UploadedFile::fake()->create('malware.exe', 100, 'application/x-msdownload');
+
+    $this->actingAs($client, 'sanctum')
+        ->post("/api/v1/interventions/{$intervention->id_intervention}/pieces-jointes", ['fichier' => $file])
+        ->assertUnprocessable();
+});
+
+test('the per-ticket attachment limit is enforced', function () {
+    Storage::fake('local');
+    $client = User::factory()->create();
+    $intervention = makeIntervention(['id_client' => $client->id]);
+
+    for ($i = 0; $i < 5; $i++) {
+        PieceJointe::create([
+            'id_intervention' => $intervention->id_intervention,
+            'chemin_fichier' => "interventions/{$intervention->id_intervention}/existing-{$i}.jpg",
+            'type_mime' => 'image/jpeg',
+            'taille_octets' => 100,
+            'uploaded_by' => $client->id,
+        ]);
+    }
+    $file = UploadedFile::fake()->image('one-too-many.jpg');
+
+    $this->actingAs($client, 'sanctum')
+        ->post("/api/v1/interventions/{$intervention->id_intervention}/pieces-jointes", ['fichier' => $file])
+        ->assertUnprocessable();
 });

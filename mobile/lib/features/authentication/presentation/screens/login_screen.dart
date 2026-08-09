@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../../app/router/route_paths.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../../../shared/widgets/app_logo_mark.dart';
+import '../../../../shared/widgets/brand_gradient_background.dart';
+import '../../../../shared/widgets/role_option_card.dart';
 import '../../domain/entities/user_entity.dart';
 import '../controllers/auth_controller.dart';
 import '../controllers/auth_state.dart';
@@ -59,81 +62,124 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authControllerProvider);
     final isLoading = authState.maybeWhen(loading: () => true, orElse: () => false);
+    final theme = Theme.of(context);
 
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(AppSpacing.marginMobile),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: AppSpacing.xxl),
-                    const Icon(Icons.security, size: 56, color: AppColors.primary),
-                    const SizedBox(height: AppSpacing.md),
-                    Text(
-                      'MSIS',
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-
-                    // SRS FR-AUTH-03: trust banner.
-                    Container(
-                      padding: const EdgeInsets.all(AppSpacing.sm),
-                      decoration: BoxDecoration(
-                        color: AppColors.success.withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(AppSpacing.radiusStandard),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Icon(Icons.lock, size: 16, color: AppColors.success),
-                          SizedBox(width: AppSpacing.xs),
-                          Flexible(
-                            child: Text(
-                              'Connecté et sécurisé — Chiffrement SSL 256-bit',
-                              style: TextStyle(fontSize: 12, color: AppColors.success),
-                              textAlign: TextAlign.center,
+      body: BrandGradientBackground(
+        child: SafeArea(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Column(
+                    children: [
+                      // Hero section over the gradient.
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.lg,
+                          AppSpacing.xl,
+                          AppSpacing.lg,
+                          AppSpacing.xl,
+                        ),
+                        child: Column(
+                          children: [
+                            const AppLogoMark(onGradient: true),
+                            const SizedBox(height: AppSpacing.md),
+                            Text(
+                              'MSIS',
+                              style: theme.textTheme.headlineLarge?.copyWith(
+                                color: Colors.white,
+                                letterSpacing: 1.2,
+                              ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 4),
+                            Text(
+                              'Suivi sécurisé de vos interventions',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: Colors.white.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
+                      // Form sheet.
+                      Container(
+                        width: double.infinity,
+                        constraints: const BoxConstraints(maxWidth: 480),
+                        padding: const EdgeInsets.fromLTRB(
+                          AppSpacing.lg,
+                          AppSpacing.xl,
+                          AppSpacing.lg,
+                          AppSpacing.lg,
+                        ),
+                        decoration: BoxDecoration(
+                          color: theme.scaffoldBackgroundColor,
+                          borderRadius: const BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusSheet * 1.5)),
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
+                                'Connexion',
+                                style: theme.textTheme.headlineSmall,
+                              ),
+                              const SizedBox(height: AppSpacing.xs),
+                              Text(
+                                'Choisissez votre profil pour continuer',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.lg),
 
-                    // SRS FR-AUTH-01: role selector.
-                    SegmentedButton<UserRole>(
-                      segments: const [
-                        ButtonSegment(
-                          value: UserRole.client,
-                          label: Text('Client'),
-                          icon: Icon(Icons.person),
-                        ),
-                        ButtonSegment(
-                          value: UserRole.technicien,
-                          label: Text('Technicien'),
-                          icon: Icon(Icons.build),
-                        ),
-                        ButtonSegment(
-                          value: UserRole.admin,
-                          label: Text('Superviseur'),
-                          icon: Icon(Icons.bar_chart),
-                        ),
-                      ],
-                      selected: _selectedRole == null ? {} : {_selectedRole!},
-                      emptySelectionAllowed: true,
-                      onSelectionChanged: (selection) {
-                        setState(() => _selectedRole = selection.isEmpty ? null : selection.first);
-                      },
-                    ),
-                    const SizedBox(height: AppSpacing.md),
+                              // SRS FR-AUTH-01: role selector.
+                              Row(
+                                children: [
+                                  for (final role in UserRole.values) ...[
+                                    if (role != UserRole.values.first) const SizedBox(width: AppSpacing.sm),
+                                    Expanded(
+                                      child: RoleOptionCard(
+                                        role: role,
+                                        selected: _selectedRole == role,
+                                        onTap: () => setState(() => _selectedRole = role),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                              const SizedBox(height: AppSpacing.lg),
 
-                    TextFormField(
+                              // SRS FR-AUTH-03: trust banner.
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: AppSpacing.sm,
+                                  vertical: AppSpacing.sm,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.success.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(AppSpacing.radiusStandard),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.verified_user_outlined, size: 16, color: AppColors.success),
+                                    SizedBox(width: AppSpacing.xs),
+                                    Flexible(
+                                      child: Text(
+                                        'Connexion chiffrée et sécurisée',
+                                        style: TextStyle(fontSize: 12, color: AppColors.success),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.lg),
+
+                              TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       decoration: const InputDecoration(
@@ -150,50 +196,55 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: AppSpacing.md),
 
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      decoration: InputDecoration(
-                        labelText: 'Mot de passe',
-                        prefixIcon: const Icon(Icons.lock_outline),
-                        suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
-                          onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: _obscurePassword,
+                                decoration: InputDecoration(
+                                  labelText: 'Mot de passe',
+                                  prefixIcon: const Icon(Icons.lock_outline),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                                  ),
+                                ),
+                                validator: (value) => (value == null || value.isEmpty) ? 'Champ requis' : null,
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () => context.push(RoutePaths.forgotPassword),
+                                  child: const Text('Mot de passe oublié ?'),
+                                ),
+                              ),
+                              const SizedBox(height: AppSpacing.sm),
+
+                              FilledButton(
+                                onPressed: isLoading || _selectedRole == null ? null : _submit,
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                      )
+                                    : const Text('Se connecter'),
+                              ),
+                              const SizedBox(height: AppSpacing.sm),
+                              Align(
+                                alignment: Alignment.center,
+                                child: TextButton(
+                                  onPressed: () => context.push(RoutePaths.register),
+                                  child: const Text("Pas encore de compte ? S'inscrire"),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      validator: (value) => (value == null || value.isEmpty) ? 'Champ requis' : null,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () => context.push(RoutePaths.forgotPassword),
-                        child: const Text('Mot de passe oublié ?'),
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-
-                    FilledButton(
-                      onPressed: isLoading || _selectedRole == null ? null : _submit,
-                      child: isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                            )
-                          : const Text('Se connecter'),
-                    ),
-                    const SizedBox(height: AppSpacing.md),
-                    Align(
-                      alignment: Alignment.center,
-                      child: TextButton(
-                        onPressed: () => context.push(RoutePaths.register),
-                        child: const Text("Pas encore de compte ? S'inscrire"),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ),

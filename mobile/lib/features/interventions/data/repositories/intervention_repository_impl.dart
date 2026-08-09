@@ -94,4 +94,14 @@ class InterventionRepositoryImpl implements InterventionRepository {
       return Result.failure(ErrorMapper.map(e));
     }
   }
+
+  @override
+  Future<Result<InterventionEntity>> addAttachment({required int interventionId, required String filePath}) async {
+    try {
+      final dto = await _remote.addAttachment(interventionId: interventionId, filePath: filePath);
+      return Result.success(dto.toEntity());
+    } on DioException catch (e) {
+      return Result.failure(ErrorMapper.map(e));
+    }
+  }
 }

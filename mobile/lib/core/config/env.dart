@@ -25,7 +25,11 @@ class Env {
     return switch (current) {
       AppEnvironment.dev => 'http://10.0.2.2:8000/api/v1', // Android emulator -> host loopback
       AppEnvironment.staging => 'https://staging.msis.example/api/v1',
-      AppEnvironment.prod => 'https://api.msis.example/api/v1',
+      // Free-tier Render demo deployment (see PRODUCTION_READINESS.md) —
+      // the real, live MVP backend, not a placeholder. Swap this for a real
+      // domain once the SRS §25 VPS deployment (deploy/vps-setup.sh) is used
+      // instead for genuine production.
+      AppEnvironment.prod => 'https://msis-backend.onrender.com/api/v1',
     };
   }
 
@@ -47,7 +51,12 @@ class Env {
     return switch (current) {
       AppEnvironment.dev => 'ws://10.0.2.2:8081', // Android emulator -> host loopback, Reverb's mapped port
       AppEnvironment.staging => 'wss://staging.msis.example:8081',
-      AppEnvironment.prod => 'wss://api.msis.example:8081',
+      // The free-tier Render deployment runs no Reverb (BROADCAST_CONNECTION=null,
+      // single web service, no extra port to expose) — this will simply never
+      // connect, which is fine: RealtimeChannelClient's reconnect/fallback
+      // already handles that, and the 15s REST poll keeps messaging working
+      // regardless. Update once a deployment with Reverb is live.
+      AppEnvironment.prod => 'wss://msis-backend.onrender.com:8081',
     };
   }
 }

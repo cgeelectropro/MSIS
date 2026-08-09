@@ -28,6 +28,9 @@ _InterventionDto _$InterventionDtoFromJson(Map<String, dynamic> json) =>
           ? null
           : DateTime.parse(json['date_cloture'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map((e) => AttachmentDto.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$InterventionDtoToJson(_InterventionDto instance) =>
@@ -46,4 +49,5 @@ Map<String, dynamic> _$InterventionDtoToJson(_InterventionDto instance) =>
       'note_satisfaction': instance.noteSatisfaction,
       'date_cloture': instance.dateCloture?.toIso8601String(),
       'created_at': instance.createdAt.toIso8601String(),
+      'attachments': instance.attachments,
     };

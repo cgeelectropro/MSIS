@@ -24,4 +24,6 @@ abstract class InterventionRepository {
   Future<Result<InterventionEntity>> close({required int interventionId, int? noteSatisfaction});
 
   Future<Result<InterventionEntity>> cancel(int interventionId);
+
+  Future<Result<InterventionEntity>> addAttachment({required int interventionId, required String filePath});
 }

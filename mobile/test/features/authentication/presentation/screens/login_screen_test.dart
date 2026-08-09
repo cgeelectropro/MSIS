@@ -43,7 +43,9 @@ void main() {
   testWidgets('submit is blocked until a role is selected and fields are valid', (tester) async {
     await tester.pumpWidget(buildTestable());
 
-    await tester.tap(find.widgetWithText(FilledButton, 'Se connecter'));
+    final submitButton = find.widgetWithText(FilledButton, 'Se connecter');
+    await tester.ensureVisible(submitButton);
+    await tester.tap(submitButton);
     await tester.pump();
 
     verifyNever(
@@ -61,7 +63,9 @@ void main() {
 
     final passwordField = find.widgetWithText(TextFormField, 'Mot de passe');
     await tester.enterText(passwordField, 'Password123!');
-    await tester.tap(find.byIcon(Icons.visibility));
+    final visibilityIcon = find.byIcon(Icons.visibility);
+    await tester.ensureVisible(visibilityIcon);
+    await tester.tap(visibilityIcon);
     await tester.pump();
 
     final field = tester.widget<TextFormField>(passwordField);
@@ -87,7 +91,9 @@ void main() {
     await tester.tap(find.text('Client'));
     await tester.enterText(find.widgetWithText(TextFormField, 'Email'), 'jean@example.com');
     await tester.enterText(find.widgetWithText(TextFormField, 'Mot de passe'), 'Password123!');
-    await tester.tap(find.widgetWithText(FilledButton, 'Se connecter'));
+    final submitButton = find.widgetWithText(FilledButton, 'Se connecter');
+    await tester.ensureVisible(submitButton);
+    await tester.tap(submitButton);
     await tester.pump();
 
     verify(
