@@ -1,17 +1,20 @@
 /// Implementation Plan §21 — three environments, switched at build time via
-/// `--dart-define=ENV=dev|staging|prod` (dev is the default for local `flutter run`).
-/// Base URLs are placeholders pending SRS D-02 (production domain decision).
+/// `--dart-define=ENV=dev|staging|prod`. `prod` (the live Render deployment,
+/// see PRODUCTION_READINESS.md) is the default so a plain `flutter run` /
+/// `flutter build` never silently targets a local backend that isn't
+/// running — pass `--dart-define=ENV=dev` explicitly to develop against
+/// `10.0.2.2:8000`.
 enum AppEnvironment { dev, staging, prod }
 
 class Env {
   Env._();
 
-  static const _envName = String.fromEnvironment('ENV', defaultValue: 'dev');
+  static const _envName = String.fromEnvironment('ENV', defaultValue: 'prod');
 
   static AppEnvironment get current => switch (_envName) {
     'staging' => AppEnvironment.staging,
-    'prod' => AppEnvironment.prod,
-    _ => AppEnvironment.dev,
+    'dev' => AppEnvironment.dev,
+    _ => AppEnvironment.prod,
   };
 
   /// Overrides the environment default when set, e.g.

@@ -24,4 +24,4 @@ RUN composer dump-autoload --optimize \
     && touch database/database.sqlite \
     && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/database
 
-CMD ["sh", "-c", "export APP_KEY=$(php artisan key:generate --show) && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+CMD ["sh", "-c", "export APP_KEY=$(php artisan key:generate --show) && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]

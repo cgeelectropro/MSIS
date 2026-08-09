@@ -31,4 +31,4 @@ RUN composer dump-autoload --optimize \
 # straight into this boot's process environment. Regenerated every boot —
 # the disk (and anything encrypted with the previous key) doesn't survive a
 # redeploy anyway on the free tier, so there's nothing to preserve.
-CMD ["sh", "-c", "export APP_KEY=$(php artisan key:generate --show) && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
+CMD ["sh", "-c", "export APP_KEY=$(php artisan key:generate --show) && php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=${PORT:-8080}"]
